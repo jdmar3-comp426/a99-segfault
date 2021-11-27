@@ -25,7 +25,7 @@ const GridManager = {
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
     // Function to invoke canvas object and draw snake tile
-    drawSnakeBlock: function(x, y) {
+    drawSnakeBlock: function(y, x) {
         this.context.fillStyle = 'rgb(200, 0, 0)';
         this.context.fillRect(
             x*this.blockWidth, y*this.blockWidth, 
@@ -33,7 +33,7 @@ const GridManager = {
         );
     },
     // Remove snake tile as snake moves
-    removeSnakeBlock: function(x, y) {
+    removeSnakeBlock: function(y, x) {
         this.context.fillStyle = 'rgb(255, 255, 255)';
         this.context.fillRect(
             x*this.blockWidth, y*this.blockWidth, 
@@ -44,7 +44,7 @@ const GridManager = {
     drawGrid: function() {
         GridManager.map.forEach(function(row, r) {
             row.forEach(function(block, c) {
-                if (GridManager.map[r][c] != 0) {
+                if (GridManager.map[r][c] !== 0) {
                     /*
                     Insert map logic
                     */
@@ -56,48 +56,36 @@ const GridManager = {
     // Make update to game state
     updateGame: function() {
         // Remove previous tail of snake
-        GridManager.removeSnakeBlock(snake.points[0][1], snake.points[0][0])
-        snake.points.shift();
+        GridManager.removeSnakeBlock(...snake.points.shift());
 
         // Update new head of snake
-        if (snake.points[snake.points.length-1][1] == GridManager.map[0].length-1 && snake.direction=="right"){
-            // snake is headed too far to the right
-            snake.points.push([snake.points[snake.points.length-1][0], 0]);
-        } else if (snake.points[snake.points.length-1][1] == 0 && snake.direction=="left") {
-            // snake is headed too far to the left
-            snake.points.push([snake.points[snake.points.length-1][0], GridManager.map[0].length-1]);
-        } else if (snake.points[snake.points.length-1][0] == 0 && snake.direction=="up") {
-            // snake is headed too far up
-            snake.points.push([GridManager.map[0].length-1, snake.points[snake.points.length-1][1]]);
-        } else if (snake.points[snake.points.length-1][0] == GridManager.map.length-1 && snake.direction=="down") {
-            // snake is headed too far down
-            snake.points.push([0, snake.points[snake.points.length-1][1]]);
-        } else {
-            // Place new head in the current direction
-            switch (snake.direction) {
-                case "left":
-                    snake.points.push([snake.points[snake.points.length-1][0], snake.points[snake.points.length-1][1]-1]);
-                    break;
-                case "right":
-                    snake.points.push([snake.points[snake.points.length-1][0], snake.points[snake.points.length-1][1]+1]);
-                    break;
-                case "up":
-                    snake.points.push([snake.points[snake.points.length-1][0]-1, snake.points[snake.points.length-1][1]]);
-                    break;
-                case "down":
-                    snake.points.push([snake.points[snake.points.length-1][0]+1, snake.points[snake.points.length-1][1]]);
-                    break;
-            }
+        const oldHead = snake.getHead();
+        const maxWidth = GridManager.map[0].length - 1;
+        // Place new head in the current direction
+        switch (snake.direction) {
+            case "left":
+                snake.points.push([oldHead[0], oldHead[1] === 0 ? maxWidth : oldHead[1]-1]);
+                break;
+            case "right":
+                snake.points.push([oldHead[0], oldHead[1] === maxWidth ? 0 : oldHead[1]+1]);
+                break;
+            case "up":
+                snake.points.push([oldHead[0] === 0 ? maxWidth : oldHead[0]-1, oldHead[1]]);
+                break;
+            case "down":
+                snake.points.push([oldHead[0] === maxWidth ? 0 : oldHead[0]+1, oldHead[1]]);
+                break;
         }
-        GridManager.drawSnakeBlock(snake.points[snake.points.length-1][1], snake.points[snake.points.length-1][0]);
+        GridManager.drawSnakeBlock(...snake.getHead());
     }
 }
 
 // Manage snake object
 var snake = {
     // Keep track of snake as array of points
-    points: [[0, 0], [0, 1], [0, 2]],
-    direction: "right"
+    points: [[0, 0], [0, 1], [0, 2]], // points are stored as (y, x) pairs with index 0 as the tail
+    direction: "right",
+    getHead: function() { return this.points[this.points.length-1] }
 }
 
 // When page loads, initialize game board
