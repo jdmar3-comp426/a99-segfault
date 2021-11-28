@@ -26,7 +26,7 @@ const GridManager = {
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
     // Function to invoke canvas object and draw snake tile
     drawSnakeBlock: function(y, x) {
-        this.context.fillStyle = 'rgb(200, 0, 0)';
+        this.context.fillStyle = 'rgb(0, 200, 0)';
         this.context.fillRect(
             x*this.blockWidth, y*this.blockWidth, 
             this.blockWidth, this.blockWidth
@@ -36,7 +36,15 @@ const GridManager = {
     removeSnakeBlock: function(y, x) {
         this.context.fillStyle = 'rgb(255, 255, 255)';
         this.context.fillRect(
-            x*this.blockWidth, y*this.blockWidth, 
+            x*this.blockWidth, y*this.blockWidth,
+            this.blockWidth, this.blockWidth
+        );
+    },
+    // Draw fruit tile
+    drawFruitBlock: function(y, x) {
+        this.context.fillStyle = 'rgb(200, 0, 0)'
+        this.context.fillRect(
+            x*this.blockWidth, y*this.blockWidth,
             this.blockWidth, this.blockWidth
         );
     },
@@ -55,26 +63,45 @@ const GridManager = {
     },
     // Make update to game state
     updateGame: function() {
-        // Remove previous tail of snake
-        GridManager.removeSnakeBlock(...snake.points.shift());
-
-        // Update new head of snake
-        const oldHead = snake.getHead();
         const maxWidth = GridManager.map[0].length - 1;
-        // Place new head in the current direction
+
+        // Update new head and place it in the current direction
+        const oldHead = snake.getHead();
+        var newHead;
         switch (snake.direction) {
             case "left":
-                snake.points.push([oldHead[0], oldHead[1] === 0 ? maxWidth : oldHead[1]-1]);
+                newHead = [oldHead[0], oldHead[1] === 0 ? maxWidth : oldHead[1]-1];
                 break;
             case "right":
-                snake.points.push([oldHead[0], oldHead[1] === maxWidth ? 0 : oldHead[1]+1]);
+                newHead = [oldHead[0], oldHead[1] === maxWidth ? 0 : oldHead[1]+1];
                 break;
             case "up":
-                snake.points.push([oldHead[0] === 0 ? maxWidth : oldHead[0]-1, oldHead[1]]);
+                newHead = [oldHead[0] === 0 ? maxWidth : oldHead[0]-1, oldHead[1]];
                 break;
             case "down":
-                snake.points.push([oldHead[0] === maxWidth ? 0 : oldHead[0]+1, oldHead[1]]);
+                newHead = [oldHead[0] === maxWidth ? 0 : oldHead[0]+1, oldHead[1]];
                 break;
+        }
+
+        // Remove previous tail of snake OR retain with fruit
+        if (snake.hasPoint(newHead)) {
+            // Collision, end game
+            // TODO: game end logic
+            return;
+        }
+
+        snake.points.push(newHead);
+        if (pointEquals(newHead, fruit)) {
+            console.log("ate fruit");
+            // Snake head is on a fruit
+            while (snake.hasPoint(fruit)) {
+                // Find a new place for the fruit
+                fruit = [Math.floor(Math.random() * maxWidth), Math.floor(Math.random() * maxWidth)];
+            }
+            GridManager.drawFruitBlock(...fruit);
+        } else {
+            GridManager.removeSnakeBlock(...snake.points.shift());
+
         }
         GridManager.drawSnakeBlock(...snake.getHead());
     }
@@ -85,7 +112,20 @@ var snake = {
     // Keep track of snake as array of points
     points: [[0, 0], [0, 1], [0, 2]], // points are stored as (y, x) pairs with index 0 as the tail
     direction: "right",
-    getHead: function() { return this.points[this.points.length-1] }
+    getHead: function() { return this.points[this.points.length-1] },
+    hasPoint: function(p) {
+        for (const point of this.points) {
+            if (pointEquals(point, p)) return true;
+        }
+        return false;
+    }
+}
+
+var fruit = [5, 5];
+
+// Checks for equality of points
+function pointEquals(p1, p2) {
+    return p1[0] === p2[0] && p1[1] === p2[1];
 }
 
 // When page loads, initialize game board
@@ -93,7 +133,8 @@ window.onload = function() {
     init();
 
     // Initialize snake
-    snake.points.forEach(block => GridManager.drawSnakeBlock(block[1], block[0]));
+    snake.points.forEach(block => GridManager.drawSnakeBlock(...block));
+    GridManager.drawFruitBlock(...fruit);
 }
 
 // Initialize canvas/corresponding attributes for GridManager
@@ -117,22 +158,22 @@ window.addEventListener("keydown", function(event) {
 
     switch (event.key) {
         case "ArrowLeft":
-            if (snake.direction != "right") {
+            if (snake.direction !== "right") {
                 snake.direction = "left";
             }
             break;
         case "ArrowRight":
-            if (snake.direction != "left") {
+            if (snake.direction !== "left") {
                 snake.direction = "right";
             }
             break;
         case "ArrowUp":
-            if (snake.direction != "down") {
+            if (snake.direction !== "down") {
                 snake.direction = "up";
             }
             break;
         case "ArrowDown":
-            if (snake.direction != "up") {
+            if (snake.direction !== "up") {
                 snake.direction = "down";
             }
             break;
