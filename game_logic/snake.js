@@ -8,8 +8,8 @@
 // Define the GridManager object to manage the game grid
 const GridManager = {
     context: null,
+    gameOver: false,
     blockWidth: null,
-    blockHeight: null,
     /*
     Define game map, which lets us refer to grid locations
     instead of pixels. Intended to be used to keep track of food/other grid items
@@ -50,16 +50,18 @@ const GridManager = {
     },
     // Iterate over map elements and draw any non-zero objects
     drawGrid: function() {
-        GridManager.map.forEach(function(row, r) {
-            row.forEach(function(block, c) {
-                if (GridManager.map[r][c] !== 0) {
-                    /*
-                    Insert map logic
-                    */
-                }
+        if (!this.gameOver) {
+            GridManager.map.forEach(function(row, r) {
+                row.forEach(function(block, c) {
+                    if (GridManager.map[r][c] !== 0) {
+                        /*
+                        Insert map logic
+                        */
+                    }
+                });
             });
-        });
-        GridManager.updateGame();
+            GridManager.updateGame();
+        }
     },
     // Make update to game state
     updateGame: function() {
@@ -87,6 +89,7 @@ const GridManager = {
         if (snake.hasPoint(newHead)) {
             // Collision, end game
             // TODO: game end logic
+            this.gameOver = true;
             return;
         }
 
