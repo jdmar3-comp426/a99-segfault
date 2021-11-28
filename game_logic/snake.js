@@ -15,56 +15,55 @@ const GridManager = {
     instead of pixels. Intended to be used to keep track of food/other grid items
     */
     map: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
     // Function to invoke canvas object and draw snake tile
-    drawSnakeBlock: function(y, x) {
+    drawSnakeBlock: function (y, x) {
         this.context.fillStyle = 'rgb(0, 200, 0)';
         this.context.fillRect(
-            x*this.blockWidth, y*this.blockWidth, 
+            x * this.blockWidth, y * this.blockWidth,
             this.blockWidth, this.blockWidth
         );
     },
     // Remove snake tile as snake moves
-    removeSnakeBlock: function(y, x) {
+    removeSnakeBlock: function (y, x) {
         this.context.fillStyle = 'rgb(255, 255, 255)';
         this.context.fillRect(
-            x*this.blockWidth, y*this.blockWidth,
+            x * this.blockWidth, y * this.blockWidth,
             this.blockWidth, this.blockWidth
         );
     },
     // Draw fruit tile
-    drawFruitBlock: function(y, x) {
+    drawFruitBlock: function (y, x) {
         this.context.fillStyle = 'rgb(200, 0, 0)'
         this.context.fillRect(
-            x*this.blockWidth, y*this.blockWidth,
+            x * this.blockWidth, y * this.blockWidth,
             this.blockWidth, this.blockWidth
         );
     },
     // Iterate over map elements and draw any non-zero objects
-    drawGrid: function() {
-        if (!this.gameOver) {
-            GridManager.map.forEach(function(row, r) {
-                row.forEach(function(block, c) {
-                    if (GridManager.map[r][c] !== 0) {
-                        /*
-                        Insert map logic
-                        */
-                    }
-                });
+    drawGrid: function () {
+        GridManager.map.forEach(function (row, r) {
+            row.forEach(function (block, c) {
+                if (GridManager.map[r][c] !== 0) {
+                    /*
+                    Insert map logic
+                    */
+                }
             });
-            GridManager.updateGame();
-        }
+        });
+        GridManager.updateGame();
     },
     // Make update to game state
-    updateGame: function() {
+    updateGame: function () {
+        if (this.gameOver) return;
         const maxWidth = GridManager.map[0].length - 1;
 
         // Update new head and place it in the current direction
@@ -72,16 +71,16 @@ const GridManager = {
         var newHead;
         switch (snake.direction) {
             case "left":
-                newHead = [oldHead[0], oldHead[1] === 0 ? maxWidth : oldHead[1]-1];
+                newHead = [oldHead[0], oldHead[1] === 0 ? maxWidth : oldHead[1] - 1];
                 break;
             case "right":
-                newHead = [oldHead[0], oldHead[1] === maxWidth ? 0 : oldHead[1]+1];
+                newHead = [oldHead[0], oldHead[1] === maxWidth ? 0 : oldHead[1] + 1];
                 break;
             case "up":
-                newHead = [oldHead[0] === 0 ? maxWidth : oldHead[0]-1, oldHead[1]];
+                newHead = [oldHead[0] === 0 ? maxWidth : oldHead[0] - 1, oldHead[1]];
                 break;
             case "down":
-                newHead = [oldHead[0] === maxWidth ? 0 : oldHead[0]+1, oldHead[1]];
+                newHead = [oldHead[0] === maxWidth ? 0 : oldHead[0] + 1, oldHead[1]];
                 break;
         }
 
@@ -115,8 +114,10 @@ var snake = {
     // Keep track of snake as array of points
     points: [[0, 0], [0, 1], [0, 2]], // points are stored as (y, x) pairs with index 0 as the tail
     direction: "right",
-    getHead: function() { return this.points[this.points.length-1] },
-    hasPoint: function(p) {
+    getHead: function () {
+        return this.points[this.points.length - 1]
+    },
+    hasPoint: function (p) {
         for (const point of this.points) {
             if (pointEquals(point, p)) return true;
         }
@@ -132,7 +133,7 @@ function pointEquals(p1, p2) {
 }
 
 // When page loads, initialize game board
-window.onload = function() {
+window.onload = function () {
     init();
 
     // Initialize snake
@@ -145,15 +146,15 @@ function init() {
     window.canvas = document.getElementById('snakeGrid');
     if (window.canvas.getContext) {
         GridManager.context = window.canvas.getContext('2d');
-        GridManager.blockWidth = Math.floor(window.canvas.width/10);
-        GridManager.blockHeight = Math.floor(window.canvas.height/10);
+        GridManager.blockWidth = Math.floor(window.canvas.height / 10);
+        //GridManager.blockHeight = Math.floor(window.canvas.height/10);
     }
     // Interval time is in ms
     setInterval(GridManager.drawGrid, 100);
 }
 
 // Watch for arrow key input to control snake direction
-window.addEventListener("keydown", function(event) {
+window.addEventListener("keydown", function (event) {
     // Prevent the same event from being handled twice
     if (event.defaultPrevented) {
         return;
