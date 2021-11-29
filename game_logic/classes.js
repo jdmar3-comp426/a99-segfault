@@ -2,6 +2,20 @@
     Defines classes to be used in game logic.
  */
 
+class LoadedImage {
+    static HeadNorth = new LoadedImage("https://i.imgur.com/SzibTAr.png");
+    static HeadEast = new LoadedImage("https://i.imgur.com/aty89Dm.png");
+    static HeadSouth = new LoadedImage("https://i.imgur.com/CDPu6N5.png");
+    static HeadWest = new LoadedImage("https://i.imgur.com/FOvnnXO.png");
+    static Body = new LoadedImage("https://i.imgur.com/8HVeW6i.png");
+    static FruitApple = new LoadedImage("https://preview.redd.it/bxcbiiu1wxa71.png?auto=webp&s=709c4efa8fc567e9f16aeda1008ccd5b700c3052")
+
+    constructor(src) {
+        this.image = new Image();
+        this.image.src = src;
+    }
+}
+
 class Direction {
     // essentially an enum class
     static N = new Direction("north");

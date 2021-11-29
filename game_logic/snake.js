@@ -5,6 +5,8 @@
     around the ends of the board.
 */
 
+const gridWidth = 15;
+
 // Define the GridManager object to manage the game grid
 const GridManager = {
     context: null,
@@ -15,33 +17,52 @@ const GridManager = {
     Define game map, which lets us refer to grid locations
     instead of pixels. Intended to be used to keep track of food/other grid items
     */
-    map: Array.from(Array(10), _ => Array(10).fill(0)),
+    map: Array.from(Array(gridWidth), _ => Array(gridWidth).fill(0)),
     // Function to invoke canvas object and draw snake tile
     drawSnakeBlock: function (y, x) {
         var target = new Point(y, x);
         if (target.equals(snake.head)) {
-            const headImg = new Image();
+            var headImg;
             switch (snake.direction) {
                 case Direction.N:
-                    headImg.src = "https://i.imgur.com/SzibTAr.png";
+                    headImg = LoadedImage.HeadNorth;
                     break;
                 case Direction.E:
-                    headImg.src = "https://i.imgur.com/aty89Dm.png";
+                    headImg = LoadedImage.HeadEast;
                     break;
                 case Direction.S:
-                    headImg.src = "https://i.imgur.com/CDPu6N5.png";
+                    headImg = LoadedImage.HeadSouth;
                     break;
                 case Direction.W:
-                    headImg.src = "https://i.imgur.com/FOvnnXO.png";
+                    headImg = LoadedImage.HeadWest;
+                    break;
             }
-
-            this.context.drawImage(headImg, x * this.blockWidth - .5 * this.growth,
+            this.context.drawImage(headImg.image, x * this.blockWidth - .5 * this.growth,
                 y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
         } else {
-            const snakeImg = new Image();
-            snakeImg.src = "https://i.imgur.com/8HVeW6i.png";
-            this.context.drawImage(snakeImg, x * this.blockWidth - .5 * this.growth,
+            // TODO: Add directional sprites for testing
+            // switch (target.direction) {
+            //     case Direction.NS:
+            //         snakeImg.src = "./../img/ns.png";
+            //         break;
+            //     case Direction.EW:
+            //         snakeImg.src = "./../img/ew.png";
+            //         break;
+            //     case Direction.NW:
+            //         snakeImg.src = "./../img/nw.png";
+            //         break;
+            //     case Direction.SW:
+            //         snakeImg.src = "./../img/sw.png";
+            //         break;
+            //     case Direction.NE:
+            //         snakeImg.src = "./../img/ne.png";
+            //         break;
+            //     case Direction.SE:
+            //         snakeImg.src = "./../img/se.png";
+            //         break;
+            // }
+            this.context.drawImage(LoadedImage.Body.image, x * this.blockWidth - .5 * this.growth,
                 y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
         }
@@ -83,12 +104,7 @@ const GridManager = {
     },
     // Draw fruit tile
     drawFruitBlock: function (y, x) {
-
-        const fruitImg = new Image();
-        fruitImg.src = "https://preview.redd.it/bxcbiiu1wxa71.png?auto=webp&s=709c4efa8fc567e9f16aeda1008ccd5b700c3052";
-
-
-        this.context.drawImage(fruitImg,
+        this.context.drawImage(LoadedImage.FruitApple.image,
             x * this.blockWidth, y * this.blockWidth,
             this.blockWidth, this.blockWidth
         );
@@ -166,9 +182,10 @@ var fruit = generateFruit();
 
 function generateFruit() {
     const maxIndex = GridManager.map.length - 1;
-    while (snake.hasPoint(fruit)) {
+    var out = snake.points[0];
+    while (snake.hasPoint(out)) {
         // Find a new place for the fruit
-        var out = new Point(Math.floor(Math.random() * maxIndex), Math.floor(Math.random() * maxIndex));
+        out = new Point(Math.floor(Math.random() * maxIndex), Math.floor(Math.random() * maxIndex));
     }
     return out;
 }
@@ -187,7 +204,7 @@ function init() {
     window.canvas = document.getElementById('snakeGrid');
     if (window.canvas.getContext) {
         GridManager.context = window.canvas.getContext('2d');
-        GridManager.blockWidth = Math.floor(window.canvas.height / 10);
+        GridManager.blockWidth = Math.floor(window.canvas.height / gridWidth);
 
 
     }
