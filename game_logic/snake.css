@@ -7,6 +7,10 @@
 
 #square:after {
     content: "";
-    display: block;
+    display: inline-block;
     padding-bottom: 100%;
+}
+
+canvas {
+    background-color: bisque;
 }

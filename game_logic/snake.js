@@ -10,6 +10,7 @@ const GridManager = {
     context: null,
     gameOver: false,
     blockWidth: null,
+    growth: 0,
     /*
     Define game map, which lets us refer to grid locations
     instead of pixels. Intended to be used to keep track of food/other grid items
@@ -26,27 +27,53 @@ const GridManager = {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
     // Function to invoke canvas object and draw snake tile
     drawSnakeBlock: function (y, x) {
-        this.context.fillStyle = 'rgb(0, 200, 0)';
-        this.context.fillRect(
-            x * this.blockWidth, y * this.blockWidth,
-            this.blockWidth, this.blockWidth
-        );
+        const snake = new Image();
+        snake.src = "https://i.imgur.com/8HVeW6i.png";
+        this.context.drawImage(snake, x*this.blockWidth - .5*this.growth, y*this.blockWidth - .5* this.growth , this.blockWidth + this.growth, this.blockWidth + this.growth);
+
+    },
+    clear: function() {
+        this.context.clearRect(0, 0, canvas.width, canvas.height);
     },
     // Remove snake tile as snake moves
-    removeSnakeBlock: function (y, x) {
+    removeSnakeBlock: function (y, x, fruit) {
         this.context.fillStyle = 'rgb(255, 255, 255)';
-        this.context.fillRect(
-            x * this.blockWidth, y * this.blockWidth,
-            this.blockWidth, this.blockWidth
-        );
+        if (fruit) {
+            this.context.clearRect(
+                x * this.blockWidth , y * this.blockWidth,
+                this.blockWidth, this.blockWidth
+            );
+        } else {
+            switch (snake.direction) {
+                case "up":
+                case "down":
+                    GridManager.clear();
+                    for (let i = 0; i < snake.length(); i++) {
+                        this.drawSnakeBlock(...snake.points[i]);
+
+                    }
+                    break;
+
+                case "left":
+                case "right":
+                    GridManager.clear();
+                    for (let i = 0; i < snake.length(); i++) {
+                        this.drawSnakeBlock(...snake.points[i]);
+                    }
+
+                    break;
+
+            }
+        }
     },
     // Draw fruit tile
     drawFruitBlock: function (y, x) {
         this.context.fillStyle = 'rgb(200, 0, 0)'
-        this.context.fillRect(
-            x * this.blockWidth, y * this.blockWidth,
-            this.blockWidth, this.blockWidth
-        );
+
+            this.context.fillRect(
+                x * this.blockWidth, y * this.blockWidth,
+                this.blockWidth, this.blockWidth
+            );
     },
     // Iterate over map elements and draw any non-zero objects
     drawGrid: function () {
@@ -89,6 +116,7 @@ const GridManager = {
             // Collision, end game
             // TODO: game end logic
             this.gameOver = true;
+
             return;
         }
 
@@ -96,16 +124,22 @@ const GridManager = {
         if (pointEquals(newHead, fruit)) {
             console.log("ate fruit");
             // Snake head is on a fruit
+            this.growth += 5;
+            // get rid of fruit immediately
+            this.removeSnakeBlock(snake.getHead()[0],snake.getHead()[1], true );
             while (snake.hasPoint(fruit)) {
                 // Find a new place for the fruit
+
                 fruit = [Math.floor(Math.random() * maxWidth), Math.floor(Math.random() * maxWidth)];
             }
             GridManager.drawFruitBlock(...fruit);
         } else {
-            GridManager.removeSnakeBlock(...snake.points.shift());
+            GridManager.removeSnakeBlock(...snake.points.shift(), false);
+            GridManager.drawFruitBlock(...fruit);
 
         }
         GridManager.drawSnakeBlock(...snake.getHead());
+        GridManager.drawFruitBlock(...fruit);
     }
 }
 
@@ -122,6 +156,9 @@ var snake = {
             if (pointEquals(point, p)) return true;
         }
         return false;
+    },
+    length: function() {
+        return this.points.length;
     }
 }
 
@@ -147,10 +184,11 @@ function init() {
     if (window.canvas.getContext) {
         GridManager.context = window.canvas.getContext('2d');
         GridManager.blockWidth = Math.floor(window.canvas.height / 10);
+
         //GridManager.blockHeight = Math.floor(window.canvas.height/10);
     }
     // Interval time is in ms
-    setInterval(GridManager.drawGrid, 100);
+    setInterval(GridManager.drawGrid, 200);
 }
 
 // Watch for arrow key input to control snake direction
