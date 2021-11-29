@@ -3,6 +3,7 @@
  */
 
 class Direction {
+    // essentially an enum class
     static N = new Direction("north");
     static S = new Direction("south");
     static W = new Direction("west");
@@ -14,7 +15,7 @@ class Direction {
     static NE = new Direction("north-east");
     static SE = new Direction("south-east")
 
-    static headDirections = [Direction.N, Direction.S, Direction.W, Direction.E];
+    static headDirections = [Direction.N, Direction.S, Direction.E, Direction.W];
     static bodyDirections = [Direction.NS, Direction.EW, Direction.NW, Direction.SW, Direction.NE, Direction.SE];
 
     constructor(name) {
@@ -22,10 +23,32 @@ class Direction {
     }
 
     combine(other) {
-        if (!Direction.headDirections.includes(this) || !Direction.headDirections.includes(other)) {
-            throw new Error("Can't combine non-head directions");
+        if (!(other instanceof Direction)) throw new Error("Invalid direction");
+        const dirInts = [Direction.headDirections.indexOf(this), Direction.headDirections.indexOf(other)].sort();
+        if (dirInts.includes(-1)) throw new Error("Can't combine non-head directions");
+
+        switch (dirInts[0]) {
+            case 0:
+                switch (dirInts[1]) {
+                    case 1:
+                        return Direction.NS;
+                    case 2:
+                        return Direction.NE;
+                    case 3:
+                        return Direction.NW;
+                }
+                break;
+            case 1:
+                switch (dirInts[1]) {
+                    case 2:
+                        return Direction.SE;
+                    case 3:
+                        return Direction.SW;
+                }
+                break;
+            case 2:
+                return Direction.EW;
         }
-        return null;
     }
 }
 
@@ -60,6 +83,7 @@ class Point {
 class Snake {
     constructor() {
         this.points = [new Point(0, 0, Direction.E), new Point(0, 1, Direction.E), new Point(0, 2, Direction.E)];
+        this.oldDirection = Direction.E;
         this.direction = Direction.E;
     }
 
