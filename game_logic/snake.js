@@ -27,9 +27,33 @@ const GridManager = {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
     // Function to invoke canvas object and draw snake tile
     drawSnakeBlock: function (y, x) {
-        const snake = new Image();
-        snake.src = "https://i.imgur.com/8HVeW6i.png";
-        this.context.drawImage(snake, x*this.blockWidth - .5*this.growth, y*this.blockWidth - .5* this.growth , this.blockWidth + this.growth, this.blockWidth + this.growth);
+        if (y === snake.getHead()[0] && x === snake.getHead()[1]) {
+            const head = new Image();
+            switch (snake.direction) {
+                case "up":
+                    head.src = "https://i.imgur.com/SzibTAr.png";
+                    break;
+                case "right":
+                    head.src = "https://i.imgur.com/aty89Dm.png";
+                    break;
+                case "down":
+                    head.src = "https://i.imgur.com/CDPu6N5.png";
+                    break;
+                case "left":
+                    head.src = "https://i.imgur.com/FOvnnXO.png";
+            }
+
+            this.context.drawImage(head, x*this.blockWidth - .5*this.growth,
+                y*this.blockWidth - .5* this.growth ,
+                this.blockWidth + this.growth, this.blockWidth + this.growth);
+        } else {
+
+            const snake = new Image();
+            snake.src = "https://i.imgur.com/8HVeW6i.png";
+            this.context.drawImage(snake, x * this.blockWidth - .5 * this.growth,
+                y * this.blockWidth - .5 * this.growth,
+                this.blockWidth + this.growth, this.blockWidth + this.growth);
+        }
 
     },
     clear: function() {
@@ -68,9 +92,12 @@ const GridManager = {
     },
     // Draw fruit tile
     drawFruitBlock: function (y, x) {
-        this.context.fillStyle = 'rgb(200, 0, 0)'
 
-            this.context.fillRect(
+        const fruit  = new Image();
+        fruit.src = "https://preview.redd.it/bxcbiiu1wxa71.png?auto=webp&s=709c4efa8fc567e9f16aeda1008ccd5b700c3052";
+
+
+            this.context.drawImage(fruit,
                 x * this.blockWidth, y * this.blockWidth,
                 this.blockWidth, this.blockWidth
             );
@@ -119,8 +146,8 @@ const GridManager = {
 
             return;
         }
-
         snake.points.push(newHead);
+        this.drawSnakeBlock(oldHead[0], oldHead[1]);
         if (pointEquals(newHead, fruit)) {
             console.log("ate fruit");
             // Snake head is on a fruit
@@ -185,10 +212,10 @@ function init() {
         GridManager.context = window.canvas.getContext('2d');
         GridManager.blockWidth = Math.floor(window.canvas.height / 10);
 
-        //GridManager.blockHeight = Math.floor(window.canvas.height/10);
+
     }
     // Interval time is in ms
-    setInterval(GridManager.drawGrid, 200);
+    setInterval(GridManager.drawGrid, 180);
 }
 
 // Watch for arrow key input to control snake direction
