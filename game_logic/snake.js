@@ -110,7 +110,7 @@ const GridManager = {
     },
     // Make update to game state
     updateGame: function () {
-        const maxWidth = GridManager.map[0].length - 1;
+        const maxIndex = GridManager.map[0].length - 1;
 
         // Update new head and place it in the current direction
         const oldHead = snake.head;
@@ -118,16 +118,16 @@ const GridManager = {
         // const newDir = oldHead.direction + snake.direction;
         switch (snake.direction) {
             case Direction.N:
-                newHead = new Point(oldHead.y === 0 ? maxWidth : oldHead.y - 1, oldHead.x);
+                newHead = new Point(oldHead.y === 0 ? maxIndex : oldHead.y - 1, oldHead.x);
                 break;
             case Direction.S:
-                newHead = new Point(oldHead.y === maxWidth ? 0 : oldHead.y + 1, oldHead.x);
+                newHead = new Point(oldHead.y === maxIndex ? 0 : oldHead.y + 1, oldHead.x);
                 break;
             case Direction.W:
-                newHead = new Point(oldHead.y, oldHead.x === 0 ? maxWidth : oldHead.x - 1);
+                newHead = new Point(oldHead.y, oldHead.x === 0 ? maxIndex : oldHead.x - 1);
                 break;
             case Direction.E:
-                newHead = new Point(oldHead.y, oldHead.x === maxWidth ? 0 : oldHead.x + 1);
+                newHead = new Point(oldHead.y, oldHead.x === maxIndex ? 0 : oldHead.x + 1);
                 break;
         }
         newHead.direction = snake.direction.combine(snake.oldDirection);
@@ -147,10 +147,7 @@ const GridManager = {
             this.growth += 5;
             // get rid of fruit immediately
             this.removeBlock(snake.head.y, snake.head.x, true);
-            while (snake.hasPoint(fruit)) {
-                // Find a new place for the fruit
-                fruit = new Point(Math.floor(Math.random() * maxWidth), Math.floor(Math.random() * maxWidth));
-            }
+            fruit = generateFruit();
             GridManager.drawFruitBlock(...fruit);
         } else {
             GridManager.removeBlock(...snake.points.shift(), false);
@@ -165,7 +162,16 @@ const GridManager = {
 // Manage snake object
 var snake = new Snake();
 
-var fruit = new Point(5, 5);
+var fruit = generateFruit();
+
+function generateFruit() {
+    const maxIndex = GridManager.map.length - 1;
+    while (snake.hasPoint(fruit)) {
+        // Find a new place for the fruit
+        var out = new Point(Math.floor(Math.random() * maxIndex), Math.floor(Math.random() * maxIndex));
+    }
+    return out;
+}
 
 // When page loads, initialize game board
 window.onload = function () {
