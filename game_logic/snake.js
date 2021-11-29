@@ -130,6 +130,7 @@ const GridManager = {
                 newHead = new Point(oldHead.y, oldHead.x === maxWidth ? 0 : oldHead.x + 1);
                 break;
         }
+        newHead.direction = snake.direction.combine(snake.oldDirection);
 
         // Remove previous tail of snake OR retain with fruit
         if (snake.hasPoint(newHead)) {
@@ -198,21 +199,25 @@ window.addEventListener("keydown", function (event) {
     switch (event.key) {
         case "ArrowLeft":
             if (snake.direction !== Direction.E) {
+                snake.oldDirection = snake.direction;
                 snake.direction = Direction.W;
             }
             break;
         case "ArrowRight":
             if (snake.direction !== Direction.W) {
+                snake.oldDirection = snake.direction;
                 snake.direction = Direction.E;
             }
             break;
         case "ArrowUp":
             if (snake.direction !== Direction.S) {
+                snake.oldDirection = snake.direction;
                 snake.direction = Direction.N;
             }
             break;
         case "ArrowDown":
             if (snake.direction !== Direction.N) {
+                snake.oldDirection = snake.direction;
                 snake.direction = Direction.S;
             }
             break;
