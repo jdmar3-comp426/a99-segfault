@@ -6,7 +6,6 @@
 */
 
 const gridWidth = 15;
-var inputProcessed = false;
 
 // Define the GridManager object to manage the game grid
 const GridManager = {
@@ -105,7 +104,7 @@ const GridManager = {
     },
     // Make update to game state
     updateGame: function () {
-        inputProcessed = false;
+        snake.direction = lastDirection;
         if (this.gameOver) return;
         const maxIndex = GridManager.map[0].length - 1;
 
@@ -164,6 +163,8 @@ var snake = new Snake();
 
 var fruit = generateFruit();
 
+var lastDirection = snake.direction;
+
 function generateFruit() {
     const maxIndex = GridManager.map.length - 1;
     var out = snake.points[0];
@@ -199,29 +200,28 @@ function init() {
 // Watch for arrow key input to control snake direction
 window.addEventListener("keydown", function (event) {
     // Prevent the same event from being handled twice
-    if (event.defaultPrevented || inputProcessed) {
+    if (event.defaultPrevented) {
         return;
     }
-    inputProcessed = true;
     switch (event.key) {
         case "ArrowLeft":
             if (snake.direction !== Direction.E) {
-                snake.direction = Direction.W;
+                lastDirection = Direction.W;
             }
             break;
         case "ArrowRight":
             if (snake.direction !== Direction.W) {
-                snake.direction = Direction.E;
+                lastDirection = Direction.E;
             }
             break;
         case "ArrowUp":
             if (snake.direction !== Direction.S) {
-                snake.direction = Direction.N;
+                lastDirection = Direction.N;
             }
             break;
         case "ArrowDown":
             if (snake.direction !== Direction.N) {
-                snake.direction = Direction.S;
+                lastDirection = Direction.S;
             }
             break;
     }
