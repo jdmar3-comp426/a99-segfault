@@ -5,6 +5,8 @@
     around the ends of the board.
 */
 
+
+
 const gridWidth = 15;
 var inputProcessed = false;
 var refreshTime = 150;
@@ -190,7 +192,18 @@ window.onload = function () {
 
 // Initialize canvas/corresponding attributes for GridManager
 function init() {
+    const usernameLabel = document.getElementById('usernameLabel') ;
+    const emailLabel = document.getElementById('emailLabel') ;
+
+    usernameLabel.innerHTML = "Username: " + localStorage.getItem("username") ; 
+    emailLabel.innerHTML = "Email: " + localStorage.getItem("email") ;
     window.canvas = document.getElementById('snakeGrid');
+
+     
+
+
+
+
     if (window.canvas.getContext) {
         GridManager.context = window.canvas.getContext('2d');
         GridManager.blockWidth = Math.floor(window.canvas.height / gridWidth);

@@ -2,8 +2,8 @@
     This script is intended to be used for user authentication and
     configuring gameplay settings (alternative modes, etc.)
 */
-
-
+localStorage.setItem("username" , "guest") ; 
+localStorage.setItem("email" , "guest@domain.com") ; 
 
 window.addEventListener("load" , function(){
 
@@ -45,13 +45,15 @@ window.addEventListener("load" , function(){
                 passwordCheckRequest.send() ;
                 passwordCheckRequest.addEventListener("load" , function(event){
                     const correctPassword = JSON.parse(passwordCheckRequest.response).password ; 
-                    console.log("Correct: " + correctPassword) ; 
-                    console.log("Inputted: " + inputtedPassword) ; 
+
                     if(inputtedPassword!=correctPassword){
                         alert("Login Failed") ; 
                     }
-                    else{
-                        alert("Login succesful") ; 
+                    else{ 
+                        localStorage.setItem("username" , inputtedUsername) ;
+                        localStorage.setItem("email" , JSON.parse(passwordCheckRequest.response).email) ;
+                        alert("Login succesful") ;
+
                     }
 
                 } ) ; 
