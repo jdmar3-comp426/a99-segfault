@@ -140,24 +140,27 @@ const GridManager = {
         // const newDir = oldHead.direction + snake.direction;
         switch (snake.direction) {
             case Direction.N:
-                newHead = new Point(oldHead.y === 0 ? maxIndex : oldHead.y - 1, oldHead.x);
+                // newHead = new Point(oldHead.y === 0 ? maxIndex : oldHead.y - 1, oldHead.x);
+                newHead = new Point(oldHead.y - 1, oldHead.x);
                 break;
             case Direction.S:
-                newHead = new Point(oldHead.y === maxIndex ? 0 : oldHead.y + 1, oldHead.x);
+                // newHead = new Point(oldHead.y === maxIndex ? 0 : oldHead.y + 1, oldHead.x);
+                newHead = new Point(oldHead.y + 1, oldHead.x);
                 break;
             case Direction.W:
-                newHead = new Point(oldHead.y, oldHead.x === 0 ? maxIndex : oldHead.x - 1);
+                // newHead = new Point(oldHead.y, oldHead.x === 0 ? maxIndex : oldHead.x - 1);
+                newHead = new Point(oldHead.y, oldHead.x - 1);
                 break;
             case Direction.E:
-                newHead = new Point(oldHead.y, oldHead.x === maxIndex ? 0 : oldHead.x + 1);
+                // newHead = new Point(oldHead.y, oldHead.x === maxIndex ? 0 : oldHead.x + 1);
+                newHead = new Point(oldHead.y, oldHead.x + 1);
                 break;
         }
         newHead.direction = snake.direction;
         oldHead.drawDirection = snake.direction.combine(oldHead.direction.opposite);
-        console.log(newHead.drawDirection);
 
         // Remove previous tail of snake OR retain with fruit
-        if (snake.hasPoint(newHead)) {
+        if (snake.hasPoint(newHead) || newHead.x < 0 || newHead.x > maxIndex || newHead.y < 0 || newHead.y > maxIndex) {
             // Collision, end game
             // TODO: game end logic
             this.gameOver = true;
@@ -203,7 +206,7 @@ window.onload = function () {
     init();
 
     // Initialize snake
-    snake.points.forEach(block => GridManager.drawBlock(...block));
+    snake.points.forEach(block => GridManager.drawBlock(block));
     GridManager.drawBlock(fruit);
 }
 
