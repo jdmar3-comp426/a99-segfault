@@ -36,6 +36,19 @@ class Direction {
         this.name = name;
     }
 
+    get opposite() {
+        switch (this) {
+            case Direction.N:
+                return Direction.S;
+            case Direction.S:
+                return Direction.N;
+            case Direction.W:
+                return Direction.E;
+            case Direction.E:
+                return Direction.W;
+        }
+    }
+
     combine(other) {
         if (!(other instanceof Direction)) throw new Error("Invalid direction");
         const dirInts = [Direction.headDirections.indexOf(this), Direction.headDirections.indexOf(other)].sort();
@@ -44,6 +57,7 @@ class Direction {
         switch (dirInts[0]) {
             case 0:
                 switch (dirInts[1]) {
+                    case 0:
                     case 1:
                         return Direction.NS;
                     case 2:
@@ -54,6 +68,8 @@ class Direction {
                 break;
             case 1:
                 switch (dirInts[1]) {
+                    case 1:
+                        return Direction.NS;
                     case 2:
                         return Direction.SE;
                     case 3:
@@ -61,17 +77,19 @@ class Direction {
                 }
                 break;
             case 2:
+            case 3:
                 return Direction.EW;
         }
     }
 }
 
 class Point {
-    constructor(y, x, dir = Direction.E) {
-        if (!(dir instanceof Direction)) throw new Error("Invalid direction");
+    constructor(y, x, dir = Direction.E, drawDir = Direction.EW) {
+        if (!(dir instanceof Direction) || !(drawDir instanceof Direction)) throw new Error("Invalid direction");
         this.y = y;
         this.x = x;
         this.dir = dir;
+        this.drawDir = drawDir;
     }
 
     get direction() {
@@ -81,6 +99,17 @@ class Point {
     set direction(dir) {
         if (!(dir instanceof Direction)) throw new Error("Invalid direction");
         this.dir = dir;
+    }
+
+    get drawDirection() {
+        return this.drawDir;
+    }
+
+    set drawDirection(drawDir) {
+        if (!(drawDir instanceof Direction)) setTimeout(() => {
+            console.log(drawDir);
+        }, 2000);//throw new Error("Invalid direction");
+        this.drawDir = drawDir;
     }
 
     equals(other) {
@@ -96,8 +125,10 @@ class Point {
 
 class Snake {
     constructor() {
-        this.points = [new Point(0, 0, Direction.E), new Point(0, 1, Direction.E), new Point(0, 2, Direction.E)];
-        this.oldDirection = Direction.E;
+        this.points = [
+            new Point(0, 0, Direction.E, Direction.EW),
+            new Point(0, 1, Direction.E, Direction.EW),
+            new Point(0, 2, Direction.E, Direction.EW)];
         this.direction = Direction.E;
     }
 
