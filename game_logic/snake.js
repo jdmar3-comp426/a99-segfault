@@ -45,32 +45,34 @@ const GridManager = {
             this.context.drawImage(headImg.image, p.x * this.blockWidth - .5 * this.growth,
                 p.y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
+        // TODO: tail sprite
+        //  } else if (p.equals(snake.tail)) {
         } else {
             // body block
-            const snakeImg = LoadedImage.Body.image;
+            // const snakeImg = LoadedImage.Body.image;
             // TODO: Add directional sprites for testing
-            // This is WIP but basically just set the src to the right thing
-            // const snakeImg = new Image();
-            // switch (p.drawDirection) {
-            //     case Direction.NS:
-            //         snakeImg.src = "assets/ns.png";
-            //         break;
-            //     case Direction.EW:
-            //         snakeImg.src = "assets/ew.png";
-            //         break;
-            //     case Direction.NW:
-            //         snakeImg.src = "assets/nw.png";
-            //         break;
-            //     case Direction.SW:
-            //         snakeImg.src = "assets/sw.png";
-            //         break;
-            //     case Direction.NE:
-            //         snakeImg.src = "assets/ne.png";
-            //         break;
-            //     case Direction.SE:
-            //         snakeImg.src = "assets/se.png";
-            //         break;
-            // }
+            // This is WIP, very debuggable
+            const snakeImg = new Image();
+            switch (p.drawDirection) {
+                case Direction.NS:
+                    snakeImg.src = "https://i.imgur.com/GOGK4AG.png";
+                    break;
+                case Direction.EW:
+                    snakeImg.src = "https://i.imgur.com/Gxc7fn4.png";
+                    break;
+                case Direction.NW:
+                    snakeImg.src = "https://i.imgur.com/FMAt9Ui.png";
+                    break;
+                case Direction.SW:
+                    snakeImg.src = "https://i.imgur.com/xJKPW7B.png";
+                    break;
+                case Direction.NE:
+                    snakeImg.src = "https://i.imgur.com/33kiGvi.png";
+                    break;
+                case Direction.SE:
+                    snakeImg.src = "https://i.imgur.com/962f40B.png";
+                    break;
+            }
             this.context.drawImage(snakeImg, p.x * this.blockWidth - .5 * this.growth,
                 p.y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
@@ -151,7 +153,7 @@ const GridManager = {
                 break;
         }
         newHead.direction = snake.direction;
-        newHead.drawDirection = snake.direction.combine(oldHead.direction.opposite);
+        oldHead.drawDirection = snake.direction.combine(oldHead.direction.opposite);
         console.log(newHead.drawDirection);
 
         // Remove previous tail of snake OR retain with fruit
@@ -215,7 +217,7 @@ function init() {
 
     }
     // Interval time is in ms
-    setInterval(GridManager.drawGrid, 100);
+    setInterval(GridManager.drawGrid, 150);
 }
 
 // Watch for arrow key input to control snake direction

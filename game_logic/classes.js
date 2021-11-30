@@ -140,6 +140,10 @@ class Snake {
         return this.points[this.length - 1];
     }
 
+    get tail() {
+        return this.points[0];
+    }
+
     hasPoint(p) {
         for (const point of this.points) {
             if (point.equals(p)) return true;
