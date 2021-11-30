@@ -52,28 +52,28 @@ const GridManager = {
             // const snakeImg = LoadedImage.Body.image;
             // TODO: Add directional sprites for testing
             // This is WIP, very debuggable
-            const snakeImg = new Image();
+            var snakeImg;
             switch (p.drawDirection) {
                 case Direction.NS:
-                    snakeImg.src = "https://i.imgur.com/GOGK4AG.png";
+                    snakeImg.src = LoadedImage.BodyNS;
                     break;
                 case Direction.EW:
-                    snakeImg.src = "https://i.imgur.com/Gxc7fn4.png";
+                    snakeImg.src = LoadedImage.BodyEW;
                     break;
                 case Direction.NW:
-                    snakeImg.src = "https://i.imgur.com/FMAt9Ui.png";
+                    snakeImg.src = LoadedImage.BodyNW;
                     break;
                 case Direction.SW:
-                    snakeImg.src = "https://i.imgur.com/xJKPW7B.png";
+                    snakeImg.src = LoadedImage.BodySW;
                     break;
                 case Direction.NE:
-                    snakeImg.src = "https://i.imgur.com/33kiGvi.png";
+                    snakeImg.src = LoadedImage.BodyNE;
                     break;
                 case Direction.SE:
-                    snakeImg.src = "https://i.imgur.com/962f40B.png";
+                    snakeImg.src = LoadedImage.BodySE;
                     break;
             }
-            this.context.drawImage(snakeImg, p.x * this.blockWidth - .5 * this.growth,
+            this.context.drawImage(snakeImg.image, p.x * this.blockWidth - .5 * this.growth,
                 p.y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
         }
