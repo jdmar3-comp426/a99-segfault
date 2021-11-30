@@ -83,9 +83,9 @@ const GridManager = {
         this.context.clearRect(0, 0, canvas.width, canvas.height);
     },
     // Remove snake tile as snake moves
-    removeBlock: function (y, x, fruit) {
+    removeBlock: function (y, x, isFruit) {
         this.context.fillStyle = 'rgb(255, 255, 255)';
-        if (fruit) {
+        if (isFruit) {
             this.context.clearRect(
                 x * this.blockWidth, y * this.blockWidth,
                 this.blockWidth, this.blockWidth
@@ -174,14 +174,16 @@ const GridManager = {
             this.growth += 1;
             // get rid of fruit immediately
             this.removeBlock(snake.head.y, snake.head.x, true);
+            this.removeBlock(oldHead.y, oldHead.x, false);
             fruit = generateFruit();
-            GridManager.drawBlock(fruit);
+            // GridManager.drawBlock(fruit);
         } else {
             GridManager.removeBlock(snake.points.shift(), false);
-            GridManager.drawBlock(fruit);
+            // GridManager.drawBlock(fruit);
 
         }
         GridManager.drawBlock(snake.head);
+        GridManager.drawBlock(oldHead);
         GridManager.drawBlock(fruit);
     }
 }
