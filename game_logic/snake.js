@@ -55,22 +55,22 @@ const GridManager = {
             var snakeImg;
             switch (p.drawDirection) {
                 case Direction.NS:
-                    snakeImg.src = LoadedImage.BodyNS;
+                    snakeImg = LoadedImage.BodyNS;
                     break;
                 case Direction.EW:
-                    snakeImg.src = LoadedImage.BodyEW;
+                    snakeImg = LoadedImage.BodyEW;
                     break;
                 case Direction.NW:
-                    snakeImg.src = LoadedImage.BodyNW;
+                    snakeImg = LoadedImage.BodyNW;
                     break;
                 case Direction.SW:
-                    snakeImg.src = LoadedImage.BodySW;
+                    snakeImg = LoadedImage.BodySW;
                     break;
                 case Direction.NE:
-                    snakeImg.src = LoadedImage.BodyNE;
+                    snakeImg = LoadedImage.BodyNE;
                     break;
                 case Direction.SE:
-                    snakeImg.src = LoadedImage.BodySE;
+                    snakeImg = LoadedImage.BodySE;
                     break;
             }
             this.context.drawImage(snakeImg.image, p.x * this.blockWidth - .5 * this.growth,
