@@ -5,6 +5,8 @@
     around the ends of the board.
 */
 
+const gridWidth = 15;
+
 // Define the GridManager object to manage the game grid
 const GridManager = {
     context: null,
@@ -15,74 +17,95 @@ const GridManager = {
     Define game map, which lets us refer to grid locations
     instead of pixels. Intended to be used to keep track of food/other grid items
     */
-    map: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+    map: Array.from(Array(gridWidth), _ => Array(gridWidth).fill(0)),
     // Function to invoke canvas object and draw snake tile
-    drawSnakeBlock: function (y, x) {
-        if (y === snake.getHead()[0] && x === snake.getHead()[1]) {
-            const head = new Image();
+    drawBlock: function (p) {
+        if (!(p instanceof Point)) throw new Error("Not a Point");
+        if (p.equals(fruit)) {
+            this.context.drawImage(LoadedImage.FruitApple.image,
+                p.x * this.blockWidth, p.y * this.blockWidth,
+                this.blockWidth, this.blockWidth
+            );
+        } else if (p.equals(snake.head)) {
+            var headImg;
             switch (snake.direction) {
-                case "up":
-                    head.src = "https://i.imgur.com/SzibTAr.png";
+                case Direction.N:
+                    headImg = LoadedImage.HeadNorth;
                     break;
-                case "right":
-                    head.src = "https://i.imgur.com/aty89Dm.png";
+                case Direction.E:
+                    headImg = LoadedImage.HeadEast;
                     break;
-                case "down":
-                    head.src = "https://i.imgur.com/CDPu6N5.png";
+                case Direction.S:
+                    headImg = LoadedImage.HeadSouth;
                     break;
-                case "left":
-                    head.src = "https://i.imgur.com/FOvnnXO.png";
+                case Direction.W:
+                    headImg = LoadedImage.HeadWest;
+                    break;
             }
-
-            this.context.drawImage(head, x*this.blockWidth - .5*this.growth,
-                y*this.blockWidth - .5* this.growth ,
+            this.context.drawImage(headImg.image, p.x * this.blockWidth - .5 * this.growth,
+                p.y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
+        // TODO: tail sprite
+        //  } else if (p.equals(snake.tail)) {
         } else {
-
-            const snake = new Image();
-            snake.src = "https://i.imgur.com/8HVeW6i.png";
-            this.context.drawImage(snake, x * this.blockWidth - .5 * this.growth,
-                y * this.blockWidth - .5 * this.growth,
+            // body block
+            // const snakeImg = LoadedImage.Body.image;
+            // TODO: Add directional sprites for testing
+            // This is WIP, very debuggable
+            var snakeImg;
+            switch (p.drawDirection) {
+                case Direction.NS:
+                    snakeImg = LoadedImage.BodyNS;
+                    break;
+                case Direction.EW:
+                    snakeImg = LoadedImage.BodyEW;
+                    break;
+                case Direction.NW:
+                    snakeImg = LoadedImage.BodyNW;
+                    break;
+                case Direction.SW:
+                    snakeImg = LoadedImage.BodySW;
+                    break;
+                case Direction.NE:
+                    snakeImg = LoadedImage.BodyNE;
+                    break;
+                case Direction.SE:
+                    snakeImg = LoadedImage.BodySE;
+                    break;
+            }
+            this.context.drawImage(snakeImg.image, p.x * this.blockWidth - .5 * this.growth,
+                p.y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
         }
 
     },
-    clear: function() {
+    clear: function () {
         this.context.clearRect(0, 0, canvas.width, canvas.height);
     },
     // Remove snake tile as snake moves
-    removeSnakeBlock: function (y, x, fruit) {
+    removeBlock: function (y, x, fruit) {
         this.context.fillStyle = 'rgb(255, 255, 255)';
         if (fruit) {
             this.context.clearRect(
-                x * this.blockWidth , y * this.blockWidth,
+                x * this.blockWidth, y * this.blockWidth,
                 this.blockWidth, this.blockWidth
             );
         } else {
             switch (snake.direction) {
-                case "up":
-                case "down":
+                case Direction.N:
+                case Direction.S:
                     GridManager.clear();
-                    for (let i = 0; i < snake.length(); i++) {
-                        this.drawSnakeBlock(...snake.points[i]);
+                    for (let i = 0; i < snake.length; i++) {
+                        this.drawBlock(snake.points[i]);
 
                     }
                     break;
 
-                case "left":
-                case "right":
+                case Direction.W:
+                case Direction.E:
                     GridManager.clear();
-                    for (let i = 0; i < snake.length(); i++) {
-                        this.drawSnakeBlock(...snake.points[i]);
+                    for (let i = 0; i < snake.length; i++) {
+                        this.drawBlock(snake.points[i]);
                     }
 
                     break;
@@ -90,110 +113,89 @@ const GridManager = {
             }
         }
     },
-    // Draw fruit tile
-    drawFruitBlock: function (y, x) {
-
-        const fruit  = new Image();
-        fruit.src = "https://preview.redd.it/bxcbiiu1wxa71.png?auto=webp&s=709c4efa8fc567e9f16aeda1008ccd5b700c3052";
-
-
-            this.context.drawImage(fruit,
-                x * this.blockWidth, y * this.blockWidth,
-                this.blockWidth, this.blockWidth
-            );
-    },
     // Iterate over map elements and draw any non-zero objects
     drawGrid: function () {
-        GridManager.map.forEach(function (row, r) {
-            row.forEach(function (block, c) {
-                if (GridManager.map[r][c] !== 0) {
-                    /*
-                    Insert map logic
-                    */
-                }
-            });
-        });
-        GridManager.updateGame();
+        // GridManager.map.forEach(function (row, r) {
+        //     row.forEach(function (block, c) {
+        //         if (GridManager.map[r][c] !== 0) {
+        //             /*
+        //             Insert map logic
+        //             */
+        //         }
+        //     });
+        // });
+        if (!this.gameOver) {
+            GridManager.updateGame();
+        }
     },
     // Make update to game state
     updateGame: function () {
         if (this.gameOver) return;
-        const maxWidth = GridManager.map[0].length - 1;
+        const maxIndex = GridManager.map[0].length - 1;
 
         // Update new head and place it in the current direction
-        const oldHead = snake.getHead();
+        // snake.oldDirection = snake.direction;
+        const oldHead = snake.head;
         var newHead;
+        // const newDir = oldHead.direction + snake.direction;
         switch (snake.direction) {
-            case "left":
-                newHead = [oldHead[0], oldHead[1] === 0 ? maxWidth : oldHead[1] - 1];
+            case Direction.N:
+                newHead = new Point(oldHead.y === 0 ? maxIndex : oldHead.y - 1, oldHead.x);
                 break;
-            case "right":
-                newHead = [oldHead[0], oldHead[1] === maxWidth ? 0 : oldHead[1] + 1];
+            case Direction.S:
+                newHead = new Point(oldHead.y === maxIndex ? 0 : oldHead.y + 1, oldHead.x);
                 break;
-            case "up":
-                newHead = [oldHead[0] === 0 ? maxWidth : oldHead[0] - 1, oldHead[1]];
+            case Direction.W:
+                newHead = new Point(oldHead.y, oldHead.x === 0 ? maxIndex : oldHead.x - 1);
                 break;
-            case "down":
-                newHead = [oldHead[0] === maxWidth ? 0 : oldHead[0] + 1, oldHead[1]];
+            case Direction.E:
+                newHead = new Point(oldHead.y, oldHead.x === maxIndex ? 0 : oldHead.x + 1);
                 break;
         }
+        newHead.direction = snake.direction;
+        oldHead.drawDirection = snake.direction.combine(oldHead.direction.opposite);
+        console.log(newHead.drawDirection);
 
         // Remove previous tail of snake OR retain with fruit
         if (snake.hasPoint(newHead)) {
             // Collision, end game
             // TODO: game end logic
             this.gameOver = true;
-
             return;
         }
         snake.points.push(newHead);
-        this.drawSnakeBlock(oldHead[0], oldHead[1]);
-        if (pointEquals(newHead, fruit)) {
+        this.drawBlock(oldHead);
+        if (newHead.equals(fruit)) {
             console.log("ate fruit");
             // Snake head is on a fruit
-            this.growth += 5;
+            this.growth += 1;
             // get rid of fruit immediately
-            this.removeSnakeBlock(snake.getHead()[0],snake.getHead()[1], true );
-            while (snake.hasPoint(fruit)) {
-                // Find a new place for the fruit
-
-                fruit = [Math.floor(Math.random() * maxWidth), Math.floor(Math.random() * maxWidth)];
-            }
-            GridManager.drawFruitBlock(...fruit);
+            this.removeBlock(snake.head.y, snake.head.x, true);
+            fruit = generateFruit();
+            GridManager.drawBlock(fruit);
         } else {
-            GridManager.removeSnakeBlock(...snake.points.shift(), false);
-            GridManager.drawFruitBlock(...fruit);
+            GridManager.removeBlock(snake.points.shift(), false);
+            GridManager.drawBlock(fruit);
 
         }
-        GridManager.drawSnakeBlock(...snake.getHead());
-        GridManager.drawFruitBlock(...fruit);
+        GridManager.drawBlock(snake.head);
+        GridManager.drawBlock(fruit);
     }
 }
 
 // Manage snake object
-var snake = {
-    // Keep track of snake as array of points
-    points: [[0, 0], [0, 1], [0, 2]], // points are stored as (y, x) pairs with index 0 as the tail
-    direction: "right",
-    getHead: function () {
-        return this.points[this.points.length - 1]
-    },
-    hasPoint: function (p) {
-        for (const point of this.points) {
-            if (pointEquals(point, p)) return true;
-        }
-        return false;
-    },
-    length: function() {
-        return this.points.length;
+var snake = new Snake();
+
+var fruit = generateFruit();
+
+function generateFruit() {
+    const maxIndex = GridManager.map.length - 1;
+    var out = snake.points[0];
+    while (snake.hasPoint(out)) {
+        // Find a new place for the fruit
+        out = new Point(Math.floor(Math.random() * maxIndex), Math.floor(Math.random() * maxIndex));
     }
-}
-
-var fruit = [5, 5];
-
-// Checks for equality of points
-function pointEquals(p1, p2) {
-    return p1[0] === p2[0] && p1[1] === p2[1];
+    return out;
 }
 
 // When page loads, initialize game board
@@ -201,8 +203,8 @@ window.onload = function () {
     init();
 
     // Initialize snake
-    snake.points.forEach(block => GridManager.drawSnakeBlock(...block));
-    GridManager.drawFruitBlock(...fruit);
+    snake.points.forEach(block => GridManager.drawBlock(...block));
+    GridManager.drawBlock(fruit);
 }
 
 // Initialize canvas/corresponding attributes for GridManager
@@ -210,12 +212,12 @@ function init() {
     window.canvas = document.getElementById('snakeGrid');
     if (window.canvas.getContext) {
         GridManager.context = window.canvas.getContext('2d');
-        GridManager.blockWidth = Math.floor(window.canvas.height / 10);
+        GridManager.blockWidth = Math.floor(window.canvas.height / gridWidth);
 
 
     }
     // Interval time is in ms
-    setInterval(GridManager.drawGrid, 180);
+    setInterval(GridManager.drawGrid, 150);
 }
 
 // Watch for arrow key input to control snake direction
@@ -227,23 +229,23 @@ window.addEventListener("keydown", function (event) {
 
     switch (event.key) {
         case "ArrowLeft":
-            if (snake.direction !== "right") {
-                snake.direction = "left";
+            if (snake.direction !== Direction.E) {
+                snake.direction = Direction.W;
             }
             break;
         case "ArrowRight":
-            if (snake.direction !== "left") {
-                snake.direction = "right";
+            if (snake.direction !== Direction.W) {
+                snake.direction = Direction.E;
             }
             break;
         case "ArrowUp":
-            if (snake.direction !== "down") {
-                snake.direction = "up";
+            if (snake.direction !== Direction.S) {
+                snake.direction = Direction.N;
             }
             break;
         case "ArrowDown":
-            if (snake.direction !== "up") {
-                snake.direction = "down";
+            if (snake.direction !== Direction.N) {
+                snake.direction = Direction.S;
             }
             break;
     }
