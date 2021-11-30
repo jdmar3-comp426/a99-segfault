@@ -215,7 +215,7 @@ function init() {
 
     }
     // Interval time is in ms
-    setInterval(GridManager.drawGrid, 500);
+    setInterval(GridManager.drawGrid, 100);
 }
 
 // Watch for arrow key input to control snake direction
