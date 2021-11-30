@@ -126,6 +126,7 @@ const GridManager = {
     },
     // Make update to game state
     updateGame: function () {
+        if (this.gameOver) return;
         const maxIndex = GridManager.map[0].length - 1;
 
         // Update new head and place it in the current direction
@@ -160,7 +161,7 @@ const GridManager = {
         if (newHead.equals(fruit)) {
             console.log("ate fruit");
             // Snake head is on a fruit
-            this.growth += 5;
+            this.growth += 2;
             // get rid of fruit immediately
             this.removeBlock(snake.head.y, snake.head.x, true);
             fruit = generateFruit();
@@ -209,7 +210,7 @@ function init() {
 
     }
     // Interval time is in ms
-    setInterval(GridManager.drawGrid, 180);
+    setInterval(GridManager.drawGrid, 150);
 }
 
 // Watch for arrow key input to control snake direction
