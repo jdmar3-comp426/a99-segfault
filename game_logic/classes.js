@@ -14,7 +14,9 @@ class LoadedImage {
     static BodySW = new LoadedImage("https://i.imgur.com/xJKPW7B.png");
     static BodyNE = new LoadedImage("https://i.imgur.com/33kiGvi.png");
     static BodySE = new LoadedImage("https://i.imgur.com/962f40B.png");
-    static FruitApple = new LoadedImage("https://preview.redd.it/bxcbiiu1wxa71.png?auto=webp&s=709c4efa8fc567e9f16aeda1008ccd5b700c3052")
+    static FruitApple = new LoadedImage("https://preview.redd.it/bxcbiiu1wxa71.png?auto=webp&s=709c4efa8fc567e9f16aeda1008ccd5b700c3052");
+
+    static TrafficCone = new LoadedImage("https://i.imgur.com/wL4luTP.png");
 
     constructor(src) {
         this.image = new Image();

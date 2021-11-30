@@ -7,6 +7,8 @@
 
 const gridWidth = 15;
 var inputProcessed = false;
+var refreshTime = 150;
+var refresh = null;
 
 // Define the GridManager object to manage the game grid
 const GridManager = {
@@ -145,7 +147,10 @@ const GridManager = {
         this.drawBlock(oldHead);
         if (newHead.equals(fruit)) {
             // Snake head is on a fruit
-            this.growth += 1;
+            this.growth += 5;
+            refreshTime += 50;
+            clearInterval(refresh);
+           refresh = setInterval(GridManager.drawGrid, refreshTime);
             // get rid of fruit immediately
             this.removeBlock(snake.head.y, snake.head.x, true);
             this.removeBlock(oldHead.y, oldHead.x, false);
@@ -193,7 +198,7 @@ function init() {
 
     }
     // Interval time is in ms
-    setInterval(GridManager.drawGrid, 150);
+    refresh = setInterval(GridManager.drawGrid, refreshTime);
 }
 
 // Watch for arrow key input to control snake direction
