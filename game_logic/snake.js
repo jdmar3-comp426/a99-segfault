@@ -50,9 +50,7 @@ const GridManager = {
         //  } else if (p.equals(snake.tail)) {
         } else {
             // body block
-            // const snakeImg = LoadedImage.Body.image;
-            // TODO: Add directional sprites for testing
-            // This is WIP, very debuggable
+            // TODO: Add directional sprites
             var snakeImg;
             switch (p.drawDirection) {
                 case Direction.NS:
@@ -92,39 +90,15 @@ const GridManager = {
                 this.blockWidth, this.blockWidth
             );
         } else {
-            switch (snake.direction) {
-                case Direction.N:
-                case Direction.S:
-                    GridManager.clear();
-                    for (let i = 0; i < snake.length; i++) {
-                        this.drawBlock(snake.points[i]);
-
-                    }
-                    break;
-
-                case Direction.W:
-                case Direction.E:
-                    GridManager.clear();
-                    for (let i = 0; i < snake.length; i++) {
-                        this.drawBlock(snake.points[i]);
-                    }
-
-                    break;
-
+            GridManager.clear();
+            for (let i = 0; i < snake.length; i++) {
+                this.drawBlock(snake.points[i]);
             }
+            this.drawBlock(fruit);
         }
     },
     // Iterate over map elements and draw any non-zero objects
     drawGrid: function () {
-        // GridManager.map.forEach(function (row, r) {
-        //     row.forEach(function (block, c) {
-        //         if (GridManager.map[r][c] !== 0) {
-        //             /*
-        //             Insert map logic
-        //             */
-        //         }
-        //     });
-        // });
         if (!this.gameOver) {
             GridManager.updateGame();
         }
@@ -136,10 +110,8 @@ const GridManager = {
         const maxIndex = GridManager.map[0].length - 1;
 
         // Update new head and place it in the current direction
-        // snake.oldDirection = snake.direction;
         const oldHead = snake.head;
         var newHead;
-        // const newDir = oldHead.direction + snake.direction;
         switch (snake.direction) {
             case Direction.N:
                 // newHead = new Point(oldHead.y === 0 ? maxIndex : oldHead.y - 1, oldHead.x);
@@ -164,7 +136,6 @@ const GridManager = {
         // Remove previous tail of snake OR retain with fruit
         if (snake.hasPoint(newHead) || newHead.x < 0 || newHead.x > maxIndex || newHead.y < 0 || newHead.y > maxIndex) {
             // Collision, end game
-            // TODO: game end logic
             GridManager.removeBlock(oldHead.y, oldHead.x, false);
             GridManager.drawBlock(oldHead);
             this.gameOver = true;
@@ -173,7 +144,6 @@ const GridManager = {
         snake.points.push(newHead);
         this.drawBlock(oldHead);
         if (newHead.equals(fruit)) {
-            console.log("ate fruit");
             // Snake head is on a fruit
             this.growth += 1;
             // get rid of fruit immediately
