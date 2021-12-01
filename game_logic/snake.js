@@ -19,6 +19,7 @@ let increment = initialIncrement;
 const GridManager = {
     context: null,
     gameOver: false,
+    isPaused: false,
     blockWidth: null,
     growth: 0,
     mode: Gamemode.DontStarve,  // TODO: set gamemode based on user selection
@@ -158,9 +159,12 @@ const GridManager = {
         this.drawBlock(oldHead);
         if (newHead.equals(entities.fruit)) {
             // Snake head is on a fruit
+
             this.growth += 2.5;
             increment *= 0.85;
             refreshTime += .5 * increment;
+            document.getElementById('currentScore').innerHTML = "" +(parseInt(document.getElementById('currentScore').innerHTML)+1);
+
             clearInterval(refresh);
             refresh = setInterval(GridManager.drawGrid, refreshTime);
             // get rid of fruit immediately
@@ -255,6 +259,8 @@ function init() {
     const usernameLabel = document.getElementById('usernameLabel');
     const emailLabel = document.getElementById('emailLabel');
 
+    const currentScore = document.getElementById('currentScore');
+
     usernameLabel.innerHTML = localStorage.getItem("username") ; 
     emailLabel.innerHTML = localStorage.getItem("email") ;
     window.canvas = document.getElementById('snakeGrid');
@@ -293,6 +299,19 @@ window.addEventListener("keydown", function (event) {
         case "ArrowDown":
             if (snake.direction !== Direction.N) {
                 snake.direction = Direction.S;
+            }
+            break;
+        case " ":
+            console.log("Space pressed\n");
+            if (GridManager.gameOver) {
+                restartGame();
+            } else if (GridManager.isPaused) {
+                GridManager.isPaused = false;
+                clearInterval(refresh);
+                refresh = setInterval(GridManager.drawGrid, refreshTime);
+            } else {
+                GridManager.isPaused = true;
+                clearInterval(refresh);
             }
             break;
     }
