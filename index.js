@@ -2,10 +2,13 @@
     This script is intended to be used for user authentication and
     configuring gameplay settings (alternative modes, etc.)
 */
-localStorage.setItem("username" , "guest") ; 
-localStorage.setItem("email" , "guest@domain.com") ; 
 
 window.addEventListener("load" , function(){
+
+    initializeForGuest() ; 
+
+
+
 
     // When home page loads, add event to button click that sends user to game
     document.getElementById("launchGame").onclick = function() {
@@ -64,7 +67,23 @@ window.addEventListener("load" , function(){
         }) ; 
     }
 
+    function initializeForGuest(){
 
+        const getGuestRequest = new XMLHttpRequest() ; 
+        getGuestRequest.open("GET" , "http://localhost:5000/app/user/guest") ;
+        getGuestRequest.send() ;
+        getGuestRequest.addEventListener("load" , function(event){
+            localStorage.setItem("username" , "guest") ;
+            const guestEmail = JSON.parse(getGuestRequest.response).email ;
+            const guestObstacleHighScore = JSON.parse(getGuestRequest.response).obstacleHighScore;
+            const guestStarveHighScore = JSON.parse(getGuestRequest.response).starveHighScore ; 
+            localStorage.setItem("email" , guestEmail) ; 
+            localStorage.setItem("obstacleHighScore" , guestObstacleHighScore) ;
+            localStorage.setItem("starveHighScore" , guestStarveHighScore) ;
+
+        }
+        ) ; 
+    }
 
 
 

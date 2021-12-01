@@ -257,11 +257,24 @@ window.onload = function () {
 
 // Initialize canvas/corresponding attributes for GridManager
 function init() {
+
     const usernameLabel = document.getElementById('usernameLabel');
     const emailLabel = document.getElementById('emailLabel');
+    const highestScoreLabel = document.getElementById('userStandardScore') ; 
+     
+    if(document.getElementById('gameType').innerHTML == "Don't Starve"){
+        highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore") ; 
+    }
+    else{
+        highestScoreLabel.innerHTML = localStorage.getItem("obstacleHighScore") ;
+    }
 
     usernameLabel.innerHTML = localStorage.getItem("username") ; 
     emailLabel.innerHTML = localStorage.getItem("email") ;
+
+
+
+
     window.canvas = document.getElementById('snakeGrid');
 
     if (window.canvas.getContext) {
