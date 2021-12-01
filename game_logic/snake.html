@@ -23,19 +23,19 @@
 
                     <div class="navbar-menu">
                         <div class="navbar-end">
-                            <a class="navbar-item">
+                            <a class="navbar-item" href="./../index.html">
                                 Home
                             </a>
                             <div class="navbar-item has-dropdown is-hoverable">
                                 <a class="navbar-link">
-                                  Game Mode
+                                  Game Modes
                                 </a>
                                 <div class="navbar-dropdown">
-                                  <a class="navbar-item">
-                                    Slim Fruit
-                                  </a>
-                                  <a class="navbar-item">
+                                  <a class="navbar-item" onclick="setDontStarve()">
                                     Don't Starve
+                                  </a>
+                                  <a class="navbar-item" onclick="setObstacleCourse()">
+                                    Obstacle Course
                                   </a>
                                 </div>
                             </div>
@@ -52,8 +52,8 @@
                 <p class="title is-1">
                     Snake
                 </p>
-                <p class="subtitle is-size-4">
-                    Standard Mode
+                <p class="subtitle is-size-4" id="gameType">
+                    Don't Starve
                 </p>
             </div>
         </div>

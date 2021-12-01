@@ -306,3 +306,15 @@ function restartGame() {
     snake = new Snake();
     GridManager.gameOver = false;
 }
+
+// Change game mode to Don't Starve
+function setDontStarve() {
+    GridManager.mode = Gamemode.DontStarve;
+    document.getElementById('gameType').innerHTML = "Don't Starve";
+}
+
+// Change game mode to Obstacle Course
+function setObstacleCourse() {
+    GridManager.mode = Gamemode.ObstacleCourse;
+    document.getElementById('gameType').innerHTML = "Obstacle Course";
+}
