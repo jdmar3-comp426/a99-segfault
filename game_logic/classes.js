@@ -15,6 +15,7 @@ class LoadedImage {
     static BodyNE = new LoadedImage("https://i.imgur.com/33kiGvi.png");
     static BodySE = new LoadedImage("https://i.imgur.com/962f40B.png");
     static FruitApple = new LoadedImage("https://preview.redd.it/bxcbiiu1wxa71.png?auto=webp&s=709c4efa8fc567e9f16aeda1008ccd5b700c3052");
+    static FruitGreenApple = new LoadedImage("https://i.imgur.com/ORJbhEo.png");
 
     static TrafficCone = new LoadedImage("https://i.imgur.com/wL4luTP.png");
 
@@ -130,6 +131,7 @@ class Point {
     }
 
     equals(other) {
+        if (!(other instanceof Point)) return false;
         return this.y === other.y && this.x === other.x;
     }
 
