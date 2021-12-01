@@ -19,6 +19,7 @@ let increment = initialIncrement;
 const GridManager = {
     context: null,
     gameOver: false,
+    isPaused: false,
     blockWidth: null,
     growth: 0,
     mode: Gamemode.DontStarve,  // TODO: set gamemode based on user selection
@@ -151,16 +152,20 @@ const GridManager = {
             // Collision, end game
             GridManager.removeBlock(oldHead.y, oldHead.x, false);
             GridManager.drawBlock(oldHead);
-            this.gameOver = true;
+            endGame();
+
             return;
         }
         snake.points.push(newHead);
         this.drawBlock(oldHead);
         if (newHead.equals(entities.fruit)) {
             // Snake head is on a fruit
+
             this.growth += 2.5;
             increment *= 0.85;
             refreshTime += .5 * increment;
+            document.getElementById('currentScore').innerHTML = "" +(parseInt(document.getElementById('currentScore').innerHTML)+1);
+
             clearInterval(refresh);
             refresh = setInterval(GridManager.drawGrid, refreshTime);
             // get rid of fruit immediately
@@ -255,10 +260,9 @@ function init() {
     const usernameLabel = document.getElementById('usernameLabel');
     const emailLabel = document.getElementById('emailLabel');
 
-    usernameLabel.innerHTML = "Username: " + localStorage.getItem("username");
-    emailLabel.innerHTML = "Email: " + localStorage.getItem("email");
+    usernameLabel.innerHTML = localStorage.getItem("username") ; 
+    emailLabel.innerHTML = localStorage.getItem("email") ;
     window.canvas = document.getElementById('snakeGrid');
-
 
     if (window.canvas.getContext) {
         GridManager.context = window.canvas.getContext('2d');
@@ -296,8 +300,44 @@ window.addEventListener("keydown", function (event) {
                 snake.direction = Direction.S;
             }
             break;
+        case " ":
+            inputProcessed = false;
+            if (GridManager.gameOver) {
+                restartGame();
+            } else if (GridManager.isPaused) {
+                GridManager.isPaused = false;
+                clearInterval(refresh);
+                refresh = setInterval(GridManager.drawGrid, refreshTime);
+            } else {
+                GridManager.isPaused = true;
+                clearInterval(refresh);
+            }
+            break;
     }
 
     // Cancel the default action to avoid it being handled twice
     event.preventDefault();
 }, true)
+
+// Reset game state
+function restartGame() {
+    document.getElementById('currentScore').innerHTML = "0";
+    snake = new Snake();
+    GridManager.gameOver = false;
+}
+
+// Change game mode to Don't Starve
+function setDontStarve() {
+    GridManager.mode = Gamemode.DontStarve;
+    document.getElementById('gameType').innerHTML = "Don't Starve";
+}
+
+// Change game mode to Obstacle Course
+function setObstacleCourse() {
+    GridManager.mode = Gamemode.ObstacleCourse;
+    document.getElementById('gameType').innerHTML = "Obstacle Course";
+}
+
+function endGame() {
+    GridManager.gameOver = true;
+}
