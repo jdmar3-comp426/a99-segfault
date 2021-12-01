@@ -156,7 +156,7 @@ const GridManager = {
             increment = incrementBase
             refreshTime += .5*increment;
             clearInterval(refresh);
-           refresh = setInterval(GridManager.drawGrid, refreshTime);
+            refresh = setInterval(GridManager.drawGrid, refreshTime);
             // get rid of fruit immediately
             this.removeBlock(snake.head.y, snake.head.x, true);
             this.removeBlock(oldHead.y, oldHead.x, false);
@@ -203,11 +203,6 @@ function init() {
     emailLabel.innerHTML = localStorage.getItem("email") ;
     window.canvas = document.getElementById('snakeGrid');
 
-     
-
-
-
-
     if (window.canvas.getContext) {
         GridManager.context = window.canvas.getContext('2d');
         GridManager.blockWidth = Math.floor(window.canvas.height / gridWidth);
@@ -252,3 +247,9 @@ window.addEventListener("keydown", function (event) {
     // Cancel the default action to avoid it being handled twice
     event.preventDefault();
 }, true)
+
+// Reset game state
+function restartGame() {
+    snake = new Snake();
+    GridManager.gameOver = false;
+}
