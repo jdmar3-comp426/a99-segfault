@@ -6,7 +6,8 @@
 */
 
 
-const gridWidth = 15;
+const gridWidth = 12;
+const numObstacles = 8;
 let inputProcessed = false;
 const initialRefreshTime = 150;
 let refreshTime = initialRefreshTime;
@@ -106,7 +107,7 @@ const GridManager = {
             for (let i = 0; i < snake.length; i++) {
                 this.drawBlock(snake.points[i]);
             }
-            this.drawBlock(entities.fruit);
+            entities.draw();
         }
     },
     // Iterate over map elements and draw any non-zero objects
@@ -119,7 +120,7 @@ const GridManager = {
     updateGame: function () {
         inputProcessed = false;
         if (this.gameOver) return;
-        const maxIndex = GridManager.map.length - 1;
+        const maxIndex = gridWidth - 1;
 
         // Update new head and place it in the current direction
         const oldHead = snake.head;
@@ -165,7 +166,7 @@ const GridManager = {
             // get rid of fruit immediately
             this.removeBlock(snake.head.y, snake.head.x, true);
             this.removeBlock(oldHead.y, oldHead.x, false);
-            entities.fruit = generateFruit(entities.slimFruit);
+            entities.fruit = generateEntity(entities.slimFruit);
         } else {
             if (this.mode === Gamemode.DontStarve && newHead.equals(entities.slimFruit)) {
                 this.growth = Math.max(this.growth - 2.5, 0);
@@ -177,7 +178,7 @@ const GridManager = {
                 // get rid of fruit immediately
                 this.removeBlock(snake.head.y, snake.head.x, true);
                 this.removeBlock(oldHead.y, oldHead.x, false);
-                entities.slimFruit = generateFruit(entities.fruit);
+                entities.slimFruit = generateEntity(entities.fruit);
             }
             GridManager.removeBlock(snake.points.shift(), false);
         }
@@ -210,19 +211,7 @@ const entities = {
 
 // Initialize slimFruit and obstacles according to mode
 entities.obstacles = {
-    points: function() {
-        const maxIndex = GridManager.map.length - 1;
-        let out = [];
-        if (GridManager.mode === Gamemode.ObstacleCourse) {
-            let target = snake.points[0];
-            // TODO: generate obstacles
-            while (snake.hasPoint(target) || this.hasPoint(target)) {
-                target = new Point(Math.floor(Math.random() * maxIndex), Math.floor(Math.random() * maxIndex));
-            }
-            out.push(target);
-        }
-        return out;
-    }(),
+    points: [],
     hasPoint: function(p) {
         for (const point of this.points) {
             if (point.equals(p)) return true;
@@ -230,14 +219,20 @@ entities.obstacles = {
         return false;
     }
 }
-entities.fruit = generateFruit();
+if (GridManager.mode === Gamemode.ObstacleCourse) {
+    // TODO: generate obstacles
+    for (let i = 0; i < numObstacles; i++) {
+        entities.obstacles.points.push(generateEntity());
+    }
+}
+entities.fruit = generateEntity();
 if (GridManager.mode === Gamemode.DontStarve) {
-    entities.slimFruit = generateFruit(entities.fruit);
+    entities.slimFruit = generateEntity(entities.fruit);
 }
 
 
-function generateFruit(exclude = null) {
-    const maxIndex = GridManager.map.length - 1;
+function generateEntity(exclude = null) {
+    const maxIndex = gridWidth - 1;
     let out = snake.points[0];
     while (snake.hasPoint(out) || entities.obstacles.hasPoint(out) || out.equals(exclude)) {
         // Find a new place for the fruit
