@@ -152,7 +152,8 @@ const GridManager = {
             // Collision, end game
             GridManager.removeBlock(oldHead.y, oldHead.x, false);
             GridManager.drawBlock(oldHead);
-            this.gameOver = true;
+            endGame();
+
             return;
         }
         snake.points.push(newHead);
@@ -259,8 +260,6 @@ function init() {
     const usernameLabel = document.getElementById('usernameLabel');
     const emailLabel = document.getElementById('emailLabel');
 
-    const currentScore = document.getElementById('currentScore');
-
     usernameLabel.innerHTML = localStorage.getItem("username") ; 
     emailLabel.innerHTML = localStorage.getItem("email") ;
     window.canvas = document.getElementById('snakeGrid');
@@ -302,7 +301,7 @@ window.addEventListener("keydown", function (event) {
             }
             break;
         case " ":
-            console.log("Space pressed\n");
+            inputProcessed = false;
             if (GridManager.gameOver) {
                 restartGame();
             } else if (GridManager.isPaused) {
@@ -322,6 +321,7 @@ window.addEventListener("keydown", function (event) {
 
 // Reset game state
 function restartGame() {
+    document.getElementById('currentScore').innerHTML = "0";
     snake = new Snake();
     GridManager.gameOver = false;
 }
@@ -336,4 +336,8 @@ function setDontStarve() {
 function setObstacleCourse() {
     GridManager.mode = Gamemode.ObstacleCourse;
     document.getElementById('gameType').innerHTML = "Obstacle Course";
+}
+
+function endGame() {
+    GridManager.gameOver = true;
 }
