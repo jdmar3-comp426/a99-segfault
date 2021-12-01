@@ -199,8 +199,8 @@ function init() {
     const usernameLabel = document.getElementById('usernameLabel') ;
     const emailLabel = document.getElementById('emailLabel') ;
 
-    usernameLabel.innerHTML = "Username: " + localStorage.getItem("username") ; 
-    emailLabel.innerHTML = "Email: " + localStorage.getItem("email") ;
+    usernameLabel.innerHTML = localStorage.getItem("username") ; 
+    emailLabel.innerHTML = localStorage.getItem("email") ;
     window.canvas = document.getElementById('snakeGrid');
 
      

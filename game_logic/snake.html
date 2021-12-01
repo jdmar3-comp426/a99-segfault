@@ -6,15 +6,83 @@
     <title>Snake | Segfault</title>
     <script type="text/javascript" src="./../game_logic/classes.js"></script>
     <script type="text/javascript" src="./../game_logic/snake.js"></script>
+    <link rel="stylesheet" href="./../node_modules/bulma/css/bulma.css">
     <link href="./snake.css" rel="stylesheet">
 </head>
 
 <body>
-    <h1 id="usernameLabel">username</h1>
-    <h1 id="emailLabel">email</h1>
-<canvas id="snakeGrid" width="800px" height="800px">
-    Canvas does not appear to be supported. Please use a compatible browser to play!
-</canvas>
+    <section class="hero is-warning">
+        <div class="hero-head">
+            <nav class="navbar">
+                <div class="container">
+                    <div id="navMenu" class="navbar-brand">
+                        <p class="navbar-item is-size-4 is-family-monospace">
+                            SEGFAULT
+                        </p>
+                    </div>
 
+                    <div class="navbar-menu">
+                        <div class="navbar-end">
+                            <a class="navbar-item">
+                                Home
+                            </a>
+                            <a class="navbar-item">
+                                Don't Starve
+                            </a>
+                            <div class="navbar-item">
+                                <div class="buttons">
+                                    <a class="button is-warning is-inverted">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="container has-text-centered">
+                <p class="title is-1">
+                    Snake
+                </p>
+                <p class="subtitle is-size-4">
+                    Standard Mode
+                </p>
+            </div>
+        </div>
+
+        <div class="hero-body">
+        </div>
+    </section>
+
+    <section class="section has-background-warning-light">
+        <div class="hero-body">
+            <div class="columns">
+                <div class="column is-one-fifth has-text-centered">
+                    <h1 class="title">Username</h1>
+                    <h2 id="usernameLabel" class="title has-text-grey"></h2>
+                    <br><br>
+                    <h1 class="title">Email</h1>
+                    <h2 id="emailLabel" class="title has-text-grey"></h2>
+                </div>
+
+                <div class="column is-flex is-flex-direction-column is-align-items-center">
+                    <canvas id="snakeGrid" width="800px" height="800px">
+                        Canvas does not appear to be supported. Please use a compatible browser to play!
+                    </canvas>
+
+                    <br>
+                    <div class="buttons">
+                        <a class="button is-warning is-inverted">Play Again</a>
+                    </div>
+                </div>
+
+                <div class="column is-one-fifth has-text-centered">
+                    <h1 class="title">Current Score</h1>
+                    <h2 id="currentScore" class="title has-text-grey"></h2>
+                    <br><br>
+                    <h1 class="title">High Score</h1>
+                    <h2 id="userStandardScore" class="title has-text-grey"></h2>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 </html>
