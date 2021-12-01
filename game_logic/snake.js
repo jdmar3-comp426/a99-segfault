@@ -8,11 +8,11 @@
 
 
 const gridWidth = 15;
-var inputProcessed = false;
-var refreshTime = 150;
-var refresh = null;
-var incrementBase;
-var increment;
+let inputProcessed = false;
+let refreshTime = 150;
+let refresh = null;
+let incrementBase;
+let increment;
 
 // Define the GridManager object to manage the game grid
 const GridManager = {
@@ -20,6 +20,7 @@ const GridManager = {
     gameOver: false,
     blockWidth: null,
     growth: 0,
+    mode: Gamemode.DontStarve,  // TODO: set gamemode based on user selection
     /*
     Define game map, which lets us refer to grid locations
     instead of pixels. Intended to be used to keep track of food/other grid items
@@ -34,7 +35,7 @@ const GridManager = {
                 this.blockWidth, this.blockWidth
             );
         } else if (p.equals(snake.head)) {
-            var headImg;
+            let headImg;
             switch (snake.direction) {
                 case Direction.N:
                     headImg = LoadedImage.HeadNorth;
@@ -57,7 +58,7 @@ const GridManager = {
         } else {
             // body block
             // TODO: Add directional sprites
-            var snakeImg;
+            let snakeImg;
             switch (p.drawDirection) {
                 case Direction.NS:
                     snakeImg = LoadedImage.BodyNS;
@@ -113,11 +114,11 @@ const GridManager = {
     updateGame: function () {
         inputProcessed = false;
         if (this.gameOver) return;
-        const maxIndex = GridManager.map[0].length - 1;
+        const maxIndex = GridManager.map.length - 1;
 
         // Update new head and place it in the current direction
         const oldHead = snake.head;
-        var newHead;
+        let newHead;
         switch (snake.direction) {
             case Direction.N:
                 // newHead = new Point(oldHead.y === 0 ? maxIndex : oldHead.y - 1, oldHead.x);
@@ -171,13 +172,22 @@ const GridManager = {
 }
 
 // Manage snake object
-var snake = new Snake();
+let snake = new Snake();
 
-var fruit = generateFruit();
+// Object containing all non-snake entities
+const entities = {
+    fruit: generateFruit(),     // main fruit, always present
+    slimFruit: null,            // slimming fruit, Don't Starve exclusive
+    obstacles: null             // obstacles, Obstacle course exclusive
+}
+
+switch (GridManager.mode) {
+    
+}
 
 function generateFruit() {
     const maxIndex = GridManager.map.length - 1;
-    var out = snake.points[0];
+    let out = snake.points[0];
     while (snake.hasPoint(out)) {
         // Find a new place for the fruit
         out = new Point(Math.floor(Math.random() * maxIndex), Math.floor(Math.random() * maxIndex));

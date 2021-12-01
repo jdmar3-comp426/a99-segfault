@@ -24,6 +24,15 @@ class LoadedImage {
     }
 }
 
+class Gamemode {
+    static DontStarve = new Gamemode("Don't Starve");
+    static ObstacleCourse = new Gamemode("Obstacle Course");
+
+    constructor (name) {
+        this.name = name;
+    }
+}
+
 class Direction {
     // essentially an enum class
     static N = new Direction("north");
