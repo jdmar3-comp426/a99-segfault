@@ -47,7 +47,7 @@ window.addEventListener("load" , function(){
                     const correctPassword = JSON.parse(passwordCheckRequest.response).password ; 
 
                     if(inputtedPassword!=correctPassword){
-                        alert("Login Failed") ; 
+                        alert("Incorrect Password") ; 
                     }
                     else{ 
                         localStorage.setItem("username" , inputtedUsername) ;
