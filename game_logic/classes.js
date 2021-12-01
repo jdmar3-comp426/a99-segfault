@@ -8,12 +8,18 @@ class LoadedImage {
     static HeadSouth = new LoadedImage("https://i.imgur.com/CDPu6N5.png");
     static HeadWest = new LoadedImage("https://i.imgur.com/FOvnnXO.png");
     static Body = new LoadedImage("https://i.imgur.com/8HVeW6i.png");
-    static BodyNS = new LoadedImage("https://i.imgur.com/GOGK4AG.png");
-    static BodyEW = new LoadedImage("https://i.imgur.com/Gxc7fn4.png");
-    static BodyNW = new LoadedImage("https://i.imgur.com/FMAt9Ui.png");
-    static BodySW = new LoadedImage("https://i.imgur.com/xJKPW7B.png");
-    static BodyNE = new LoadedImage("https://i.imgur.com/33kiGvi.png");
-    static BodySE = new LoadedImage("https://i.imgur.com/962f40B.png");
+    static BodyNSDebug = new LoadedImage("https://i.imgur.com/GOGK4AG.png");
+    static BodyEWDebug = new LoadedImage("https://i.imgur.com/Gxc7fn4.png");
+    static BodyNWDebug = new LoadedImage("https://i.imgur.com/FMAt9Ui.png");
+    static BodySWDebug = new LoadedImage("https://i.imgur.com/xJKPW7B.png");
+    static BodyNEDebug = new LoadedImage("https://i.imgur.com/33kiGvi.png");
+    static BodySEDebug = new LoadedImage("https://i.imgur.com/962f40B.png");
+    static BodyNS = new LoadedImage("https://i.imgur.com/6qsFgGX.png");
+    static BodyEW = new LoadedImage("https://i.imgur.com/zddCIIt.png");
+    static BodyNW = new LoadedImage("https://i.imgur.com/uGb4Zre.png");
+    static BodySW = new LoadedImage("https://i.imgur.com/zNfYeFe.png");
+    static BodyNE = new LoadedImage("https://i.imgur.com/aQ60q5h.png");
+    static BodySE = new LoadedImage("https://i.imgur.com/M6fqc1f.png");
     static FruitApple = new LoadedImage("https://preview.redd.it/bxcbiiu1wxa71.png?auto=webp&s=709c4efa8fc567e9f16aeda1008ccd5b700c3052");
     static FruitGreenApple = new LoadedImage("https://i.imgur.com/ORJbhEo.png");
 
