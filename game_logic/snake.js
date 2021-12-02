@@ -157,7 +157,7 @@ const GridManager = {
             // Collision, end game
             GridManager.removeBlock(oldHead.y, oldHead.x, false);
             GridManager.drawBlock(oldHead);
-            this.endGame();
+            endGame();
             return;
         }
         snake.points.push(newHead);
@@ -378,4 +378,48 @@ function setObstacleCourse() {
     x.style.display = "none";
     GridManager.mode = Gamemode.ObstacleCourse;
     document.getElementById('gameType').innerHTML = "Obstacle Course";
+}
+
+function endGame() {
+    console.log(localStorage.getItem("username")) ;
+    console.log(localStorage.getItem("starveGamesPlayed"));
+    const currentScore = parseInt(document.getElementById('currentScore').innerHTML) ;
+    const highestScoreLabel = document.getElementById('userStandardScore') ;
+    const highScore = parseInt(highestScoreLabel.innerHTML) ;
+
+    const updateRequest = new XMLHttpRequest() ;
+    updateRequest.open("PATCH" , "http://localhost:5000/app/update/user/" + localStorage.getItem("username")) ;
+
+    if(currentScore > highScore){
+        highestScoreLabel.innerHTML = currentScore ;
+        if(document.getElementById('gameType').innerHTML.includes("Don't Starve")){
+            currentGamesPlayed = localStorage.getItem("starveGamesPlayed") ;
+            updateRequest.send(new URLSearchParams({starveHighScore : currentScore , starveGamesPlayed : (parseInt(currentGamesPlayed) + 1)})) ;
+            localStorage.setItem("starveHighScore" , currentScore) ;
+            localStorage.setItem("starveGamesPlayed" , (parseInt(currentGamesPlayed) + 1)) ;
+        }
+        else{
+            currentGamesPlayed = localStorage.getItem("obstacleGamesPlayed") ;
+            updateRequest.send(new URLSearchParams({obstacleHighScore : currentScore , obstacleGamesPlayed : (parseInt(currentGamesPlayed) + 1)})) ;
+            localStorage.setItem("obstacleHighScore" , currentScore) ;
+            localStorage.setItem("obstacleGamesPlayed" , (parseInt(currentGamesPlayed) + 1)) ;
+        }
+    }
+    else{
+        if(document.getElementById('gameType').innerHTML.includes("Don't Starve")){
+            currentGamesPlayed = localStorage.getItem("starveGamesPlayed") ;
+            updateRequest.send(new URLSearchParams({starveGamesPlayed : (parseInt(currentGamesPlayed) + 1)})) ;
+            localStorage.setItem("starveGamesPlayed" , (parseInt(currentGamesPlayed) + 1)) ;
+        }
+        else{
+            currentGamesPlayed = localStorage.getItem("obstacleGamesPlayed") ;
+            updateRequest.send(new URLSearchParams({obstacleGamesPlayed : (parseInt(currentGamesPlayed) + 1)})) ;
+            localStorage.setItem("obstacleGamesPlayed" , (parseInt(currentGamesPlayed) + 1)) ;
+        }
+    }
+    updateRequest.addEventListener("load" , function(event){
+
+    } ) ;
+
+    GridManager.gameOver = true;
 }
