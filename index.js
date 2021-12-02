@@ -4,33 +4,68 @@
 */
 
 window.addEventListener("load" , function(){
-
     initializeForGuest() ; 
-
-
-
 
     // When home page loads, add event to button click that sends user to game
     document.getElementById("launchGame").onclick = function() {
         location.href = './game_logic/snake.html';
     }
 
-    const signupForm = document.getElementById("signup") ; 
+    const signupForm = document.getElementById("createAccountForm");
     signupForm.addEventListener( "submit" , function(event){
         event.preventDefault(); 
         signup() ; 
     }
     ); 
 
-    const loginForm = document.getElementById("login") ; 
+    const loginForm = document.getElementById("loginForm");
     loginForm.addEventListener( "submit" , function(event){
         event.preventDefault(); 
         login() ; 
     }
     ); 
 
-    function login(){
+    function initializeForGuest(){
 
+        const getGuestRequest = new XMLHttpRequest() ; 
+        getGuestRequest.open("GET" , "http://localhost:5000/app/user/guest") ;
+        getGuestRequest.send() ;
+        getGuestRequest.addEventListener("load" , function(event){
+            localStorage.setItem("username" , "guest") ;
+            const guestEmail = JSON.parse(getGuestRequest.response).email ;
+            const guestObstacleHighScore = JSON.parse(getGuestRequest.response).obstacleHighScore;
+            const guestStarveHighScore = JSON.parse(getGuestRequest.response).starveHighScore ; 
+            localStorage.setItem("email" , guestEmail) ; 
+            localStorage.setItem("obstacleHighScore" , guestObstacleHighScore) ;
+            localStorage.setItem("starveHighScore" , guestStarveHighScore) ;
+
+        }
+        ) ; 
+    }
+    
+    // While form is overlayed, add event listener to remove overlay if user clicks outside of the form
+    document.addEventListener("click", function(event) {
+        if (event.target == document.getElementById("loginButton")) {
+            // Display login form
+            document.getElementById("loginSection").style.display = "block";
+            document.getElementById("createAccountSection").style.display = "none";
+            window.formOverlayed = true;
+        } else if (event.target == document.getElementById("createAccount")) {
+            // Display account creation form
+            document.getElementById("loginSection").style.display = "none";
+            document.getElementById("createAccountSection").style.display = "block";
+            window.formOverlayed = true;
+        } else if (window.formOverlayed) {
+            // Hide forms if user clicks outside area
+            if (!loginForm.contains(event.target) && !createAccountForm.contains(event.target)) {
+                document.getElementById("loginSection").style.display = "none";
+                document.getElementById("createAccountSection").style.display = "none";
+                window.formOverlayed = false;
+            }
+        }
+    });
+
+    function login(){
         const loginFormData = new FormData(loginForm) ; 
         const loginInfo = new URLSearchParams(loginFormData) ; 
         const inputtedUsername = loginFormData.get("username") ;
@@ -67,29 +102,7 @@ window.addEventListener("load" , function(){
         }) ; 
     }
 
-    function initializeForGuest(){
-
-        const getGuestRequest = new XMLHttpRequest() ; 
-        getGuestRequest.open("GET" , "http://localhost:5000/app/user/guest") ;
-        getGuestRequest.send() ;
-        getGuestRequest.addEventListener("load" , function(event){
-            localStorage.setItem("username" , "guest") ;
-            const guestEmail = JSON.parse(getGuestRequest.response).email ;
-            const guestObstacleHighScore = JSON.parse(getGuestRequest.response).obstacleHighScore;
-            const guestStarveHighScore = JSON.parse(getGuestRequest.response).starveHighScore ; 
-            localStorage.setItem("email" , guestEmail) ; 
-            localStorage.setItem("obstacleHighScore" , guestObstacleHighScore) ;
-            localStorage.setItem("starveHighScore" , guestStarveHighScore) ;
-
-        }
-        ) ; 
-    }
-
-
-
     function signup(){
-
-         
 
         const signupFormData = new FormData(signupForm) ; 
         const signupInfo = new URLSearchParams(signupFormData) ;
@@ -97,6 +110,7 @@ window.addEventListener("load" , function(){
 
 
         const requestVerification = new XMLHttpRequest() ; 
+        console.log(inputtedUsername);
         requestVerification.open("GET" , "http://localhost:5000/app/user/exists/" + inputtedUsername) ;
         requestVerification.send() ; 
         requestVerification.addEventListener("load" , function(event){
@@ -121,8 +135,6 @@ window.addEventListener("load" , function(){
         requestVerification.addEventListener("error" , function(event){
             alert("Signup failed"); 
         })
-    }
+    };
+});
 
-}
-
-) ;

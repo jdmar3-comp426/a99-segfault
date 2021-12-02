@@ -6,42 +6,208 @@
         <title>Snake | Segfault</title>
         <script type="text/javascript" src="index.js"></script>
         <script type="text/javascript" src="./game_logic/snake.js"></script>
+        <link rel="stylesheet" href="./../node_modules/bulma/css/bulma.css">
+        <link rel="stylesheet" href="./../home.css">
     </head>
 
     <body>
-        <button id="launchGame" type="button">Play Snake</button>
+        <section class="hero is-warning">
+            <div class="hero-head">
+                <nav class="navbar">
+                    <div class="container">
+                        <div id="navMenu" class="navbar-brand">
+                            <p class="navbar-item is-size-4 is-family-monospace">
+                                SEGFAULT
+                            </p>
+                        </div>
+    
+                        <div class="navbar-menu">
+                            <div class="navbar-end">
+                                <a class="navbar-item" href="./../index.html">
+                                    Home
+                                </a>
+                                <div class="navbar-item has-dropdown is-hoverable">
+                                    <a class="navbar-link">
+                                      Game Modes
+                                    </a>
+                                    <div class="navbar-dropdown">
+                                      <a class="navbar-item" onclick="setDontStarve()">
+                                        Don't Starve
+                                      </a>
+                                      <a class="navbar-item" onclick="setObstacleCourse()">
+                                        Obstacle Course
+                                      </a>
+                                    </div>
+                                </div>
+                                <div class="navbar-item">
+                                    <div class="buttons">
+                                        <a class="button is-warning is-inverted" id="loginButton">Login</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                <div class="container has-text-centered">
+                    <p class="title is-1">
+                        Snake
+                    </p>
+                    <p class="subtitle is-size-4" id="gameType">
+                        Don't Starve
+                    </p>
+                </div>
+            </div>
+    
+            <div class="hero-body">
+            </div>
+        </section>
 
-        <div class="content">
-            <p>
-                Please signup for an account on the email list!
-            </p>
-            <form id="signup">
-                <label for="username">Username:</label>
-                <input id="username" name="username" value="">
+        <section class="has-background-warning-light">
+            <br>
+            <div class="columns">
+                <div class="column is-one-fifth">
+                </div>
 
-                <label for="email">Email Address:</label>
-                <input id="email" name="email" value="">
+                <div class="column has-text-centered">
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title is-family-monospace">
+                              Don't Starve
+                            </p>
+                        </header>
 
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" value="">
+                        <div class="card-image">
+                          <figure class="image is-4by3">
+                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                          </figure>
+                        </div>
 
-                <input type="submit" value="Submit">
+                        <div class="card-content">
+                            <div class="content">
+                              Description for Don't Starve
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column has-text-centered">
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title is-family-monospace">
+                              Obstacle Course
+                            </p>
+                        </header>
+
+                        <div class="card-image">
+                          <figure class="image is-4by3">
+                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                          </figure>
+                        </div>
+
+                        <div class="card-content">
+                            <div class="content">
+                              Description for Obstacle Course
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-one-fifth">
+                </div>
+            </div>
+
+            <br>
+            <div class="buttons is-flex is-justify-content-center">
+                <button class="button is-warning is-inverted" id="launchGame">Play Snake</button>
+            </div>
+            <br>
+        </section>
+
+        <!-- Login form -->
+        <section id="loginSection">
+            <form id="loginForm" class="container">
+                <div class="box" id="loginBox">
+                    <section class="hero is-small is-link">
+                        <div class="hero-body">
+                            <p class="title">
+                                Login
+                            </p>
+                        </div>
+                    </section>
+                    <br>
+                    <div class="field">
+                        <label class="label">Username</label>
+                        <div class="control">
+                        <input class="input" type="text" id="username" name="username" value="">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Password</label>
+                        <div class="control">
+                        <input class="input" type="password" id="password" name="password" value="">
+                        </div>
+                    </div>
+
+                    <input type="submit" value="Login">
+
+                    <h2><a id="createAccount">Register</a> for a free account</h2>
+                </div>
             </form>
-            
-            <p>
-                Please Login!
-            </p>
-            <form id="login">
-                <label for="username">Username:</label>
-                <input name="username" value="">
-                
-                <label for="password">Password:</label>
-                <input type="password" name="password" value="">
+        </section>
 
-                <input type="submit" value="Submit">
+        <!-- Account creation form -->
+        <section id="createAccountSection">
+            <form id="createAccountForm" class="container">
+                <div class="box" id="formBox">
+                    <section class="hero is-small is-link">
+                        <div class="hero-body">
+                            <p class="title">
+                                Register an Account
+                            </p>
+                        </div>
+                    </section>
+                    <br>
+                    <div class="field">
+                        <label class="label">Name</label>
+                        <div class="control">
+                        <input class="input" type="text" placeholder="Text input">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control">
+                        <input class="input" type="text" id="email" name="email" value="">
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label class="label">Username</label>
+                        <div class="control">
+                            <input class="input is-success" type="text" id="username" name="username" value="">
+                        </div>
+                        <p class="help is-success">This username is available</p>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Password</label>
+                        <div class="control">
+                        <input class="input" type="password" name="password" value="">
+                        </div>
+                    </div>
+
+                    <input type="submit" value="Create Account">
+                </div>
             </form>
-
-        
-        </div>   
+        </section>
     </body>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Snake</strong> by <a href="https://github.com/jdmar3-comp426/a99-segfault">Segfault</a> | COMP 426 | Fall 2021
+            </p>
+        </div>
+    </footer>
 </html>
