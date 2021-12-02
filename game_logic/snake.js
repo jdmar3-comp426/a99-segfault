@@ -12,7 +12,6 @@ let inputProcessed = false;
 const initialRefreshTime = 150;
 let refreshTime = initialRefreshTime;
 let refresh = null;
-let progress = null;
 const initialIncrement = 20;
 let increment = initialIncrement;
 
@@ -23,7 +22,7 @@ const GridManager = {
     isPaused: false,
     blockWidth: null,
     growth: 0,
-    mode: localStorage.getItem("mode") === "Don't Starve" ? Gamemode.DontStarve : Gamemode.ObstacleCourse,
+    mode: Gamemode.DontStarve,  // TODO: set gamemode based on user selection
     /*
     Define game map, which lets us refer to grid locations
     instead of pixels. Intended to be used to keep track of food/other grid items
@@ -120,82 +119,145 @@ const GridManager = {
     },
     // Make update to game state
     updateGame: function () {
-        inputProcessed = false;
-        if (this.gameOver) return;
-        const maxIndex = gridWidth - 1;
+        if (this.mode === Gamemode.DontStarve) {
+            inputProcessed = false;
+            if (this.gameOver) return;
+            const maxIndex = gridWidth - 1;
 
-        // Update new head and place it in the current direction
-        const oldHead = snake.head;
-        let newHead;
-        switch (snake.direction) {
-            case Direction.N:
-                // newHead = new Point(oldHead.y === 0 ? maxIndex : oldHead.y - 1, oldHead.x);
-                newHead = new Point(oldHead.y - 1, oldHead.x);
-                break;
-            case Direction.S:
-                // newHead = new Point(oldHead.y === maxIndex ? 0 : oldHead.y + 1, oldHead.x);
-                newHead = new Point(oldHead.y + 1, oldHead.x);
-                break;
-            case Direction.W:
-                // newHead = new Point(oldHead.y, oldHead.x === 0 ? maxIndex : oldHead.x - 1);
-                newHead = new Point(oldHead.y, oldHead.x - 1);
-                break;
-            case Direction.E:
-                // newHead = new Point(oldHead.y, oldHead.x === maxIndex ? 0 : oldHead.x + 1);
-                newHead = new Point(oldHead.y, oldHead.x + 1);
-                break;
-        }
-        newHead.direction = snake.direction;
-        oldHead.drawDirection = snake.direction.combine(oldHead.direction.opposite);
+            // Update new head and place it in the current direction
+            const oldHead = snake.head;
+            let newHead;
+            switch (snake.direction) {
+                case Direction.N:
+                    // newHead = new Point(oldHead.y === 0 ? maxIndex : oldHead.y - 1, oldHead.x);
+                    newHead = new Point(oldHead.y - 1, oldHead.x);
+                    break;
+                case Direction.S:
+                    // newHead = new Point(oldHead.y === maxIndex ? 0 : oldHead.y + 1, oldHead.x);
+                    newHead = new Point(oldHead.y + 1, oldHead.x);
+                    break;
+                case Direction.W:
+                    // newHead = new Point(oldHead.y, oldHead.x === 0 ? maxIndex : oldHead.x - 1);
+                    newHead = new Point(oldHead.y, oldHead.x - 1);
+                    break;
+                case Direction.E:
+                    // newHead = new Point(oldHead.y, oldHead.x === maxIndex ? 0 : oldHead.x + 1);
+                    newHead = new Point(oldHead.y, oldHead.x + 1);
+                    break;
+            }
+            newHead.direction = snake.direction;
+            oldHead.drawDirection = snake.direction.combine(oldHead.direction.opposite);
 
-        // Remove previous tail of snake OR retain with fruit
-        if (snake.hasPoint(newHead) || newHead.x < 0 || newHead.x > maxIndex || newHead.y < 0 || newHead.y > maxIndex) {
-            // Collision, end game
-            GridManager.removeBlock(oldHead.y, oldHead.x, false);
-            GridManager.drawBlock(oldHead);
-            endGame();
+            // Remove previous tail of snake OR retain with fruit
+            if (snake.hasPoint(newHead) || newHead.x < 0 || newHead.x > maxIndex || newHead.y < 0 || newHead.y > maxIndex) {
+                // Collision, end game
+                GridManager.removeBlock(oldHead.y, oldHead.x, false);
+                GridManager.drawBlock(oldHead);
+                endGame();
 
-            return;
-        }
-        snake.points.push(newHead);
-        this.drawBlock(oldHead);
-        if (newHead.equals(entities.fruit)) {
-            // Snake head is on a fruit
+                return;
+            }
+            snake.points.push(newHead);
+            this.drawBlock(oldHead);
+            if (newHead.equals(entities.fruit)) {
+                // Snake head is on a fruit
 
-            this.growth += 2.5;
-            increment *= 0.85;
-            refreshTime += .5 * increment;
-            document.getElementById('currentScore').innerHTML = "" +(parseInt(document.getElementById('currentScore').innerHTML)+1);
-
-            clearInterval(refresh);
-            refresh = setInterval(GridManager.drawGrid, refreshTime);
-            // get rid of fruit immediately
-            this.removeBlock(snake.head.y, snake.head.x, true);
-            this.removeBlock(oldHead.y, oldHead.x, false);
-            entities.fruit = generateEntity(entities.slimFruit);
-
-            // Update timer
-            document.getElementById('progressBar').value += 5;
-        } else {
-            if (this.mode === Gamemode.DontStarve && newHead.equals(entities.slimFruit)) {
-                this.growth = Math.max(this.growth - 2.5, 0);
-                refreshTime = Math.max(refreshTime - .5 * increment, initialRefreshTime);
-                increment = Math.min(increment /= 0.85, initialIncrement);
+                this.growth += 2.5;
+                increment *= 0.85;
+                refreshTime += .5 * increment;
+                document.getElementById('currentScore').innerHTML = "" +(parseInt(document.getElementById('currentScore').innerHTML)+1);
 
                 clearInterval(refresh);
                 refresh = setInterval(GridManager.drawGrid, refreshTime);
                 // get rid of fruit immediately
                 this.removeBlock(snake.head.y, snake.head.x, true);
                 this.removeBlock(oldHead.y, oldHead.x, false);
-                entities.slimFruit = generateEntity(entities.fruit);
+                entities.fruit = generateEntity(entities.slimFruit);
+
+                // Update timer
+                document.getElementById('progressBar').value += 5;
+            } else {
+                if (this.mode === Gamemode.DontStarve && newHead.equals(entities.slimFruit)) {
+                    this.growth = Math.max(this.growth - 2.5, 0);
+                    refreshTime = Math.max(refreshTime - .5 * increment, initialRefreshTime);
+                    increment = Math.min(increment /= 0.85, initialIncrement);
+
+                    clearInterval(refresh);
+                    refresh = setInterval(GridManager.drawGrid, refreshTime);
+                    // get rid of fruit immediately
+                    this.removeBlock(snake.head.y, snake.head.x, true);
+                    this.removeBlock(oldHead.y, oldHead.x, false);
+                    entities.slimFruit = generateEntity(entities.fruit);
+                }
+                GridManager.removeBlock(snake.points.shift(), false);
             }
-            GridManager.removeBlock(snake.points.shift(), false);
+            console.log(refreshTime);
+            GridManager.drawBlock(snake.head);
+            GridManager.drawBlock(oldHead);
+            entities.draw();
+        } else {
+
+            inputProcessed = false;
+            if (this.gameOver) return;
+            const maxIndex = gridWidth - 1;
+
+            // Update new head and place it in the current direction
+            const oldHead = snake.head;
+            let newHead;
+            switch (snake.direction) {
+                case Direction.N:
+                    // newHead = new Point(oldHead.y === 0 ? maxIndex : oldHead.y - 1, oldHead.x);
+                    newHead = new Point(oldHead.y - 1, oldHead.x);
+                    break;
+                case Direction.S:
+                    // newHead = new Point(oldHead.y === maxIndex ? 0 : oldHead.y + 1, oldHead.x);
+                    newHead = new Point(oldHead.y + 1, oldHead.x);
+                    break;
+                case Direction.W:
+                    // newHead = new Point(oldHead.y, oldHead.x === 0 ? maxIndex : oldHead.x - 1);
+                    newHead = new Point(oldHead.y, oldHead.x - 1);
+                    break;
+                case Direction.E:
+                    // newHead = new Point(oldHead.y, oldHead.x === maxIndex ? 0 : oldHead.x + 1);
+                    newHead = new Point(oldHead.y, oldHead.x + 1);
+                    break;
+            }
+            newHead.direction = snake.direction;
+            oldHead.drawDirection = snake.direction.combine(oldHead.direction.opposite);
+
+            // Remove previous tail of snake OR retain with fruit
+            if (snake.hasPoint(newHead) || newHead.x < 0 || newHead.x > maxIndex || newHead.y < 0 || newHead.y > maxIndex) {
+                // Collision, end game
+                GridManager.removeBlock(oldHead.y, oldHead.x, false);
+                GridManager.drawBlock(oldHead);
+                endGame();
+
+                return;
+            }
+            snake.points.push(newHead);
+            this.drawBlock(oldHead);
+            if (newHead.equals(entities.fruit)) {
+                this.removeBlock(snake.head.y, snake.head.x, true);
+                this.removeBlock(oldHead.y, oldHead.x, false);
+                entities.fruit = generateEntity(entities.slimFruit);
+            } else if (newHead.equals(entities.obstacles)) {
+                // Snake head is on a fruit
+                document.getElementById('currentScore').innerHTML = "" + (parseInt(document.getElementById('currentScore').innerHTML) + 1);
+
+                this.gameOver = true;
+                endGame();
+            } else {
+                    // get rid of fruit immediately
+                    this.removeBlock(snake.head.y, snake.head.x, true);
+                    this.removeBlock(oldHead.y, oldHead.x, false);
+                GridManager.removeBlock(snake.points.shift(), false);
+            }
+            console.log(refreshTime);
+            GridManager.drawBlock(snake.head);
+            GridManager.drawBlock(oldHead);
+            entities.draw();
         }
-        console.log(refreshTime);
-        GridManager.drawBlock(snake.head);
-        GridManager.drawBlock(oldHead);
-        entities.draw();
-    }
+        }
 }
 
 // Manage snake object
@@ -261,26 +323,25 @@ window.onload = function () {
 
 // Initialize canvas/corresponding attributes for GridManager
 function init() {
-    // Set game mode display
-    if (GridManager.mode === Gamemode.DontStarve) {
-        setDontStarve();
-    } else if (GridManager.mode === Gamemode.ObstacleCourse) {
-        setObstacleCourse();
-    }
 
     const usernameLabel = document.getElementById('usernameLabel');
     const emailLabel = document.getElementById('emailLabel');
-    const highestScoreLabel = document.getElementById('userStandardScore') ; 
-     
-    if(document.getElementById('gameType').innerHTML == "Don't Starve"){
-        highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore") ; 
+    const highestScoreLabel = document.getElementById('userStandardScore') ;
+
+    if(document.getElementById('gameType').innerHTML === "Don't Starve"){
+        highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore") ;
+        setDontStarve();
     }
     else{
         highestScoreLabel.innerHTML = localStorage.getItem("obstacleHighScore") ;
+        setObstacleCourse();
     }
 
-    usernameLabel.innerHTML = localStorage.getItem("username") ; 
+    usernameLabel.innerHTML = localStorage.getItem("username") ;
     emailLabel.innerHTML = localStorage.getItem("email") ;
+
+
+
 
     window.canvas = document.getElementById('snakeGrid');
 
@@ -290,11 +351,11 @@ function init() {
     }
     // Interval time is in ms
     refresh = setInterval(GridManager.drawGrid, refreshTime);
-    progress = setInterval(updateProgressBar, 200);
 }
 
 // Watch for arrow key input to control snake direction
 window.addEventListener("keydown", function (event) {
+
     // Prevent the same event from being handled twice
     if (event.defaultPrevented || inputProcessed) {
         return;
@@ -302,6 +363,7 @@ window.addEventListener("keydown", function (event) {
     inputProcessed = true;
     switch (event.key) {
         case "ArrowLeft":
+
             if (snake.direction !== Direction.E) {
                 snake.direction = Direction.W;
             }
@@ -344,38 +406,9 @@ window.addEventListener("keydown", function (event) {
 function restartGame() {
     clearInterval(refresh);
     refresh = setInterval(GridManager.drawGrid, refreshTime);
-     
-    // reset timer
-    document.getElementById('progressBar').value = 100;
-    progress = setInterval(updateProgressBar, 200);
-
     document.getElementById('currentScore').innerHTML = "0";
     snake = new Snake();
     GridManager.gameOver = false;
-}
-
-// Update progress bar for simulating timer
-function updateProgressBar() {
-    progressBar = document.getElementById('progressBar');
-    if (progressBar.value >= 75) {
-        progressBar.classList.remove("is-warning");
-        progressBar.classList.remove("is-danger");
-        progressBar.classList.add("is-success"); 
-    } else if (progressBar.value >= 25) {
-        progressBar.classList.remove("is-success");
-        progressBar.classList.remove("is-danger");
-        progressBar.classList.add("is-warning");
-    } else {
-        progressBar.classList.remove("is-success");
-        progressBar.classList.remove("is-warning");
-        progressBar.classList.add("is-danger");
-    }
-    progressBar.value -= 1;
-
-    // Game over
-    if (progressBar.value == 0) {
-        endGame();
-    }
 }
 
 // Change game mode to Don't Starve
@@ -386,11 +419,13 @@ function setDontStarve() {
 
 // Change game mode to Obstacle Course
 function setObstacleCourse() {
+    var x = document.getElementById('progressBar')
+    x.style.display = "none";
     GridManager.mode = Gamemode.ObstacleCourse;
     document.getElementById('gameType').innerHTML = "Obstacle Course";
 }
 
 function endGame() {
+
     GridManager.gameOver = true;
-    clearInterval(progress);
 }
