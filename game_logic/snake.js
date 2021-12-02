@@ -22,7 +22,7 @@ const GridManager = {
     isPaused: false,
     blockWidth: null,
     growth: 0,
-    mode: Gamemode.DontStarve,  // TODO: set gamemode based on user selection
+    mode: localStorage.getItem("mode") === "Don't Starve" ? Gamemode.DontStarve : Gamemode.ObstacleCourse,
     /*
     Define game map, which lets us refer to grid locations
     instead of pixels. Intended to be used to keep track of food/other grid items
@@ -257,6 +257,12 @@ window.onload = function () {
 
 // Initialize canvas/corresponding attributes for GridManager
 function init() {
+    // Set game mode display
+    if (GridManager.mode === Gamemode.DontStarve) {
+        setDontStarve();
+    } else if (GridManager.mode === Gamemode.ObstacleCourse) {
+        setObstacleCourse();
+    }
 
     const usernameLabel = document.getElementById('usernameLabel');
     const emailLabel = document.getElementById('emailLabel');
@@ -271,9 +277,6 @@ function init() {
 
     usernameLabel.innerHTML = localStorage.getItem("username") ; 
     emailLabel.innerHTML = localStorage.getItem("email") ;
-
-
-
 
     window.canvas = document.getElementById('snakeGrid');
 

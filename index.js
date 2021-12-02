@@ -7,8 +7,14 @@ window.addEventListener("load" , function(){
     initializeForGuest() ; 
 
     // When home page loads, add event to button click that sends user to game
-    document.getElementById("launchGame").onclick = function() {
+    document.getElementById("launchDontStarve").onclick = function() {
         location.href = './game_logic/snake.html';
+        localStorage.setItem("mode", "Don't Starve");
+    }
+
+    document.getElementById("launchObstacleCourse").onclick = function() {
+        location.href = './game_logic/snake.html';
+        localStorage.setItem("mode", "Obstacle Course");
     }
 
     const signupForm = document.getElementById("createAccountForm");
