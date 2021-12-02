@@ -18,3 +18,7 @@
 canvas {
     background-color: bisque;
 }
+
+html {
+    overflow: hidden;
+}
