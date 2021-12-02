@@ -39,8 +39,8 @@ app.post("/app/new/", (req, res) => {
 
 	//const info = stmt.run(req.body.user, md5(req.body.pass),req.body.email,req.body.user);
 	try{
-		const stmt = db.prepare("INSERT INTO userinfo (username,password,email) VALUES (?,?,?)") ; 
-		const info = stmt.run(req.body.username, req.body.password,req.body.email);
+		const stmt = db.prepare("INSERT INTO userinfo (username,password,email,starveHighScore, obstacleHighScore,starveGamesPlayed,obstacleGamesPlayed) VALUES (?,?,?,?,?,?,?)") ; 
+		const info = stmt.run(req.body.username, req.body.password,req.body.email,0,0,0,0);
 		res.status(201).json({"message" : "1 record created with username " + req.body.username + " (201)"}) ;
 	}
 	catch(error){
@@ -78,8 +78,8 @@ app.get("/app/user/exists/:username", (req, res) => {
 
 // UPDATE a single user (HTTP method PATCH) at endpoint /app/update/user/:username
 app.patch("/app/update/user/:username", (req, res) => {	
-	const stmt = db.prepare("UPDATE userinfo SET username = COALESCE(?,username), password = COALESCE(?,password) , email = COALESCE(?,email) WHERE username = '" + req.params.username + "'") ; 
-	const info = stmt.run(req.body.username, md5(req.body.password),req.body.email);  
+	const stmt = db.prepare("UPDATE userinfo SET username = COALESCE(?,username), password = COALESCE(?,password) , email = COALESCE(?,email) , starveHighScore = COALESCE(?,starveHighScore) , obstacleHighScore = COALESCE(?,obstacleHighScore) , starveGamesPlayed = COALESCE(?,starveGamesPlayed), obstacleGamesPlayed = COALESCE(?,obstacleGamesPlayed) WHERE username = '" + req.params.username + "'") ; 
+	const info = stmt.run(req.body.username,req.body.password,req.body.email,req.body.starveHighScore, req.body.obstacleHighScore,req.body.starveGamesPlayed, req.body.obstacleGamesPlayed);  
 	res.json({"message":"1 record updated: username " + req.params.username + " (200)"});
 	res.status(200); 
 })

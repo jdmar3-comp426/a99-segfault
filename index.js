@@ -35,9 +35,14 @@ window.addEventListener("load" , function(){
             const guestEmail = JSON.parse(getGuestRequest.response).email ;
             const guestObstacleHighScore = JSON.parse(getGuestRequest.response).obstacleHighScore;
             const guestStarveHighScore = JSON.parse(getGuestRequest.response).starveHighScore ; 
+            const guestStarveGamesPlayed = JSON.parse(getGuestRequest.response).starveGamesPlayed ; 
+            const guestObstacleGamesPlayed = JSON.parse(getGuestRequest.response).obstacleGamesPlayed ; 
+
             localStorage.setItem("email" , guestEmail) ; 
             localStorage.setItem("obstacleHighScore" , guestObstacleHighScore) ;
             localStorage.setItem("starveHighScore" , guestStarveHighScore) ;
+            localStorage.setItem("starveGamesPlayed" , guestStarveGamesPlayed) ; 
+            localStorage.setItem("obstacleGamesPlayed" , guestObstacleGamesPlayed) ; 
 
         }
         ) ; 
@@ -90,6 +95,10 @@ window.addEventListener("load" , function(){
                     else{ 
                         localStorage.setItem("username" , inputtedUsername) ;
                         localStorage.setItem("email" , JSON.parse(passwordCheckRequest.response).email) ;
+                        localStorage.setItem("starveHighScore" , JSON.parse(passwordCheckRequest.response).starveHighScore) ; 
+                        localStorage.setItem("obstacleHighScore" , JSON.parse(passwordCheckRequest.response).obstacleHighScore) ; 
+                        localStorage.setItem("starveGamesPlayed" , JSON.parse(passwordCheckRequest.response).starveGamesPlayed ) ; 
+                        localStorage.setItem("obstacleGamesPlayed" ,JSON.parse(passwordCheckRequest.response).obstacleGamesPlayed) ; 
                         alert("Login succesful");
                         document.getElementById("loginSection").style.display = "none";
                         document.getElementById("createAccountSection").style.display = "none";
