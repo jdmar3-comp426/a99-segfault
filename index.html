@@ -20,30 +20,14 @@
                                 SEGFAULT
                             </p>
                         </div>
-    
+
                         <div class="navbar-menu">
                             <div class="navbar-end">
-                                <a class="navbar-item" href="./../index.html">
-                                    Home
-                                </a>
-                                <div class="navbar-item has-dropdown is-hoverable">
-                                    <a class="navbar-link">
-                                      Game Modes
-                                    </a>
-                                    <div class="navbar-dropdown">
-                                      <a class="navbar-item" onclick="setDontStarve()">
-                                        Don't Starve
-                                      </a>
-                                      <a class="navbar-item" onclick="setObstacleCourse()">
-                                        Obstacle Course
-                                      </a>
-                                    </div>
-                                </div>
                                 <div class="navbar-item">
-                                    <div class="buttons">
-                                        <a class="button is-warning is-inverted" id="loginButton">Login</a>
-                                    </div>
+                                <div class="buttons">
+                                    <a class="button is-warning is-inverted" id="">Account</a>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -52,12 +36,9 @@
                     <p class="title is-1">
                         Snake
                     </p>
-                    <p class="subtitle is-size-4" id="gameType">
-                        Don't Starve
-                    </p>
                 </div>
             </div>
-    
+
             <div class="hero-body">
             </div>
         </section>
@@ -69,44 +50,48 @@
                 </div>
 
                 <div class="column has-text-centered">
-                    <div class="card">
-                        <header class="card-header">
-                            <p class="card-header-title is-family-monospace">
-                              Don't Starve
-                            </p>
-                        </header>
+                    <div class="card" id="launchDontStarve">
+                        <a>
+                            <header class="card-header">
+                                <p class="card-header-title is-family-monospace">
+                                Don't Starve
+                                </p>
+                            </header>
 
-                        <div class="card-image">
-                          <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-                          </figure>
-                        </div>
+                            <div class="card-image">
+                            <figure class="image is-4by3">
+                                <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                            </figure>
+                            </div>
+                        </a>
 
                         <div class="card-content">
                             <div class="content">
-                              Description for Don't Starve
+                            Description for Don't Starve
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="column has-text-centered">
-                    <div class="card">
-                        <header class="card-header">
-                            <p class="card-header-title is-family-monospace">
-                              Obstacle Course
-                            </p>
-                        </header>
+                    <div class="card" id="launchObstacleCourse">
+                        <a>
+                            <header class="card-header">
+                                <p class="card-header-title is-family-monospace">
+                                Obstacle Course
+                                </p>
+                            </header>
 
-                        <div class="card-image">
-                          <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-                          </figure>
-                        </div>
+                            <div class="card-image">
+                            <figure class="image is-4by3">
+                                <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                            </figure>
+                            </div>
+                        </a>
 
                         <div class="card-content">
                             <div class="content">
-                              Description for Obstacle Course
+                            Description for Obstacle Course
                             </div>
                         </div>
                     </div>
@@ -118,7 +103,8 @@
 
             <br>
             <div class="buttons is-flex is-justify-content-center">
-                <button class="button is-warning is-inverted" id="launchGame">Play Snake</button>
+                <button class="button is-warning is-inverted" id="loginButton">Login</button>
+                <button class="button is-warning is-inverted" id="createAccount">Signup</button>
             </div>
             <br>
         </section>
@@ -150,8 +136,6 @@
                     </div>
 
                     <input type="submit" value="Login">
-
-                    <h2><a id="createAccount">Register</a> for a free account</h2>
                 </div>
             </form>
         </section>

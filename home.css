@@ -33,3 +33,7 @@
 #loginForm {
     top: 25%;
 }
+
+html {
+    overflow: hidden;
+}
