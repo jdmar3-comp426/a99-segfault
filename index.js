@@ -90,8 +90,10 @@ window.addEventListener("load" , function(){
                     else{ 
                         localStorage.setItem("username" , inputtedUsername) ;
                         localStorage.setItem("email" , JSON.parse(passwordCheckRequest.response).email) ;
-                        alert("Login succesful") ;
-
+                        alert("Login succesful");
+                        document.getElementById("loginSection").style.display = "none";
+                        document.getElementById("createAccountSection").style.display = "none";
+                        window.formOverlayed = false;
                     }
 
                 } ) ; 
