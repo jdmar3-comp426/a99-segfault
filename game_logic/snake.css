@@ -11,6 +11,10 @@
     padding-bottom: 100%;
 }
 
+#progressBar {
+    width: 50%;
+}
+
 canvas {
     background-color: bisque;
 }

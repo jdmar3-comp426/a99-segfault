@@ -12,6 +12,7 @@ let inputProcessed = false;
 const initialRefreshTime = 150;
 let refreshTime = initialRefreshTime;
 let refresh = null;
+let progress = null;
 const initialIncrement = 20;
 let increment = initialIncrement;
 
@@ -172,6 +173,9 @@ const GridManager = {
             this.removeBlock(snake.head.y, snake.head.x, true);
             this.removeBlock(oldHead.y, oldHead.x, false);
             entities.fruit = generateEntity(entities.slimFruit);
+
+            // Update timer
+            document.getElementById('progressBar').value += 5;
         } else {
             if (this.mode === Gamemode.DontStarve && newHead.equals(entities.slimFruit)) {
                 this.growth = Math.max(this.growth - 2.5, 0);
@@ -286,6 +290,7 @@ function init() {
     }
     // Interval time is in ms
     refresh = setInterval(GridManager.drawGrid, refreshTime);
+    progress = setInterval(updateProgressBar, 200);
 }
 
 // Watch for arrow key input to control snake direction
@@ -339,9 +344,38 @@ window.addEventListener("keydown", function (event) {
 function restartGame() {
     clearInterval(refresh);
     refresh = setInterval(GridManager.drawGrid, refreshTime);
+     
+    // reset timer
+    document.getElementById('progressBar').value = 100;
+    progress = setInterval(updateProgressBar, 200);
+
     document.getElementById('currentScore').innerHTML = "0";
     snake = new Snake();
     GridManager.gameOver = false;
+}
+
+// Update progress bar for simulating timer
+function updateProgressBar() {
+    progressBar = document.getElementById('progressBar');
+    if (progressBar.value >= 75) {
+        progressBar.classList.remove("is-warning");
+        progressBar.classList.remove("is-danger");
+        progressBar.classList.add("is-success"); 
+    } else if (progressBar.value >= 25) {
+        progressBar.classList.remove("is-success");
+        progressBar.classList.remove("is-danger");
+        progressBar.classList.add("is-warning");
+    } else {
+        progressBar.classList.remove("is-success");
+        progressBar.classList.remove("is-warning");
+        progressBar.classList.add("is-danger");
+    }
+    progressBar.value -= 1;
+
+    // Game over
+    if (progressBar.value == 0) {
+        endGame();
+    }
 }
 
 // Change game mode to Don't Starve
@@ -358,4 +392,5 @@ function setObstacleCourse() {
 
 function endGame() {
     GridManager.gameOver = true;
+    clearInterval(progress);
 }
