@@ -334,6 +334,8 @@ window.addEventListener("keydown", function (event) {
 
 // Reset game state
 function restartGame() {
+    clearInterval(refresh);
+    refresh = setInterval(GridManager.drawGrid, refreshTime);
     document.getElementById('currentScore').innerHTML = "0";
     snake = new Snake();
     GridManager.gameOver = false;
