@@ -122,9 +122,6 @@ const GridManager = {
             GridManager.updateGame();
         }
     },
-    endGame: function () {
-        this.gameOver = true;
-    },
     // Make update to game state
     updateGame: function () {
         if (this.gameOver || this.isPaused) return;
@@ -368,15 +365,19 @@ function restartGame() {
 
 // Change game mode to Don't Starve
 function setDontStarve() {
-    document.getElementById('progressBar').style.display = "";
     GridManager.mode = Gamemode.DontStarve;
+    //GridManager.isPaused = true;
+    //restartGame();
+    document.getElementById('progressBar').style.display = "";
     document.getElementById('gameType').innerHTML = "Don't Starve";
 }
 
 // Change game mode to Obstacle Course
 function setObstacleCourse() {
-    document.getElementById('progressBar').style.display = "none";
     GridManager.mode = Gamemode.ObstacleCourse;
+    //GridManager.isPaused = true;
+    //restartGame();
+    document.getElementById('progressBar').style.display = "none";
     document.getElementById('gameType').innerHTML = "Obstacle Course";
 }
 
