@@ -328,7 +328,7 @@ function init_game() {
 
     snake.points.forEach(block => GridManager.drawBlock(block));
     entities.draw();
-    if (!GridManager.isPaused) progress = setInterval(updateProgressBar, 200);
+    if (!GridManager.isPaused && GridManager.mode === Gamemode.DontStarve) progress = setInterval(updateProgressBar, 100);
     pauseSymbol();
 };
 
@@ -342,7 +342,9 @@ window.addEventListener("keydown", function (event) {
                 GridManager.isPaused = !GridManager.isPaused;
                 pauseSymbol();
                 clearInterval(progress);
-                progress = setInterval(updateProgressBar, 200);
+                if (GridManager.mode === Gamemode.DontStarve) {
+                    progress = setInterval(updateProgressBar, 200);
+                }
             }
             break;
         case "ArrowLeft":
@@ -400,6 +402,7 @@ function restartGame() {
     updateProgressBar();
     document.getElementById('progressBar').max = 100;
 
+    this.growth = 0;
     document.getElementById('currentScore').innerHTML = "0";
     GridManager.clear();
     snake = new Snake();
@@ -430,7 +433,7 @@ function updateProgressBar() {
     progressBar.value -= 1;
 
     // Game over
-    if (progressBar.value === 0) {
+    if (progressBar.value === 0 ) {
         endGame();
     }
 }
@@ -452,6 +455,7 @@ function setObstacleCourse() {
     syncDB();
     GridManager.mode = Gamemode.ObstacleCourse;
     restartGame();
+    clearInterval(progress);
     document.getElementById('progressBar').style.display = "none";
     document.getElementById('gameType').innerHTML = "Obstacle Course";
     document.getElementById('userStandardScore').innerHTML = localStorage.obstacleHighScore;
