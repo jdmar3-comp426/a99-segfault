@@ -9,7 +9,7 @@
 const gridWidth = 12;
 const numObstacles = 8;
 let inputProcessed = false;
-const initialRefreshTime = 1000;
+const initialRefreshTime = 150;
 let refreshTime = initialRefreshTime;
 let refresh = null;
 let progress = null;
@@ -189,7 +189,7 @@ const GridManager = {
                 // Snake head is on a fruit
                 this.growth += 2.5;
                 increment *= 0.85;
-                refreshTime += .5 * increment;
+                refreshTime += .8 * increment;
                 document.getElementById('currentScore').innerHTML = "" + (parseInt(document.getElementById('currentScore').innerHTML) + 1);
 
                 clearInterval(refresh);
