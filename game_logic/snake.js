@@ -368,14 +368,14 @@ function restartGame() {
 
 // Change game mode to Don't Starve
 function setDontStarve() {
+    document.getElementById('progressBar').style.display = "";
     GridManager.mode = Gamemode.DontStarve;
     document.getElementById('gameType').innerHTML = "Don't Starve";
 }
 
 // Change game mode to Obstacle Course
 function setObstacleCourse() {
-    var x = document.getElementById('progressBar')
-    x.style.display = "none";
+    document.getElementById('progressBar').style.display = "none";
     GridManager.mode = Gamemode.ObstacleCourse;
     document.getElementById('gameType').innerHTML = "Obstacle Course";
 }
