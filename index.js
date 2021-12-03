@@ -138,34 +138,39 @@ window.addEventListener("load" , function(){
         const signupFormData = new FormData(signupForm) ;
         const signupInfo = new URLSearchParams(signupFormData) ;
         const inputtedUsername = signupFormData.get("username") ;
-
-
-        const requestVerification = new XMLHttpRequest() ;
-        console.log(inputtedUsername);
-        requestVerification.open("GET" , "http://localhost:5000/app/user/exists/" + inputtedUsername) ;
-        requestVerification.send() ;
-        requestVerification.addEventListener("load" , function(event){
-            var isInDatabase = JSON.parse(requestVerification.response)["EXISTS(SELECT 1 FROM userinfo WHERE username = '" + inputtedUsername + "')"] ==1;
-            if(!isInDatabase){
-                const sendRequest = new XMLHttpRequest() ;
-                sendRequest.open("POST" , "http://localhost:5000/app/new/" ) ;
-                sendRequest.send(signupInfo) ;
-                sendRequest.addEventListener("error" , function(event){
+        const inputtedPassword =  signupFormData.get("password") ;
+        const inputtedEmail = signupFormData.get("email") ;
+        if(inputtedUsername === "" || inputtedPassword === "" || inputtedEmail === ""){
+            alert("Can't complete signup, you have a field empty") ; 
+        }
+        else{
+            const requestVerification = new XMLHttpRequest() ;
+            requestVerification.open("GET" , "http://localhost:5000/app/user/exists/" + inputtedUsername) ;
+            requestVerification.send() ;
+            requestVerification.addEventListener("load" , function(event){
+                var isInDatabase = JSON.parse(requestVerification.response)["EXISTS(SELECT 1 FROM userinfo WHERE username = '" + inputtedUsername + "')"] ==1;
+                if(!isInDatabase){
+                    const sendRequest = new XMLHttpRequest() ;
+                    sendRequest.open("POST" , "http://localhost:5000/app/new/" ) ;
+                    sendRequest.send(signupInfo) ;
+                    sendRequest.addEventListener("error" , function(event){
                         alert("Submission Unsuccesful! Please try again.") ;
                     }
-                ) ;
-                sendRequest.addEventListener("load" , function(event){
-                    alert("Signed up!") ;
-                })
-            }
-            else{
-                alert("User is already in database") ;
-            }
-            console.log(JSON.parse(requestVerification.response)["EXISTS(SELECT 1 FROM userinfo WHERE username = '" + inputtedUsername + "')"] == 1);
-        })
-        requestVerification.addEventListener("error" , function(event){
-            alert("Signup failed");
-        })
+                    ) ;
+                    sendRequest.addEventListener("load" , function(event){
+                        alert("Signed up!") ;
+                    }) ; 
+                }
+                else{
+                    alert("User is already in database") ;
+                }
+            } ) ; 
+            requestVerification.addEventListener("error" , function(event){
+                alert("Signup failed");
+            }) ; 
+        }
+
+        
     };
 });
 
