@@ -101,6 +101,13 @@ const GridManager = {
     clear: function () {
         this.context.clearRect(0, 0, canvas.width, canvas.height);
     },
+    draw: function() {
+        this.clear();
+        for (let i = 0; i < snake.length; i++) {
+            this.drawBlock(snake.points[i]);
+        }
+        entities.draw();
+    },
     // Remove snake tile as snake moves
     removeBlock: function (y, x, isFruit) {
         this.context.fillStyle = 'rgb(255, 255, 255)';
@@ -110,11 +117,7 @@ const GridManager = {
                 this.blockWidth, this.blockWidth
             );
         } else {
-            GridManager.clear();
-            for (let i = 0; i < snake.length; i++) {
-                this.drawBlock(snake.points[i]);
-            }
-            entities.draw();
+            this.draw();
         }
     },
     // Iterate over map elements and draw any non-zero objects
@@ -246,7 +249,7 @@ entities.init = _ => {
     if (GridManager.mode === Gamemode.ObstacleCourse) {
         // TODO: generate obstacles
         for (let i = 0; i < numObstacles; i++) {
-            entities.obstacles.points.push(generateEntity());
+            entities.obstacles.points.push(generateEntity(new Point(0, 3)));
         }
     }
     entities.fruit = generateEntity();
@@ -275,17 +278,14 @@ function init() {
     const emailLabel = document.getElementById('emailLabel');
     const highestScoreLabel = document.getElementById('userStandardScore');
 
-    if(document.getElementById('gameType').innerHTML === "Don't Starve"){
-        highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore") ;
-        setDontStarve();
-    }
-    else{
-        highestScoreLabel.innerHTML = localStorage.getItem("obstacleHighScore") ;
-        setObstacleCourse();
+    if (document.getElementById('gameType').innerHTML === "Don't Starve") {
+        highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore");
+    } else {
+        highestScoreLabel.innerHTML = localStorage.getItem("obstacleHighScore");
     }
 
-    usernameLabel.innerHTML = localStorage.getItem("username") ;
-    emailLabel.innerHTML = localStorage.getItem("email") ;
+    usernameLabel.innerHTML = localStorage.getItem("username");
+    emailLabel.innerHTML = localStorage.getItem("email");
 
     window.canvas = document.getElementById('snakeGrid');
 
@@ -346,7 +346,6 @@ window.addEventListener("keydown", function (event) {
 
 // Reset game state
 function restartGame() {
-    GridManager.isPaused = true;
     clearInterval(refresh);
     refresh = setInterval(GridManager.drawGrid, refreshTime);
 
@@ -360,11 +359,13 @@ function restartGame() {
     entities.init();
 
     GridManager.gameOver = false;
+    GridManager.draw();
+    GridManager.isPaused = true;
 }
 
 // Update progress bar for simulating timer
 function updateProgressBar() {
-    progressBar = document.getElementById('progressBar');
+    let progressBar = document.getElementById('progressBar');
     if (progressBar.value >= 75) {
         progressBar.classList.remove("is-warning");
         progressBar.classList.remove("is-danger");
@@ -378,6 +379,7 @@ function updateProgressBar() {
         progressBar.classList.remove("is-warning");
         progressBar.classList.add("is-danger");
     }
+    // TODO: don't decrement progressBar if game is paused
     progressBar.value -= 1;
 
     // Game over
@@ -389,8 +391,7 @@ function updateProgressBar() {
 // Change game mode to Don't Starve
 function setDontStarve() {
     GridManager.mode = Gamemode.DontStarve;
-    //GridManager.isPaused = true;
-    //restartGame();
+    restartGame();
     document.getElementById('progressBar').style.display = "";
     document.getElementById('gameType').innerHTML = "Don't Starve";
 }
@@ -398,8 +399,7 @@ function setDontStarve() {
 // Change game mode to Obstacle Course
 function setObstacleCourse() {
     GridManager.mode = Gamemode.ObstacleCourse;
-    //GridManager.isPaused = true;
-    //restartGame();
+    restartGame();
     document.getElementById('progressBar').style.display = "none";
     document.getElementById('gameType').innerHTML = "Obstacle Course";
 }
