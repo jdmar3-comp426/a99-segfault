@@ -9,7 +9,7 @@
 const gridWidth = 12;
 const numObstacles = 8;
 let inputProcessed = false;
-const initialRefreshTime = 150;
+const initialRefreshTime = 1000;
 let refreshTime = initialRefreshTime;
 let refresh = null;
 let progress = null;
@@ -52,7 +52,28 @@ const GridManager = {
                 p.y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
             // TODO: tail sprite
-            //  } else if (p.equals(snake.tail)) {
+        } else if (p.equals(snake.tail)) {
+            let tailImg;
+            if (snake.tail.direction !== snake.points[1].direction) {
+                snake.tail.direction = snake.points[1].direction;
+            }
+            switch (snake.tail.direction) {
+                case Direction.N:
+                    tailImg = LoadedImage.TailNorth;
+                    break;
+                case Direction.E:
+                    tailImg = LoadedImage.TailEast;
+                    break;
+                case Direction.S:
+                    tailImg = LoadedImage.TailSouth;
+                    break;
+                case Direction.W:
+                    tailImg = LoadedImage.TailWest;
+                    break;
+            }
+            this.context.drawImage(tailImg.image, p.x * this.blockWidth - .5 * this.growth,
+                p.y * this.blockWidth - .5 * this.growth,
+                this.blockWidth + this.growth, this.blockWidth + this.growth);
         } else if (p.equals(entities.fruit)) {
             this.context.drawImage(LoadedImage.FruitApple.image,
                 p.x * this.blockWidth, p.y * this.blockWidth,
@@ -280,10 +301,10 @@ function init() {
 
     if (document.getElementById('gameType').innerHTML === "Don't Starve") {
         highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore");
+
     } else {
         highestScoreLabel.innerHTML = localStorage.getItem("obstacleHighScore");
     }
-
     usernameLabel.innerHTML = localStorage.getItem("username");
     emailLabel.innerHTML = localStorage.getItem("email");
 
@@ -390,15 +411,13 @@ function updateProgressBar() {
 
 // Change game mode to Don't Starve
 function setDontStarve() {
-    GridManager.mode = Gamemode.DontStarve;
     restartGame();
-    document.getElementById('progressBar').style.display = "";
+    document.getElementById('progressBar').style.display = "block";
     document.getElementById('gameType').innerHTML = "Don't Starve";
 }
 
 // Change game mode to Obstacle Course
 function setObstacleCourse() {
-    GridManager.mode = Gamemode.ObstacleCourse;
     restartGame();
     document.getElementById('progressBar').style.display = "none";
     document.getElementById('gameType').innerHTML = "Obstacle Course";

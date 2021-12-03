@@ -3,11 +3,17 @@
  */
 
 class LoadedImage {
-    static HeadNorth = new LoadedImage("https://i.imgur.com/SzibTAr.png");
-    static HeadEast = new LoadedImage("https://i.imgur.com/aty89Dm.png");
-    static HeadSouth = new LoadedImage("https://i.imgur.com/CDPu6N5.png");
-    static HeadWest = new LoadedImage("https://i.imgur.com/FOvnnXO.png");
-    static Body = new LoadedImage("https://i.imgur.com/8HVeW6i.png");
+    static HeadNorth = new LoadedImage("https://i.imgur.com/qaHZ08P.png");
+    static HeadEast = new LoadedImage("https://i.imgur.com/2tHc7UW.png");
+    static HeadSouth = new LoadedImage("https://i.imgur.com/4vnUG9R.png");
+    static HeadWest = new LoadedImage("https://i.imgur.com/uWapKA2.png");
+
+    static TailNorth = new LoadedImage("https://i.imgur.com/DfEkjul.png");
+    static TailEast = new LoadedImage("https://i.imgur.com/1zypg5W.png");
+    static TailSouth = new LoadedImage("https://i.imgur.com/ntBcEZ5.png");
+    static TailWest = new LoadedImage("https://i.imgur.com/F8QKyW0.png");
+
+    static Body = new LoadedImage("https://i.imgur.com/uWapKA2.png");
     static BodyNSDebug = new LoadedImage("https://i.imgur.com/GOGK4AG.png");
     static BodyEWDebug = new LoadedImage("https://i.imgur.com/Gxc7fn4.png");
     static BodyNWDebug = new LoadedImage("https://i.imgur.com/FMAt9Ui.png");
