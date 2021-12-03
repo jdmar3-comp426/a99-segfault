@@ -404,12 +404,13 @@ function restartGame() {
     updateProgressBar();
     document.getElementById('progressBar').max = 100;
 
-    this.growth = 0;
+
     document.getElementById('currentScore').innerHTML = "0";
     GridManager.clear();
     snake = new Snake();
     entities.init();
-
+   GridManager.growth = 0;
+    console.log("FUCK");
     GridManager.gameOver = false;
     GridManager.draw();
     pauseSymbol();
