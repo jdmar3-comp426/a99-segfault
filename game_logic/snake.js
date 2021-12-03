@@ -12,6 +12,7 @@ let inputProcessed = false;
 const initialRefreshTime = 150;
 let refreshTime = initialRefreshTime;
 let refresh = null;
+let progress = null;
 const initialIncrement = 20;
 let increment = initialIncrement;
 
@@ -22,7 +23,7 @@ const GridManager = {
     isPaused: false,
     blockWidth: null,
     growth: 0,
-    mode: localStorage.getItem("mode") === "Don't Starve" ? Gamemode.DontStarve : Gamemode.ObstacleCourse,  // TODO: set gamemode based on user selection
+    mode: localStorage.getItem("mode") === "Don't Starve" ? Gamemode.DontStarve : Gamemode.ObstacleCourse,
     /*
     Define game map, which lets us refer to grid locations
     instead of pixels. Intended to be used to keep track of food/other grid items
@@ -159,14 +160,28 @@ const GridManager = {
         }
         snake.points.push(newHead);
         this.drawBlock(oldHead);
-
         if (this.mode === Gamemode.DontStarve) {
-            if (newHead.equals(entities.fruit)) {
-                // Snake head is on a fruit
-                this.growth += 2.5;
-                increment *= 0.85;
-                refreshTime += .5 * increment;
-                document.getElementById('currentScore').innerHTML = "" +(parseInt(document.getElementById('currentScore').innerHTML)+1);
+          if (newHead.equals(entities.fruit)) {
+              // Snake head is on a fruit
+              this.growth += 2.5;
+              increment *= 0.85;
+              refreshTime += .5 * increment;
+              document.getElementById('currentScore').innerHTML = "" +(parseInt(document.getElementById('currentScore').innerHTML)+1);
+
+              clearInterval(refresh);
+              refresh = setInterval(GridManager.drawGrid, refreshTime);
+              // get rid of fruit immediately
+              this.removeBlock(snake.head.y, snake.head.x, true);
+              this.removeBlock(oldHead.y, oldHead.x, false);
+              entities.fruit = generateEntity(entities.slimFruit);
+
+              // Update timer
+              document.getElementById('progressBar').value += 5;
+          } else {
+              if (this.mode === Gamemode.DontStarve && newHead.equals(entities.slimFruit)) {
+                  this.growth = Math.max(this.growth - 2.5, 0);
+                  refreshTime = Math.max(refreshTime - .5 * increment, initialRefreshTime);
+                  increment = Math.min(increment /= 0.85, initialIncrement);
 
                 clearInterval(refresh);
                 refresh = setInterval(GridManager.drawGrid, refreshTime);
@@ -177,24 +192,6 @@ const GridManager = {
 
                 // Update timer
                 document.getElementById('progressBar').value += 5;
-            } else {
-                if (this.mode === Gamemode.DontStarve && newHead.equals(entities.slimFruit)) {
-                    this.growth = Math.max(this.growth - 2.5, 0);
-                    refreshTime = Math.max(refreshTime - .5 * increment, initialRefreshTime);
-                    increment = Math.min(increment /= 0.85, initialIncrement);
-
-                    clearInterval(refresh);
-                    refresh = setInterval(GridManager.drawGrid, refreshTime);
-                    // get rid of fruit immediately
-                    this.removeBlock(snake.head.y, snake.head.x, true);
-                    this.removeBlock(oldHead.y, oldHead.x, false);
-                    entities.slimFruit = generateEntity(entities.fruit);
-                }
-                GridManager.removeBlock(snake.points.shift(), false);
-            }
-            GridManager.drawBlock(snake.head);
-            GridManager.drawBlock(oldHead);
-            entities.draw();
         } else {
             if (newHead.equals(entities.fruit)) {
                 document.getElementById('currentScore').innerHTML = "" +(parseInt(document.getElementById('currentScore').innerHTML)+1);
@@ -211,10 +208,10 @@ const GridManager = {
                 // this.removeBlock(oldHead.y, oldHead.x, false);
                 GridManager.removeBlock(snake.points.shift(), false);
             }
-            GridManager.drawBlock(snake.head);
-            GridManager.drawBlock(oldHead);
-            entities.draw();
         }
+        GridManager.drawBlock(snake.head);
+        GridManager.drawBlock(oldHead);
+        entities.draw();
     }
 }
 
@@ -282,11 +279,9 @@ function init() {
 
     if(document.getElementById('gameType').innerHTML === "Don't Starve"){
         highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore") ;
-        setDontStarve();
     }
     else{
         highestScoreLabel.innerHTML = localStorage.getItem("obstacleHighScore") ;
-        setObstacleCourse();
     }
 
     usernameLabel.innerHTML = localStorage.getItem("username") ;
@@ -300,16 +295,15 @@ function init() {
     }
     // Interval time is in ms
     refresh = setInterval(GridManager.drawGrid, refreshTime);
-
     entities.init();
 
     snake.points.forEach(block => GridManager.drawBlock(block));
     entities.draw();
+    progress = setInterval(updateProgressBar, 200);
 }
 
 // Watch for arrow key input to control snake direction
 window.addEventListener("keydown", function (event) {
-
     // Prevent the same event from being handled twice
     if (event.defaultPrevented || inputProcessed) {
         return;
@@ -317,7 +311,6 @@ window.addEventListener("keydown", function (event) {
     inputProcessed = true;
     switch (event.key) {
         case "ArrowLeft":
-
             if (snake.direction !== Direction.E) {
                 snake.direction = Direction.W;
             }
@@ -355,12 +348,41 @@ window.addEventListener("keydown", function (event) {
 function restartGame() {
     clearInterval(refresh);
     refresh = setInterval(GridManager.drawGrid, refreshTime);
+
+    // reset timer
+    document.getElementById('progressBar').value = 100;
+    progress = setInterval(updateProgressBar, 200);
+
     document.getElementById('currentScore').innerHTML = "0";
     GridManager.clear();
     snake = new Snake();
     entities.init();
 
     GridManager.gameOver = false;
+}
+
+// Update progress bar for simulating timer
+function updateProgressBar() {
+    progressBar = document.getElementById('progressBar');
+    if (progressBar.value >= 75) {
+        progressBar.classList.remove("is-warning");
+        progressBar.classList.remove("is-danger");
+        progressBar.classList.add("is-success");
+    } else if (progressBar.value >= 25) {
+        progressBar.classList.remove("is-success");
+        progressBar.classList.remove("is-danger");
+        progressBar.classList.add("is-warning");
+    } else {
+        progressBar.classList.remove("is-success");
+        progressBar.classList.remove("is-warning");
+        progressBar.classList.add("is-danger");
+    }
+    progressBar.value -= 1;
+
+    // Game over
+    if (progressBar.value == 0) {
+        endGame();
+    }
 }
 
 // Change game mode to Don't Starve
@@ -382,6 +404,7 @@ function setObstacleCourse() {
 }
 
 function endGame() {
+    clearInterval(progress);
     console.log(localStorage.getItem("username")) ;
     console.log(localStorage.getItem("starveGamesPlayed"));
     const currentScore = parseInt(document.getElementById('currentScore').innerHTML) ;
