@@ -31,6 +31,11 @@ const GridManager = {
     // Function to invoke canvas object and draw snake tile
     drawBlock: function (p) {
         if (!(p instanceof Point)) throw new Error("Not a Point");
+        if (p.dir === Direction.NA) {
+            let pauseImg = LoadedImage.Pause;
+            this.context.drawImage( pauseImg.image, canvas.width / 2 - pauseImg.image.width / 2- (50),
+                canvas.height / 2 - pauseImg.image.height / 2 - (50), 200, 200);
+        }
         if (p.equals(snake.head)) {
             let headImg;
             switch (snake.direction) {
@@ -50,7 +55,6 @@ const GridManager = {
             this.context.drawImage(headImg.image, p.x * this.blockWidth - .5 * this.growth,
                 p.y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
-            // TODO: tail sprite
         } else if (p.equals(snake.tail)) {
             let tailImg;
             if (snake.tail.direction !== snake.points[1].direction) {
@@ -337,21 +341,25 @@ window.addEventListener("keydown", function (event) {
     inputProcessed = true;
     switch (event.key) {
         case "ArrowLeft":
+            event.preventDefault();
             if (snake.direction !== Direction.E) {
                 snake.direction = Direction.W;
             }
             break;
         case "ArrowRight":
+            event.preventDefault();
             if (snake.direction !== Direction.W) {
                 snake.direction = Direction.E;
             }
             break;
         case "ArrowUp":
+            event.preventDefault();
             if (snake.direction !== Direction.S) {
                 snake.direction = Direction.N;
             }
             break;
         case "ArrowDown":
+            event.preventDefault();
             if (snake.direction !== Direction.N) {
                 snake.direction = Direction.S;
             }
@@ -360,10 +368,10 @@ window.addEventListener("keydown", function (event) {
             event.preventDefault();
             inputProcessed = false;
             if (GridManager.gameOver) {
-                console.log("FUCK");
                 restartGame();
             } else {
                 GridManager.isPaused = !GridManager.isPaused;
+                pauseSymbol();
                 clearInterval(progress);
                 progress = setInterval(updateProgressBar, 200);
             }
@@ -507,4 +515,11 @@ function syncDB() {
     }
     updateRequest.addEventListener("load", function (event) {
     });
+}
+
+function pauseSymbol() {
+    let middle = new Point(7, 7, Direction.NA, Direction.NA);
+    if (GridManager.isPaused) {
+        GridManager.drawBlock(middle);
+    }
 }

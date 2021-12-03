@@ -1,3 +1,7 @@
+* {
+    caret-color: transparent;
+}
+
 #createAccountSection {
     position: fixed;
     display: none;

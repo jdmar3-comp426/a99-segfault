@@ -31,6 +31,8 @@ class LoadedImage {
 
     static TrafficCone = new LoadedImage("https://i.imgur.com/wL4luTP.png");
 
+    static Pause = new LoadedImage("https://i.imgur.com/omJVFcd.png");
+
     constructor(src) {
         this.image = new Image();
         this.image.src = src;
@@ -48,6 +50,7 @@ class Gamemode {
 
 class Direction {
     // essentially an enum class
+    static NA = new Direction(("none"));
     static N = new Direction("north");
     static S = new Direction("south");
     static W = new Direction("west");

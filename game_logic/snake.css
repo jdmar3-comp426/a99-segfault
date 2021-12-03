@@ -1,7 +1,10 @@
+* {
+    caret-color: transparent;
+}
 
 #snakeGrid {
     display: flex;
-    border: 1px solid black;
+
     width: 50%;
     margin: auto;
 }
@@ -24,3 +27,5 @@ canvas {
 html {
     overflow: hidden;
 }
+
+
