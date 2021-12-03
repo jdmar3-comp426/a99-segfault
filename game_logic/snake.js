@@ -12,6 +12,7 @@ let inputProcessed = false;
 const initialRefreshTime = 150;
 let refreshTime = initialRefreshTime;
 let refresh = null;
+let progress = null;
 const initialIncrement = 20;
 let increment = initialIncrement;
 
@@ -22,7 +23,7 @@ const GridManager = {
     isPaused: false,
     blockWidth: null,
     growth: 0,
-    mode: localStorage.getItem("mode") === "Don't Starve" ? Gamemode.DontStarve : Gamemode.ObstacleCourse,  // TODO: set gamemode based on user selection
+    mode: localStorage.getItem("mode") === "Don't Starve" ? Gamemode.DontStarve : Gamemode.ObstacleCourse,
     /*
     Define game map, which lets us refer to grid locations
     instead of pixels. Intended to be used to keep track of food/other grid items
@@ -122,9 +123,6 @@ const GridManager = {
             GridManager.updateGame();
         }
     },
-    endGame: function () {
-        this.gameOver = true;
-    },
     // Make update to game state
     updateGame: function () {
         if (this.gameOver || this.isPaused) return;
@@ -162,14 +160,13 @@ const GridManager = {
         }
         snake.points.push(newHead);
         this.drawBlock(oldHead);
-
         if (this.mode === Gamemode.DontStarve) {
             if (newHead.equals(entities.fruit)) {
                 // Snake head is on a fruit
                 this.growth += 2.5;
                 increment *= 0.85;
                 refreshTime += .5 * increment;
-                document.getElementById('currentScore').innerHTML = "" +(parseInt(document.getElementById('currentScore').innerHTML)+1);
+                document.getElementById('currentScore').innerHTML = "" + (parseInt(document.getElementById('currentScore').innerHTML) + 1);
 
                 clearInterval(refresh);
                 refresh = setInterval(GridManager.drawGrid, refreshTime);
@@ -195,29 +192,24 @@ const GridManager = {
                 }
                 GridManager.removeBlock(snake.points.shift(), false);
             }
-            GridManager.drawBlock(snake.head);
-            GridManager.drawBlock(oldHead);
-            entities.draw();
         } else {
             if (newHead.equals(entities.fruit)) {
-                document.getElementById('currentScore').innerHTML = "" +(parseInt(document.getElementById('currentScore').innerHTML)+1);
+                // Snake head is on a fruit
+                document.getElementById('currentScore').innerHTML = "" + (parseInt(document.getElementById('currentScore').innerHTML) + 1);
 
                 clearInterval(refresh);
                 refresh = setInterval(GridManager.drawGrid, refreshTime);
-
                 // get rid of fruit immediately
                 this.removeBlock(snake.head.y, snake.head.x, true);
                 this.removeBlock(oldHead.y, oldHead.x, false);
-                entities.fruit = generateEntity(entities.slimFruit);
+                entities.fruit = generateEntity();
             } else {
-                // this.removeBlock(snake.head.y, snake.head.x, true);
-                // this.removeBlock(oldHead.y, oldHead.x, false);
                 GridManager.removeBlock(snake.points.shift(), false);
             }
-            GridManager.drawBlock(snake.head);
-            GridManager.drawBlock(oldHead);
-            entities.draw();
         }
+        GridManager.drawBlock(snake.head);
+        GridManager.drawBlock(oldHead);
+        entities.draw();
     }
 }
 
@@ -230,7 +222,7 @@ const entities = {
     slimFruit: null,            // slimming fruit, Don't Starve exclusive
     obstacles: {                // obstacles, Obstacle course exclusive
         points: [],
-        hasPoint: function(p) {
+        hasPoint: function (p) {
             for (const point of this.points) {
                 if (point.equals(p)) return true;
             }
@@ -281,19 +273,16 @@ function init() {
 
     const usernameLabel = document.getElementById('usernameLabel');
     const emailLabel = document.getElementById('emailLabel');
-    const highestScoreLabel = document.getElementById('userStandardScore') ;
+    const highestScoreLabel = document.getElementById('userStandardScore');
 
-    if(document.getElementById('gameType').innerHTML === "Don't Starve"){
-        highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore") ;
-        setDontStarve();
-    }
-    else{
-        highestScoreLabel.innerHTML = localStorage.getItem("obstacleHighScore") ;
-        setObstacleCourse();
+    if (document.getElementById('gameType').innerHTML === "Don't Starve") {
+        highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore");
+    } else {
+        highestScoreLabel.innerHTML = localStorage.getItem("obstacleHighScore");
     }
 
-    usernameLabel.innerHTML = localStorage.getItem("username") ;
-    emailLabel.innerHTML = localStorage.getItem("email") ;
+    usernameLabel.innerHTML = localStorage.getItem("username");
+    emailLabel.innerHTML = localStorage.getItem("email");
 
     window.canvas = document.getElementById('snakeGrid');
 
@@ -303,16 +292,15 @@ function init() {
     }
     // Interval time is in ms
     refresh = setInterval(GridManager.drawGrid, refreshTime);
-
     entities.init();
 
     snake.points.forEach(block => GridManager.drawBlock(block));
     entities.draw();
+    progress = setInterval(updateProgressBar, 200);
 }
 
 // Watch for arrow key input to control snake direction
 window.addEventListener("keydown", function (event) {
-
     // Prevent the same event from being handled twice
     if (event.defaultPrevented || inputProcessed) {
         return;
@@ -320,7 +308,6 @@ window.addEventListener("keydown", function (event) {
     inputProcessed = true;
     switch (event.key) {
         case "ArrowLeft":
-
             if (snake.direction !== Direction.E) {
                 snake.direction = Direction.W;
             }
@@ -356,8 +343,14 @@ window.addEventListener("keydown", function (event) {
 
 // Reset game state
 function restartGame() {
+    GridManager.isPaused = true;
     clearInterval(refresh);
     refresh = setInterval(GridManager.drawGrid, refreshTime);
+
+    // reset timer
+    document.getElementById('progressBar').value = 100;
+    progress = setInterval(updateProgressBar, 200);
+
     document.getElementById('currentScore').innerHTML = "0";
     GridManager.clear();
     snake = new Snake();
@@ -366,60 +359,92 @@ function restartGame() {
     GridManager.gameOver = false;
 }
 
+// Update progress bar for simulating timer
+function updateProgressBar() {
+    progressBar = document.getElementById('progressBar');
+    if (progressBar.value >= 75) {
+        progressBar.classList.remove("is-warning");
+        progressBar.classList.remove("is-danger");
+        progressBar.classList.add("is-success");
+    } else if (progressBar.value >= 25) {
+        progressBar.classList.remove("is-success");
+        progressBar.classList.remove("is-danger");
+        progressBar.classList.add("is-warning");
+    } else {
+        progressBar.classList.remove("is-success");
+        progressBar.classList.remove("is-warning");
+        progressBar.classList.add("is-danger");
+    }
+    progressBar.value -= 1;
+
+    // Game over
+    if (progressBar.value === 0) {
+        endGame();
+    }
+}
+
 // Change game mode to Don't Starve
 function setDontStarve() {
     GridManager.mode = Gamemode.DontStarve;
+    //GridManager.isPaused = true;
+    //restartGame();
+    document.getElementById('progressBar').style.display = "";
     document.getElementById('gameType').innerHTML = "Don't Starve";
 }
 
 // Change game mode to Obstacle Course
 function setObstacleCourse() {
-    var x = document.getElementById('progressBar')
-    x.style.display = "none";
     GridManager.mode = Gamemode.ObstacleCourse;
+    //GridManager.isPaused = true;
+    //restartGame();
+    document.getElementById('progressBar').style.display = "none";
     document.getElementById('gameType').innerHTML = "Obstacle Course";
 }
 
 function endGame() {
-    console.log(localStorage.getItem("username")) ;
+    clearInterval(progress);
+    console.log(localStorage.getItem("username"));
     console.log(localStorage.getItem("starveGamesPlayed"));
-    const currentScore = parseInt(document.getElementById('currentScore').innerHTML) ;
-    const highestScoreLabel = document.getElementById('userStandardScore') ;
-    const highScore = parseInt(highestScoreLabel.innerHTML) ;
+    const currentScore = parseInt(document.getElementById('currentScore').innerHTML);
+    const highestScoreLabel = document.getElementById('userStandardScore');
+    const highScore = parseInt(highestScoreLabel.innerHTML);
 
-    const updateRequest = new XMLHttpRequest() ;
-    updateRequest.open("PATCH" , "http://localhost:5000/app/update/user/" + localStorage.getItem("username")) ;
+    const updateRequest = new XMLHttpRequest();
+    updateRequest.open("PATCH", "http://localhost:5000/app/update/user/" + localStorage.getItem("username"));
 
-    if(currentScore > highScore){
-        highestScoreLabel.innerHTML = currentScore ;
-        if(document.getElementById('gameType').innerHTML.includes("Don't Starve")){
-            currentGamesPlayed = localStorage.getItem("starveGamesPlayed") ;
-            updateRequest.send(new URLSearchParams({starveHighScore : currentScore , starveGamesPlayed : (parseInt(currentGamesPlayed) + 1)})) ;
-            localStorage.setItem("starveHighScore" , currentScore) ;
-            localStorage.setItem("starveGamesPlayed" , (parseInt(currentGamesPlayed) + 1)) ;
+    if (currentScore > highScore) {
+        highestScoreLabel.innerHTML = currentScore;
+        if (document.getElementById('gameType').innerHTML.includes("Don't Starve")) {
+            currentGamesPlayed = localStorage.getItem("starveGamesPlayed");
+            updateRequest.send(new URLSearchParams({
+                starveHighScore: currentScore,
+                starveGamesPlayed: (parseInt(currentGamesPlayed) + 1)
+            }));
+            localStorage.setItem("starveHighScore", currentScore);
+            localStorage.setItem("starveGamesPlayed", (parseInt(currentGamesPlayed) + 1));
+        } else {
+            currentGamesPlayed = localStorage.getItem("obstacleGamesPlayed");
+            updateRequest.send(new URLSearchParams({
+                obstacleHighScore: currentScore,
+                obstacleGamesPlayed: (parseInt(currentGamesPlayed) + 1)
+            }));
+            localStorage.setItem("obstacleHighScore", currentScore);
+            localStorage.setItem("obstacleGamesPlayed", (parseInt(currentGamesPlayed) + 1));
         }
-        else{
-            currentGamesPlayed = localStorage.getItem("obstacleGamesPlayed") ;
-            updateRequest.send(new URLSearchParams({obstacleHighScore : currentScore , obstacleGamesPlayed : (parseInt(currentGamesPlayed) + 1)})) ;
-            localStorage.setItem("obstacleHighScore" , currentScore) ;
-            localStorage.setItem("obstacleGamesPlayed" , (parseInt(currentGamesPlayed) + 1)) ;
+    } else {
+        if (document.getElementById('gameType').innerHTML.includes("Don't Starve")) {
+            currentGamesPlayed = localStorage.getItem("starveGamesPlayed");
+            updateRequest.send(new URLSearchParams({starveGamesPlayed: (parseInt(currentGamesPlayed) + 1)}));
+            localStorage.setItem("starveGamesPlayed", (parseInt(currentGamesPlayed) + 1));
+        } else {
+            currentGamesPlayed = localStorage.getItem("obstacleGamesPlayed");
+            updateRequest.send(new URLSearchParams({obstacleGamesPlayed: (parseInt(currentGamesPlayed) + 1)}));
+            localStorage.setItem("obstacleGamesPlayed", (parseInt(currentGamesPlayed) + 1));
         }
     }
-    else{
-        if(document.getElementById('gameType').innerHTML.includes("Don't Starve")){
-            currentGamesPlayed = localStorage.getItem("starveGamesPlayed") ;
-            updateRequest.send(new URLSearchParams({starveGamesPlayed : (parseInt(currentGamesPlayed) + 1)})) ;
-            localStorage.setItem("starveGamesPlayed" , (parseInt(currentGamesPlayed) + 1)) ;
-        }
-        else{
-            currentGamesPlayed = localStorage.getItem("obstacleGamesPlayed") ;
-            updateRequest.send(new URLSearchParams({obstacleGamesPlayed : (parseInt(currentGamesPlayed) + 1)})) ;
-            localStorage.setItem("obstacleGamesPlayed" , (parseInt(currentGamesPlayed) + 1)) ;
-        }
-    }
-    updateRequest.addEventListener("load" , function(event){
+    updateRequest.addEventListener("load", function (event) {
 
-    } ) ;
+    });
 
     GridManager.gameOver = true;
 }
