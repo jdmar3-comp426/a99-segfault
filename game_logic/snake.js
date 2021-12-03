@@ -357,8 +357,10 @@ window.addEventListener("keydown", function (event) {
             }
             break;
         case " ":
+            event.preventDefault();
             inputProcessed = false;
             if (GridManager.gameOver) {
+                console.log("FUCK");
                 restartGame();
             } else {
                 GridManager.isPaused = !GridManager.isPaused;
