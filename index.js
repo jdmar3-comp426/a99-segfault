@@ -5,15 +5,16 @@
 
 window.addEventListener("load" , function(){
 
+    if (localStorage.getItem("username") === null){
+        initializeForGuest() ; 
+    }
     // When home page loads, add event to button click that sends user to game
     document.getElementById("launchDontStarve").onclick = function() {
-        if (localStorage.getItem("username") === null) initializeForGuest();
         location.href = './game_logic/snake.html';
         localStorage.setItem("mode", "Don't Starve");
     }
 
     document.getElementById("launchObstacleCourse").onclick = function() {
-        if (localStorage.getItem("username") === null) initializeForGuest();
         location.href = './game_logic/snake.html';
         localStorage.setItem("mode", "Obstacle Course");
     }
@@ -48,9 +49,15 @@ window.addEventListener("load" , function(){
                 const guestEmail = JSON.parse(getGuestRequest.response).email ;
                 const guestObstacleHighScore = JSON.parse(getGuestRequest.response).obstacleHighScore;
                 const guestStarveHighScore = JSON.parse(getGuestRequest.response).starveHighScore ;
+                const guestStarveGamesPlayed = JSON.parse(getGuestRequest.response).starveGamesPlayed ; 
+                const guestObstacleGamesPlayed = JSON.parse(getGuestRequest.response).obstacleGamesPlayed ; 
                 localStorage.setItem("email" , guestEmail) ;
                 localStorage.setItem("obstacleHighScore" , guestObstacleHighScore) ;
                 localStorage.setItem("starveHighScore" , guestStarveHighScore) ;
+                localStorage.setItem("starveGamesPlayed" , guestStarveGamesPlayed) ;
+                localStorage.setItem("obstacleGamesPlayed" , guestObstacleGamesPlayed) ;
+                console.log(guestStarveGamesPlayed) ; 
+                console.log(guestObstacleGamesPlayed) ; 
 
             }
         ) ;

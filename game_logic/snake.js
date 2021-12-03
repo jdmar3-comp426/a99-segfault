@@ -297,8 +297,6 @@ window.addEventListener("load", function() {
 
 // Initialize canvas/corresponding attributes for GridManager
 function init_game() {
-
-    console.log(localStorage.getItem("starveHighScore"));
     const usernameLabel = document.getElementById('usernameLabel');
     const emailLabel = document.getElementById('emailLabel');
     const highestScoreLabel = document.getElementById('userStandardScore');
@@ -460,6 +458,7 @@ function setObstacleCourse() {
 function endGame() {
     clearInterval(progress);
     clearInterval(refresh);
+    syncDB() ; 
 
     let highestScoreLabel = document.getElementById('userStandardScore');
     let currentScore = parseInt(document.getElementById('currentScore').innerHTML);
@@ -478,8 +477,6 @@ function endGame() {
 
 // Sync DB with session results
 function syncDB() {
-    console.log(localStorage.getItem("username"));
-    console.log(localStorage.getItem("starveGamesPlayed"));
     const currentScore = parseInt(document.getElementById('currentScore').innerHTML);
     const highScore = GridManager.mode === Gamemode.DontStarve ? localStorage.getItem("starveHighScoreDB") : localStorage.getItem("obstacleHighScoreDB");
 
