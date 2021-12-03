@@ -337,34 +337,11 @@ function init_game() {
 window.addEventListener("keydown", function (event) {
     // Prevent the same event from being handled twice
     if (event.defaultPrevented || inputProcessed) {
+        event.preventDefault();
         return;
     }
     inputProcessed = true;
     switch (event.key) {
-        case "ArrowLeft":
-            event.preventDefault();
-            if (snake.direction !== Direction.E) {
-                snake.direction = Direction.W;
-            }
-            break;
-        case "ArrowRight":
-            event.preventDefault();
-            if (snake.direction !== Direction.W) {
-                snake.direction = Direction.E;
-            }
-            break;
-        case "ArrowUp":
-            event.preventDefault();
-            if (snake.direction !== Direction.S) {
-                snake.direction = Direction.N;
-            }
-            break;
-        case "ArrowDown":
-            event.preventDefault();
-            if (snake.direction !== Direction.N) {
-                snake.direction = Direction.S;
-            }
-            break;
         case " ":
             event.preventDefault();
             inputProcessed = false;
@@ -377,11 +354,50 @@ window.addEventListener("keydown", function (event) {
                 progress = setInterval(updateProgressBar, 200);
             }
             break;
+        case "ArrowLeft":
+            event.preventDefault();
+            inputProcessed = false;
+            if (!GridManager.isPaused) {
+                if (snake.direction !== Direction.E) {
+                    snake.direction = Direction.W;
+                }
+            }
+            break;
+        case "ArrowRight":
+            event.preventDefault();
+            inputProcessed = false;
+            if (!GridManager.isPaused) {
+                if (snake.direction !== Direction.W) {
+                    snake.direction = Direction.E;
+                }
+            }
+            break;
+        case "ArrowUp":
+            event.preventDefault();
+            inputProcessed = false;
+            if (!GridManager.isPaused) {
+                if (snake.direction !== Direction.S) {
+                    snake.direction = Direction.N;
+                }
+            }
+            break;
+        case "ArrowDown":
+            event.preventDefault();
+            inputProcessed = false;
+            if(!GridManager.isPaused) {
+                if (snake.direction !== Direction.N) {
+                    snake.direction = Direction.S;
+                }
+            }
+            break;
     }
 
     // Cancel the default action to avoid it being handled twice
     event.preventDefault();
 }, true)
+
+
+
 
 // Reset game state
 function restartGame() {
