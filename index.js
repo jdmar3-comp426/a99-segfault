@@ -4,7 +4,7 @@
 */
 
 window.addEventListener("load" , function(){
-    initializeForGuest() ; 
+    initializeForGuest() ;
 
     // When home page loads, add event to button click that sends user to game
     document.getElementById("launchDontStarve").onclick = function() {
@@ -19,41 +19,36 @@ window.addEventListener("load" , function(){
 
     const signupForm = document.getElementById("createAccountForm");
     signupForm.addEventListener( "submit" , function(event){
-        event.preventDefault(); 
-        signup() ; 
-    }
-    ); 
+            event.preventDefault();
+            signup() ;
+        }
+    );
 
     const loginForm = document.getElementById("loginForm");
     loginForm.addEventListener( "submit" , function(event){
-        event.preventDefault(); 
-        login() ; 
-    }
-    ); 
+            event.preventDefault();
+            login() ;
+        }
+    );
 
     function initializeForGuest(){
 
-        const getGuestRequest = new XMLHttpRequest() ; 
+        const getGuestRequest = new XMLHttpRequest() ;
         getGuestRequest.open("GET" , "http://localhost:5000/app/user/guest") ;
         getGuestRequest.send() ;
         getGuestRequest.addEventListener("load" , function(event){
-            localStorage.setItem("username" , "guest") ;
-            const guestEmail = JSON.parse(getGuestRequest.response).email ;
-            const guestObstacleHighScore = JSON.parse(getGuestRequest.response).obstacleHighScore;
-            const guestStarveHighScore = JSON.parse(getGuestRequest.response).starveHighScore ; 
-            const guestStarveGamesPlayed = JSON.parse(getGuestRequest.response).starveGamesPlayed ; 
-            const guestObstacleGamesPlayed = JSON.parse(getGuestRequest.response).obstacleGamesPlayed ; 
+                localStorage.setItem("username" , "guest") ;
+                const guestEmail = JSON.parse(getGuestRequest.response).email ;
+                const guestObstacleHighScore = JSON.parse(getGuestRequest.response).obstacleHighScore;
+                const guestStarveHighScore = JSON.parse(getGuestRequest.response).starveHighScore ;
+                localStorage.setItem("email" , guestEmail) ;
+                localStorage.setItem("obstacleHighScore" , guestObstacleHighScore) ;
+                localStorage.setItem("starveHighScore" , guestStarveHighScore) ;
 
-            localStorage.setItem("email" , guestEmail) ; 
-            localStorage.setItem("obstacleHighScore" , guestObstacleHighScore) ;
-            localStorage.setItem("starveHighScore" , guestStarveHighScore) ;
-            localStorage.setItem("starveGamesPlayed" , guestStarveGamesPlayed) ; 
-            localStorage.setItem("obstacleGamesPlayed" , guestObstacleGamesPlayed) ; 
-
-        }
-        ) ; 
+            }
+        ) ;
     }
-    
+
     // While form is overlayed, add event listener to remove overlay if user clicks outside of the form
     document.addEventListener("click", function(event) {
         if (event.target == document.getElementById("loginButton")) {
@@ -77,8 +72,8 @@ window.addEventListener("load" , function(){
     });
 
     function login(){
-        const loginFormData = new FormData(loginForm) ; 
-        const loginInfo = new URLSearchParams(loginFormData) ; 
+        const loginFormData = new FormData(loginForm) ;
+        const loginInfo = new URLSearchParams(loginFormData) ;
         const inputtedUsername = loginFormData.get("username") ;
         const inputtedPassword = loginFormData.get("password") ;
 
@@ -87,71 +82,66 @@ window.addEventListener("load" , function(){
         verifyUsernameRequest.send() ;
 
         verifyUsernameRequest.addEventListener("load" , function(event){
-            var isInDatabase = JSON.parse(verifyUsernameRequest.response)["EXISTS(SELECT 1 FROM userinfo WHERE username = '" + inputtedUsername + "')"] ==1; 
+            var isInDatabase = JSON.parse(verifyUsernameRequest.response)["EXISTS(SELECT 1 FROM userinfo WHERE username = '" + inputtedUsername + "')"] ==1;
             if(isInDatabase){
-                const passwordCheckRequest = new XMLHttpRequest() ; 
+                const passwordCheckRequest = new XMLHttpRequest() ;
                 passwordCheckRequest.open("GET" , "http://localhost:5000/app/user/" + inputtedUsername) ;
                 passwordCheckRequest.send() ;
                 passwordCheckRequest.addEventListener("load" , function(event){
-                    const correctPassword = JSON.parse(passwordCheckRequest.response).password ; 
+                    const correctPassword = JSON.parse(passwordCheckRequest.response).password ;
 
                     if(inputtedPassword!=correctPassword){
-                        alert("Incorrect Password") ; 
+                        alert("Incorrect Password") ;
                     }
-                    else{ 
+                    else{
                         localStorage.setItem("username" , inputtedUsername) ;
                         localStorage.setItem("email" , JSON.parse(passwordCheckRequest.response).email) ;
-                        localStorage.setItem("starveHighScore" , JSON.parse(passwordCheckRequest.response).starveHighScore) ; 
-                        localStorage.setItem("obstacleHighScore" , JSON.parse(passwordCheckRequest.response).obstacleHighScore) ; 
-                        localStorage.setItem("starveGamesPlayed" , JSON.parse(passwordCheckRequest.response).starveGamesPlayed ) ; 
-                        localStorage.setItem("obstacleGamesPlayed" ,JSON.parse(passwordCheckRequest.response).obstacleGamesPlayed) ; 
                         alert("Login succesful");
                         document.getElementById("loginSection").style.display = "none";
                         document.getElementById("createAccountSection").style.display = "none";
                         window.formOverlayed = false;
                     }
 
-                } ) ; 
+                } ) ;
             }
             else{
-                alert("Invalid Username") ; 
+                alert("Invalid Username") ;
             }
-        }) ; 
+        }) ;
     }
 
     function signup(){
 
-        const signupFormData = new FormData(signupForm) ; 
+        const signupFormData = new FormData(signupForm) ;
         const signupInfo = new URLSearchParams(signupFormData) ;
         const inputtedUsername = signupFormData.get("username") ;
 
 
-        const requestVerification = new XMLHttpRequest() ; 
+        const requestVerification = new XMLHttpRequest() ;
         console.log(inputtedUsername);
         requestVerification.open("GET" , "http://localhost:5000/app/user/exists/" + inputtedUsername) ;
-        requestVerification.send() ; 
+        requestVerification.send() ;
         requestVerification.addEventListener("load" , function(event){
-            var isInDatabase = JSON.parse(requestVerification.response)["EXISTS(SELECT 1 FROM userinfo WHERE username = '" + inputtedUsername + "')"] ==1; 
+            var isInDatabase = JSON.parse(requestVerification.response)["EXISTS(SELECT 1 FROM userinfo WHERE username = '" + inputtedUsername + "')"] ==1;
             if(!isInDatabase){
                 const sendRequest = new XMLHttpRequest() ;
                 sendRequest.open("POST" , "http://localhost:5000/app/new/" ) ;
                 sendRequest.send(signupInfo) ;
                 sendRequest.addEventListener("error" , function(event){
-                    alert("Submission Unsuccesful! Please try again.") ; 
-                }
+                        alert("Submission Unsuccesful! Please try again.") ;
+                    }
                 ) ;
                 sendRequest.addEventListener("load" , function(event){
-                    alert("Signed up!") ; 
+                    alert("Signed up!") ;
                 })
             }
             else{
-                alert("User is already in database") ; 
+                alert("User is already in database") ;
             }
-            console.log(JSON.parse(requestVerification.response)["EXISTS(SELECT 1 FROM userinfo WHERE username = '" + inputtedUsername + "')"] == 1); 
+            console.log(JSON.parse(requestVerification.response)["EXISTS(SELECT 1 FROM userinfo WHERE username = '" + inputtedUsername + "')"] == 1);
         })
         requestVerification.addEventListener("error" , function(event){
-            alert("Signup failed"); 
+            alert("Signup failed");
         })
     };
 });
-

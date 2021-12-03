@@ -275,14 +275,17 @@ function init() {
     const emailLabel = document.getElementById('emailLabel');
     const highestScoreLabel = document.getElementById('userStandardScore');
 
-    if (document.getElementById('gameType').innerHTML === "Don't Starve") {
-        highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore");
-    } else {
-        highestScoreLabel.innerHTML = localStorage.getItem("obstacleHighScore");
+    if(document.getElementById('gameType').innerHTML === "Don't Starve"){
+        highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore") ;
+        setDontStarve();
+    }
+    else{
+        highestScoreLabel.innerHTML = localStorage.getItem("obstacleHighScore") ;
+        setObstacleCourse();
     }
 
-    usernameLabel.innerHTML = localStorage.getItem("username");
-    emailLabel.innerHTML = localStorage.getItem("email");
+    usernameLabel.innerHTML = localStorage.getItem("username") ;
+    emailLabel.innerHTML = localStorage.getItem("email") ;
 
     window.canvas = document.getElementById('snakeGrid');
 
