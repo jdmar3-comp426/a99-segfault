@@ -4,15 +4,16 @@
 */
 
 window.addEventListener("load" , function(){
-    initializeForGuest() ;
 
     // When home page loads, add event to button click that sends user to game
     document.getElementById("launchDontStarve").onclick = function() {
+        if (localStorage.getItem("username") === null) initializeForGuest();
         location.href = './game_logic/snake.html';
         localStorage.setItem("mode", "Don't Starve");
     }
 
     document.getElementById("launchObstacleCourse").onclick = function() {
+        if (localStorage.getItem("username") === null) initializeForGuest();
         location.href = './game_logic/snake.html';
         localStorage.setItem("mode", "Obstacle Course");
     }
@@ -94,8 +95,13 @@ window.addEventListener("load" , function(){
                         alert("Incorrect Password") ;
                     }
                     else{
+                        user_info = JSON.parse(passwordCheckRequest.response);
                         localStorage.setItem("username" , inputtedUsername) ;
-                        localStorage.setItem("email" , JSON.parse(passwordCheckRequest.response).email) ;
+                        localStorage.setItem("email" , user_info.email) ;
+                        localStorage.setItem("obstacleHighScore" , user_info.obstacleHighScore) ;
+                        localStorage.setItem("starveHighScore" , user_info.starveHighScore) ;
+                        localStorage.setItem("obstacleHighScoreDB" , user_info.obstacleHighScore) ;
+                        localStorage.setItem("starveHighScoreDB" , user_info.starveHighScore) ;
                         alert("Login succesful");
                         document.getElementById("loginSection").style.display = "none";
                         document.getElementById("createAccountSection").style.display = "none";

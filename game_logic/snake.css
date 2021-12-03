@@ -13,6 +13,7 @@
 }
 
 #progressBar {
+    display: none;
     width: 50%;
 }
 
