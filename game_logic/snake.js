@@ -385,7 +385,7 @@ window.addEventListener("keydown", function (event) {
 
     // allow inputs in between ticks w/o breaking game
     setTimeout(() => {inputProcessed = false;}, 100);
-
+    event.preventDefault();
 }, true)
 
 
