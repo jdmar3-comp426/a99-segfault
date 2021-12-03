@@ -4,18 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Page</title>
-    <script type="text/javascript" src="snake.js"></script>
+    <script type="text/javascript" src="account.js"></script>
     <link rel="stylesheet" href="./../node_modules/bulma/css/bulma.css">
     <link href="./account.css" rel="stylesheet">
 </head>
 <body>
-    <section class="hero is-primary">
-        <div class="hero-body">
-          <p class="title">
-            Account
-          </p>
+    <section class="hero is-warning">
+        <div class="hero-head">
+            <nav class="navbar">
+                <div class="container">
+                    <div id="navMenu" class="navbar-brand">
+                        <p class="navbar-item is-size-4 is-family-monospace">
+                            SEGFAULT
+                        </p>
+                    </div>
+    
+                    <div class="navbar-menu">
+                        <div class="navbar-end">
+                            <a class="navbar-item" href="./../index.html">
+                                Home
+                            </a>
+                            <div class="navbar-item has-dropdown is-hoverable">
+                                <a class="navbar-link">
+                                    Game Modes
+                                </a>
+                                <div class="navbar-dropdown">
+                                    <a class="navbar-item" onclick="setDontStarve()">
+                                        Don't Starve
+                                    </a>
+                                    <a class="navbar-item" onclick="setObstacleCourse()">
+                                        Obstacle Course
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="navbar-item">
+                                <div class="buttons">
+                                    <a class="button is-warning is-inverted">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="container has-text-centered">
+                <p class="title is-1" id="username">
+                </p>
+            </div>
         </div>
-      </section>
+    
+        <div class="hero-body">
+        </div>
+    </section>
       <section class="section has-background-white">
             <div class="container">
                 <div class="content">
