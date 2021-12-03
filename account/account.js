@@ -16,3 +16,8 @@ window.addEventListener("load", function(event) {
     obstacleHighScore.innerHTML = this.localStorage.getItem("obstacleHighScore");
 
 });
+
+function logout() {
+    localStorage.clear();
+    location.href = './../index.html';
+}
