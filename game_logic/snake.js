@@ -152,7 +152,6 @@ const GridManager = {
     // Make update to game state
     updateGame: function () {
         if (GridManager.gameOver || GridManager.isPaused) return;
-        inputProcessed = false;
         const maxIndex = gridWidth - 1;
 
         // Update new head and place it in the current direction
@@ -334,6 +333,8 @@ function init_game() {
 
 // Watch for arrow key input to control snake direction
 window.addEventListener("keydown", function (event) {
+    if (inputProcessed) return;
+    inputProcessed = true;
     switch (event.key) {
         case " ":
             if (GridManager.gameOver) {
@@ -383,6 +384,9 @@ window.addEventListener("keydown", function (event) {
     }
 
     // Cancel the default action to avoid it being handled twice
+
+    // allow inputs in between ticks w/o breaking game
+    setTimeout(() => {inputProcessed = false;}, 100);
     event.preventDefault();
 }, true)
 
