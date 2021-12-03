@@ -330,6 +330,7 @@ function init_game() {
     snake.points.forEach(block => GridManager.drawBlock(block));
     entities.draw();
     if (!GridManager.isPaused) progress = setInterval(updateProgressBar, 200);
+    pauseSymbol();
 };
 
 // Watch for arrow key input to control snake direction
