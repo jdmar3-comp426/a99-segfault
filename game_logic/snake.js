@@ -529,3 +529,8 @@ function pauseSymbol() {
         GridManager.drawBlock(middle);
     }
 }
+
+function logout() {
+    localStorage.clear();
+    location.href = './../index.html';
+}

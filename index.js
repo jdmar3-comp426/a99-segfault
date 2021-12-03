@@ -32,6 +32,12 @@ window.addEventListener("load" , function(){
         }
     );
 
+    // Remove login/sign-up buttons from display if logged in
+    if (localStorage.getItem("username") !== null && localStorage.getItem("username") !== "guest") {
+        document.getElementById("loginButton").style.display = "none";
+        document.getElementById("createAccount").style.display = "none";
+    }
+
     function initializeForGuest(){
 
         const getGuestRequest = new XMLHttpRequest() ;
@@ -106,6 +112,10 @@ window.addEventListener("load" , function(){
                         document.getElementById("loginSection").style.display = "none";
                         document.getElementById("createAccountSection").style.display = "none";
                         window.formOverlayed = false;
+
+                        // Remove login/sign-up buttons from display
+                        document.getElementById("loginButton").style.display = "none";
+                        document.getElementById("createAccount").style.display = "none";
                     }
 
                 } ) ;
@@ -151,3 +161,7 @@ window.addEventListener("load" , function(){
         })
     };
 });
+
+function logout() {
+    localStorage.clear();
+}
