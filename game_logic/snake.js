@@ -476,11 +476,7 @@ function endGame() {
     GridManager.gameOver = true;
 }
 
-// Before user leaves the game, make sure DB is updated
-window.addEventListener("beforeunload", function(event) {
-    syncDB();
-});
-
+// Sync DB with session results
 function syncDB() {
     console.log(localStorage.getItem("username"));
     console.log(localStorage.getItem("starveGamesPlayed"));
