@@ -35,8 +35,7 @@ const GridManager = {
             let pauseImg = LoadedImage.Pause;
             this.context.drawImage( pauseImg.image, canvas.width / 2 - pauseImg.image.width / 2- (50),
                 canvas.height / 2 - pauseImg.image.height / 2 - (50), 200, 200);
-        }
-        if (p.equals(snake.head)) {
+        } else if (p.equals(snake.head)) {
             let headImg;
             switch (snake.direction) {
                 case Direction.N:
@@ -335,16 +334,8 @@ function init_game() {
 
 // Watch for arrow key input to control snake direction
 window.addEventListener("keydown", function (event) {
-    // Prevent the same event from being handled twice
-    if (event.defaultPrevented || inputProcessed) {
-        event.preventDefault();
-        return;
-    }
-    inputProcessed = true;
     switch (event.key) {
         case " ":
-            event.preventDefault();
-            inputProcessed = false;
             if (GridManager.gameOver) {
                 restartGame();
             } else {
@@ -356,7 +347,6 @@ window.addEventListener("keydown", function (event) {
             break;
         case "ArrowLeft":
             event.preventDefault();
-            inputProcessed = false;
             if (!GridManager.isPaused) {
                 if (snake.direction !== Direction.E) {
                     snake.direction = Direction.W;
@@ -365,7 +355,6 @@ window.addEventListener("keydown", function (event) {
             break;
         case "ArrowRight":
             event.preventDefault();
-            inputProcessed = false;
             if (!GridManager.isPaused) {
                 if (snake.direction !== Direction.W) {
                     snake.direction = Direction.E;
@@ -374,7 +363,6 @@ window.addEventListener("keydown", function (event) {
             break;
         case "ArrowUp":
             event.preventDefault();
-            inputProcessed = false;
             if (!GridManager.isPaused) {
                 if (snake.direction !== Direction.S) {
                     snake.direction = Direction.N;
@@ -419,6 +407,7 @@ function restartGame() {
 
     GridManager.gameOver = false;
     GridManager.draw();
+    pauseSymbol();
 }
 
 // Update progress bar for simulating timer
