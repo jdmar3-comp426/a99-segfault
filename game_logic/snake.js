@@ -343,6 +343,7 @@ window.addEventListener("keydown", function (event) {
 
 // Reset game state
 function restartGame() {
+    GridManager.isPaused = true;
     clearInterval(refresh);
     refresh = setInterval(GridManager.drawGrid, refreshTime);
 
