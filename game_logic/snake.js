@@ -188,32 +188,28 @@ const GridManager = {
                     // get rid of fruit immediately
                     this.removeBlock(snake.head.y, snake.head.x, true);
                     this.removeBlock(oldHead.y, oldHead.x, false);
-                    entities.fruit = generateEntity(entities.slimFruit);
-
-                    // Update timer
-                    document.getElementById('progressBar').value += 5;
-                } else {
-                    if (newHead.equals(entities.fruit)) {
-                        document.getElementById('currentScore').innerHTML = "" + (parseInt(document.getElementById('currentScore').innerHTML) + 1);
-
-                        clearInterval(refresh);
-                        refresh = setInterval(GridManager.drawGrid, refreshTime);
-
-                        // get rid of fruit immediately
-                        this.removeBlock(snake.head.y, snake.head.x, true);
-                        this.removeBlock(oldHead.y, oldHead.x, false);
-                        entities.fruit = generateEntity(entities.slimFruit);
-                    } else {
-                        // this.removeBlock(snake.head.y, snake.head.x, true);
-                        // this.removeBlock(oldHead.y, oldHead.x, false);
-                        GridManager.removeBlock(snake.points.shift(), false);
-                    }
+                    entities.slimFruit = generateEntity(entities.fruit);
                 }
-                GridManager.drawBlock(snake.head);
-                GridManager.drawBlock(oldHead);
-                entities.draw();
+                GridManager.removeBlock(snake.points.shift(), false);
+            }
+        } else {
+            if (newHead.equals(entities.fruit)) {
+                // Snake head is on a fruit
+                document.getElementById('currentScore').innerHTML = "" + (parseInt(document.getElementById('currentScore').innerHTML) + 1);
+
+                clearInterval(refresh);
+                refresh = setInterval(GridManager.drawGrid, refreshTime);
+                // get rid of fruit immediately
+                this.removeBlock(snake.head.y, snake.head.x, true);
+                this.removeBlock(oldHead.y, oldHead.x, false);
+                entities.fruit = generateEntity();
+            } else {
+                GridManager.removeBlock(snake.points.shift(), false);
             }
         }
+        GridManager.drawBlock(snake.head);
+        GridManager.drawBlock(oldHead);
+        entities.draw();
     }
 }
 
