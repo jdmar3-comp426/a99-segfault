@@ -10,6 +10,15 @@
 
 ## Commit Blocks
 
+### Dec. 3
+
+* GP: Finished account page design
+* RG: 
+  * Refined and corrected game mechanics
+  * Completed pausing feature
+* JM: Refined webpage flow
+* IM: Finished up database and webpage linkage
+
 ### Dec. 2
 
 * JM: 
@@ -50,4 +59,3 @@
 ### Nov. 24
 
 * JM: Created basic grid and snake structure
-

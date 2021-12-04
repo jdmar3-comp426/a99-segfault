@@ -17,10 +17,10 @@
 
 ## Roles
 
-| *Name*           | *Primary Role*              | *Other Roles*                |
-|------------------|-----------------------------|------------------------------|
-| Ibrahim Mubarek  | Database lead               |                              |
-| Ryan Good        | Front end, back end co-lead |                              |
-| John Moore       | Front end co-lead           | Back end assist              |
-| Garrison Parrish | Design lead                 | Sprite artist                |
-| Oliver Chen      | Back end co-lead            | Review/documentation manager |
+| *Name*           | *Primary Role*                     | *Other Roles*                |
+|------------------|------------------------------------|------------------------------|
+| Ibrahim Mubarek  | Database lead                      |                              |
+| Ryan Good        | Front end (game), back end co-lead |                              |
+| John Moore       | Front end (webpage) co-lead        | Back end assist              |
+| Garrison Parrish | Design lead                        | Sprite artist                |
+| Oliver Chen      | Back end co-lead                   | Review/documentation manager |
