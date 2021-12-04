@@ -5,7 +5,7 @@
     around the ends of the board.
 */
 
-const gridWidth = 14;
+const gridWidth = 12;
 const numObstacles = 8;
 let inputProcessed = false;
 const initialRefreshTime = 150;
@@ -21,14 +21,8 @@ const GridManager = {
     gameOver: false,
     isPaused: true,
     blockWidth: null,
-    offset: 1,
     growth: 0,
     mode: localStorage.getItem("mode") === "Don't Starve" ? Gamemode.DontStarve : Gamemode.ObstacleCourse,
-    /*
-    Define game map, which lets us refer to grid locations
-    instead of pixels. Intended to be used to keep track of food/other grid items
-    */
-    map: Array.from(Array(gridWidth), _ => Array(gridWidth).fill(0)),
     // Function to invoke canvas object and draw snake tile
     drawBlock: function (p) {
         if (!(p instanceof Point)) throw new Error("Not a Point");
@@ -78,12 +72,12 @@ const GridManager = {
                 p.y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
         } else if (p.equals(entities.fruit)) {
-            this.context.drawImage(LoadedImage.Rat.image,
+            this.context.drawImage(LoadedImage.FruitApple.image,
                 p.x * this.blockWidth, p.y * this.blockWidth,
-                this.blockWidth*1.10, this.blockWidth*1.10
+                this.blockWidth, this.blockWidth
             );
         } else if (this.mode === Gamemode.DontStarve && p.equals(entities.slimFruit)) {
-            this.context.drawImage(LoadedImage.Coffee.image,
+            this.context.drawImage(LoadedImage.FruitGreenApple.image,
                 p.x * this.blockWidth, p.y * this.blockWidth,
                 this.blockWidth, this.blockWidth
             );
@@ -94,7 +88,6 @@ const GridManager = {
             );
         } else {
             // body block
-            // TODO: Add directional sprites
             let snakeImg;
             switch (p.drawDirection) {
                 case Direction.NS:
@@ -177,7 +170,7 @@ const GridManager = {
 
         // Remove previous tail of snake OR retain with fruit
         if (snake.hasPoint(newHead) || (this.mode === Gamemode.ObstacleCourse && entities.obstacles.hasPoint(newHead)) ||
-            newHead.x <= 0 || newHead.x >= maxIndex || newHead.y <= 0 || newHead.y >= maxIndex) {
+            newHead.x < 0 || newHead.x > maxIndex || newHead.y < 0 || newHead.y > maxIndex) {
             // Collision, end game
             GridManager.removeBlock(oldHead.y, oldHead.x, false);
             GridManager.drawBlock(oldHead);
@@ -282,15 +275,11 @@ entities.init = _ => {
 }
 
 function generateEntity(exclude = null) {
-    const maxIndex = gridWidth - 2;
+    const maxIndex = gridWidth - 1;
     let out = snake.points[0];
     while (snake.hasPoint(out) || entities.obstacles.hasPoint(out) || out.equals(exclude)) {
         // Find a new place for the fruit
-        let yVal = Math.floor(Math.random() * maxIndex)+1;
-        let xVal = Math.floor(Math.random() * maxIndex) + 1;
-        if (yVal === maxIndex) {yVal-=1;}
-        if (yVal === 1 && GridManager.mode === Gamemode.ObstacleCourse) {yVal+=1;}
-        out = new Point(yVal, xVal);
+        out = new Point(Math.floor(Math.random() * maxIndex), Math.floor(Math.random() * maxIndex));
     }
     return out;
 }
@@ -332,7 +321,7 @@ function init_game() {
     entities.draw();
     if (!GridManager.isPaused && GridManager.mode === Gamemode.DontStarve) progress = setInterval(updateProgressBar, 100);
     pauseSymbol();
-};
+}
 
 // Watch for arrow key input to control snake direction
 window.addEventListener("keydown", function (event) {
@@ -414,8 +403,7 @@ function restartGame() {
     GridManager.clear();
     snake = new Snake();
     entities.init();
-   GridManager.growth = 0;
-    console.log("FUCK");
+    GridManager.growth = 0;
     GridManager.gameOver = false;
     GridManager.draw();
     pauseSymbol();
