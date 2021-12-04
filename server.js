@@ -26,18 +26,15 @@ const server = app.listen(HTTP_PORT, () => {
 });
 // READ (HTTP method GET) at root endpoint /app/
 app.get("/app/", (req, res, next) => {
-    res.json({"message":"Your API works! (200)"});
+    res.json({"message":"Welcome to the server endpoints that are hosting the snakes game user information! (200)"});
 	res.status(200);
 });
 
-// Define other CRUD API endpoints using express.js and better-sqlite3
-// CREATE a new user (HTTP method POST) at endpoint /app/new/
 
+
+// CREATE a new user (HTTP method POST) at endpoint /app/new/
 app.post("/app/new/", (req, res) => {	
 
-	//const stmt = db.prepare("INSERT INTO userinfo (user,pass,email) VALUES (?,?,?) ON CONFLICT(user) DO UPDATE SET user=?") ;
-
-	//const info = stmt.run(req.body.user, md5(req.body.pass),req.body.email,req.body.user);
 	try{
 		const stmt = db.prepare("INSERT INTO userinfo (username,password,email,starveHighScore, obstacleHighScore,starveGamesPlayed,obstacleGamesPlayed) VALUES (?,?,?,?,?,?,?)") ; 
 		const info = stmt.run(req.body.username, req.body.password,req.body.email,0,0,0,0);
@@ -46,21 +43,13 @@ app.post("/app/new/", (req, res) => {
 	catch(error){
 		res.status(404).json("Something went wrong") ; 
 	}
-	
-	//const info = stmt.run(req.body.user, md5(req.body.pass),req.body.email);
-	
-
-	//console.log(req.body) ;
-
 	 
 });
 
 // READ a list of all users (HTTP method GET) at endpoint /app/users/
 app.get("/app/users", (req, res) => {	
 	const stmt = db.prepare("SELECT * FROM userinfo").all();
-	//console.log(stmt) ;
 	res.status(200).json(stmt);
-	
 });
 
 // READ a single user (HTTP method GET) at endpoint /app/user/:username
@@ -69,6 +58,7 @@ app.get("/app/user/:username", (req, res) => {
 	res.status(200).json(stmt);
 });
 
+//Check if :username already exists in the database
 app.get("/app/user/exists/:username", (req, res) => {	
 	const stmt = db.prepare("SELECT EXISTS(SELECT 1 FROM userinfo WHERE username = '" + req.params.username +"')").get();
 	res.status(200).json(stmt);
@@ -94,7 +84,7 @@ app.delete("/app/delete/user/:username", (req, res) => {
 
 // Default response for any other request
 app.use(function(req, res){
-	res.json({"Your API works!":"Endpoint not found. (404)"});
+	res.json({"Snakes API:":"Endpoint not found. (404)"});
     res.status(404);
 });
 

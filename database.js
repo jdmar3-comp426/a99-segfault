@@ -17,8 +17,6 @@ if (row === undefined) {
     CREATE TABLE userinfo (username TEXT PRIMARY KEY, password TEXT, email TEXT , starveHighScore INTEGER, obstacleHighScore INTEGER , starveGamesPlayed INTEGER, obstacleGamesPlayed INTEGER );
 	INSERT INTO userinfo (username, password,email,starveHighScore,obstacleHighScore,starveGamesPlayed,obstacleGamesPlayed) VALUES ('guest','password','guest@domain.com' , 0 , 0, 0, 0);
     `;
-
-    //const sqlInit = `CREATE TABLE userinfo (username TEXT PRIMARY KEY, password TEXT, email TEXT );`;
 // Execute SQL commands that we just wrote above.
     db.exec(sqlInit);
 // Echo information about what we just did to the console.
