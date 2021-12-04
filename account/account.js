@@ -72,3 +72,15 @@ function logout() {
     localStorage.clear();
     location.href = './../index.html';
 }
+
+// Change game mode to Don't Starve
+function setDontStarve() {
+    localStorage.setItem("mode", "Don't Starve");
+    location.href = './../game_logic/snake.html';
+}
+
+// Change game mode to Don't Starve
+function setObstacleCourse() {
+    localStorage.setItem("mode", "Obstacle Course");
+    location.href = './../game_logic/snake.html';
+}
