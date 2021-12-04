@@ -26,8 +26,8 @@ class LoadedImage {
     static BodySW = new LoadedImage("https://i.imgur.com/zNfYeFe.png");
     static BodyNE = new LoadedImage("https://i.imgur.com/aQ60q5h.png");
     static BodySE = new LoadedImage("https://i.imgur.com/M6fqc1f.png");
-    static FruitApple = new LoadedImage("https://preview.redd.it/bxcbiiu1wxa71.png?auto=webp&s=709c4efa8fc567e9f16aeda1008ccd5b700c3052");
-    static FruitGreenApple = new LoadedImage("https://i.imgur.com/ORJbhEo.png");
+    static Rat = new LoadedImage("https://i.imgur.com/pxGwISc.png");
+    static Coffee = new LoadedImage("https://i.imgur.com/S20TgFc.png");
 
     static TrafficCone = new LoadedImage("https://i.imgur.com/wL4luTP.png");
 
@@ -160,9 +160,9 @@ class Point {
 class Snake {
     constructor() {
         this.points = [
-            new Point(0, 0, Direction.E, Direction.EW),
-            new Point(0, 1, Direction.E, Direction.EW),
-            new Point(0, 2, Direction.E, Direction.EW)];
+            new Point(1, 1, Direction.E, Direction.EW),
+            new Point(1, 2, Direction.E, Direction.EW),
+            new Point(1, 3, Direction.E, Direction.EW)];
         this.direction = Direction.E;
     }
 
