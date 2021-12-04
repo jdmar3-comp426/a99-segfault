@@ -20,6 +20,7 @@
 #progressBar {
     display: none;
     width: 50%;
+    outline: 5px solid black;
 }
 
 html, body {
@@ -39,5 +40,3 @@ canvas {
 html {
     overflow: hidden;
 }
-
-
