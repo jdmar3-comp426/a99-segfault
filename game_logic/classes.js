@@ -31,7 +31,7 @@ class LoadedImage {
 
     static TrafficCone = new LoadedImage("https://i.imgur.com/wL4luTP.png");
 
-    static Pause = new LoadedImage("https://i.imgur.com/omJVFcd.png");
+    static Pause = new LoadedImage("https://i.imgur.com/knoGq6K.png");
 
     constructor(src) {
         this.image = new Image();

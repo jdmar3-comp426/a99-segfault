@@ -34,8 +34,8 @@ const GridManager = {
         if (!(p instanceof Point)) throw new Error("Not a Point");
         if (p.dir === Direction.NA) {
             let pauseImg = LoadedImage.Pause;
-            this.context.drawImage( pauseImg.image, canvas.width / 2 - pauseImg.image.width / 2- (50),
-                canvas.height / 2 - pauseImg.image.height / 2 - (50), 200, 200);
+            this.context.drawImage( pauseImg.image, canvas.width / 2 - pauseImg.image.width / 2+175,
+                canvas.height / 2 - pauseImg.image.height / 2 +175, 160, 160);
         } else if (p.equals(snake.head)) {
             let headImg;
             switch (snake.direction) {
