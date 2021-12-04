@@ -115,6 +115,8 @@ window.addEventListener("load" , function(){
                         localStorage.setItem("starveHighScore" , user_info.starveHighScore) ;
                         localStorage.setItem("obstacleHighScoreDB" , user_info.obstacleHighScore) ;
                         localStorage.setItem("starveHighScoreDB" , user_info.starveHighScore) ;
+                        localStorage.setItem("starveGamesPlayed" , user_info.starveGamesPlayed) ; 
+                        localStorage.setItem("obstacleGamesPlayed" , user_info.obstacleGamesPlayed) ; 
                         alert("Login succesful");
                         document.getElementById("loginSection").style.display = "none";
                         document.getElementById("createAccountSection").style.display = "none";

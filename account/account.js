@@ -8,16 +8,16 @@ window.addEventListener("load", function(event) {
     document.getElementById("obstacleGamesPlayed").innerHTML = localStorage.getItem("obstacleGamesPlayed");
 
     document.getElementById("resetStatistics").addEventListener("click" , function(event){
+        updateFields( {starveHighScore :  0 , obstacleHighScore : 0 , obstacleGamesPlayed : 0 , starveGamesPlayed:0} ) ;
+        localStorage.setItem("obstacleHighScore" , 0) ;
+        localStorage.setItem("starveHighScore" , 0) ;
+        localStorage.setItem("starveGamesPlayed" , 0) ;
+        localStorage.setItem("obstacleGamesPlayed" , 0) ;
         if(localStorage.getItem("username") === "guest"){
-            alert("You can't do this update when logged in as guest") ; 
+            alert("Guest statistics have been reset") ; 
         }
         else{
-            updateFields( {starveHighScore :  0 , obstacleHighScore : 0 , obstacleGamesPlayed : 0 , starveGamesPlayed:0} ) ;
-            localStorage.setItem("obstacleHighScore" , 0) ;
-            localStorage.setItem("starveHighScore" , 0) ;
-            localStorage.setItem("starveGamesPlayed" , 0) ;
-            localStorage.setItem("obstacleGamesPlayed" , 0) ;
-            alert("Your statistics have been reset") ; 
+            alert("Your statistics have been reset") ;
         }
     } );
     document.getElementById("updatePassword").addEventListener("click" , function(event){
