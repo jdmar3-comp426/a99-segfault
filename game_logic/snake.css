@@ -19,8 +19,8 @@
 
 #progressBar {
     display: none;
-    width: 50%;
-    outline: 5px solid black;
+    width: 44%;
+    outline: 3px solid black;
 }
 
 html, body {
