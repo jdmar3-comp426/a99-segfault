@@ -25,4 +25,6 @@ This project is licensed under the [GNU General Public License v3](https://www.g
 
 ## Demo
 
-https://www.youtube.com/watch?v=IgNQPmjUzDg
+[![Watch the video](https://i.imgur.com/IISJHpp.png)](https://www.youtube.com/watch?v=IgNQPmjUzDg)
+
+
