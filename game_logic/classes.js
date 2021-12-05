@@ -27,9 +27,18 @@ class LoadedImage {
     static BodyNE = new LoadedImage("https://i.imgur.com/aQ60q5h.png");
     static BodySE = new LoadedImage("https://i.imgur.com/M6fqc1f.png");
     static Rat = new LoadedImage("https://i.imgur.com/pxGwISc.png");
-    static Coffee = new LoadedImage("https://i.imgur.com/S20TgFc.png");
+    static Coffee = new LoadedImage("https://i.imgur.com/igbcO05.png");
 
-    static TrafficCone = new LoadedImage("https://i.imgur.com/wL4luTP.png");
+    //Obstacles
+
+    static TrafficCone = new LoadedImage("https://i.imgur.com/pnQwRLm.png");
+    static BlueMailBox = new LoadedImage("https://i.imgur.com/UvEAlcc.png");
+    static Bollard = new LoadedImage("https://i.imgur.com/W1AsZYe.png");
+    static PottedPlant = new LoadedImage("https://i.imgur.com/QklvbIP.png");
+    static RedMailBox = new LoadedImage("https://i.imgur.com/7xgyeTK.png");
+    static Tire = new LoadedImage("https://i.imgur.com/UhR1wtI.png");
+    static TrashBags = new LoadedImage("https://i.imgur.com/OZsvTfU.png");
+    static TrashCan = new LoadedImage("https://i.imgur.com/ThBJnGL.png");
 
     static Pause = new LoadedImage("https://i.imgur.com/knoGq6K.png");
 

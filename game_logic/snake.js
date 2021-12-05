@@ -7,8 +7,10 @@
 
 const gridWidth = 14;
 const numObstacles = 8;
+let obsIndex = 0;
+let obsRandom = [];
 let inputProcessed = false;
-const initialRefreshTime = 150;
+let initialRefreshTime = 0;
 let refreshTime = initialRefreshTime;
 let refresh = null;
 let progress = null;
@@ -88,10 +90,61 @@ const GridManager = {
                 this.blockWidth, this.blockWidth
             );
         } else if (this.mode === Gamemode.ObstacleCourse && entities.obstacles.hasPoint(p)) {
-            this.context.drawImage(LoadedImage.TrafficCone.image,
-                p.x * this.blockWidth, p.y * this.blockWidth,
-                this.blockWidth, this.blockWidth
-            );
+            if (obsIndex === numObstacles) {
+                obsIndex = 0;
+            }
+            obsIndex += 1;
+            switch (obsRandom[obsIndex-1]) {
+                case 0:
+                    this.context.drawImage(LoadedImage.TrafficCone.image,
+                        p.x * this.blockWidth, p.y * this.blockWidth,
+                        this.blockWidth, this.blockWidth
+                    );
+                    break;
+                case 1:
+                    this.context.drawImage(LoadedImage.BlueMailBox.image,
+                        p.x * this.blockWidth, p.y * this.blockWidth,
+                        this.blockWidth, this.blockWidth
+                    );
+                    break;
+                case 2:
+                    this.context.drawImage(LoadedImage.Bollard.image,
+                        p.x * this.blockWidth, p.y * this.blockWidth,
+                        this.blockWidth, this.blockWidth
+                    );
+                    break;
+                case 3:
+                    this.context.drawImage(LoadedImage.PottedPlant.image,
+                        p.x * this.blockWidth, p.y * this.blockWidth,
+                        this.blockWidth, this.blockWidth
+                    );
+                    break;
+                case 4:
+                    this.context.drawImage(LoadedImage.RedMailBox.image,
+                        p.x * this.blockWidth, p.y * this.blockWidth,
+                        this.blockWidth, this.blockWidth
+                    );
+                    break;
+                case 5:
+                    this.context.drawImage(LoadedImage.Tire.image,
+                        p.x * this.blockWidth, p.y * this.blockWidth,
+                        this.blockWidth, this.blockWidth
+                    );
+                    break;
+                case 6:
+                    this.context.drawImage(LoadedImage.TrashBags.image,
+                        p.x * this.blockWidth, p.y * this.blockWidth,
+                        this.blockWidth, this.blockWidth
+                    );
+                    break;
+                case 7:
+                    this.context.drawImage(LoadedImage.TrashCan.image,
+                        p.x * this.blockWidth, p.y * this.blockWidth,
+                        this.blockWidth, this.blockWidth
+                    );
+                    break;
+
+            }
         } else {
             // body block
             // TODO: Add directional sprites
@@ -202,13 +255,15 @@ const GridManager = {
                 entities.fruit = generateEntity(entities.slimFruit);
 
                 // Update timer
-                document.getElementById('progressBar').value += 5;
+                document.getElementById('progressBar').value += 10;
             } else {
                 if (this.mode === Gamemode.DontStarve && newHead.equals(entities.slimFruit)) {
                     this.growth = Math.max(this.growth - 2.5, 0);
                     refreshTime = Math.max(refreshTime - .5 * increment, initialRefreshTime);
                     increment = Math.min(increment /= 0.85, initialIncrement);
 
+
+                    document.getElementById('progressBar').value += 5;
                     clearInterval(refresh);
                     refresh = setInterval(GridManager.drawGrid, refreshTime);
                     // get rid of fruit immediately
@@ -272,6 +327,7 @@ entities.init = _ => {
     if (GridManager.mode === Gamemode.ObstacleCourse) {
         // TODO: generate obstacles
         for (let i = 0; i < numObstacles; i++) {
+            obsRandom[i] = Math.floor(Math.random() * numObstacles);
             entities.obstacles.points.push(generateEntity(new Point(0, 3)));
         }
     }
@@ -306,9 +362,13 @@ function init_game() {
     const highestScoreLabel = document.getElementById('userStandardScore');
 
     if (GridManager.mode.name === "Don't Starve") {
+        initialRefreshTime = 150;
+        refreshTime = initialRefreshTime;
         highestScoreLabel.innerHTML = localStorage.getItem("starveHighScore");
         document.getElementById('progressBar').style.display = "block";
     } else {
+        initialRefreshTime = 175;
+        refreshTime = initialRefreshTime;
         highestScoreLabel.innerHTML = localStorage.getItem("obstacleHighScore");
         document.getElementById('progressBar').style.display = "none";
     }
@@ -389,7 +449,7 @@ window.addEventListener("keydown", function (event) {
     // Cancel the default action to avoid it being handled twice
 
     // allow inputs in between ticks w/o breaking game
-    setTimeout(() => {inputProcessed = false;}, 100);
+    setTimeout(() => {inputProcessed = false;}, 150);
     event.preventDefault();
 }, true)
 
@@ -448,6 +508,8 @@ function updateProgressBar() {
 
 // Change game mode to Don't Starve
 function setDontStarve() {
+    initialRefreshTime = 150;
+    refreshTime = initialRefreshTime;
     localStorage.setItem("mode", Gamemode.DontStarve.name);
     syncDB();
     GridManager.mode = Gamemode.DontStarve;
@@ -459,6 +521,8 @@ function setDontStarve() {
 
 // Change game mode to Obstacle Course
 function setObstacleCourse() {
+    initialRefreshTime = 175;
+    refreshTime = initialRefreshTime;
     localStorage.setItem("mode", Gamemode.ObstacleCourse.name);
     syncDB();
     GridManager.mode = Gamemode.ObstacleCourse;
