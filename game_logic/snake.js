@@ -31,14 +31,19 @@ const GridManager = {
     instead of pixels. Intended to be used to keep track of food/other grid items
     */
     map: Array.from(Array(gridWidth), _ => Array(gridWidth).fill(0)),
-    // Function to invoke canvas object and draw snake tile
+
+    // Function to invoke canvas object and draw snake/rat/coffee/obstacle tile
     drawBlock: function (p) {
         if (!(p instanceof Point)) throw new Error("Not a Point");
+
+        // if it doesn't have a direction, it's the pause symbol!!
         if (p.dir === Direction.NA) {
             let pauseImg = LoadedImage.Pause;
             this.context.drawImage( pauseImg.image, canvas.width / 2 - pauseImg.image.width / 2+175,
                 canvas.height / 2 - pauseImg.image.height / 2 +175, 160, 160);
-        } else if (p.equals(snake.head)) {
+        }
+        // draw head
+        else if (p.equals(snake.head)) {
             let headImg;
             switch (snake.direction) {
                 case Direction.N:
@@ -57,7 +62,9 @@ const GridManager = {
             this.context.drawImage(headImg.image, p.x * this.blockWidth - .5 * this.growth,
                 p.y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
-        } else if (p.equals(snake.tail)) {
+        }
+        // draw tail
+        else if (p.equals(snake.tail)) {
             let tailImg;
             if (snake.tail.direction !== snake.points[1].direction) {
                 snake.tail.direction = snake.points[1].direction;
@@ -79,20 +86,28 @@ const GridManager = {
             this.context.drawImage(tailImg.image, p.x * this.blockWidth - .5 * this.growth,
                 p.y * this.blockWidth - .5 * this.growth,
                 this.blockWidth + this.growth, this.blockWidth + this.growth);
-        } else if (p.equals(entities.fruit)) {
+        }
+        // draw rat (previously a piece of fruit)
+        else if (p.equals(entities.fruit)) {
             this.context.drawImage(LoadedImage.Rat.image,
                 p.x * this.blockWidth, p.y * this.blockWidth,
                 this.blockWidth*1.10, this.blockWidth*1.10
             );
-        } else if (this.mode === Gamemode.DontStarve && p.equals(entities.slimFruit)) {
+        }
+        // draw coffee (previously an off-color piece of fruit)
+        else if (this.mode === Gamemode.DontStarve && p.equals(entities.slimFruit)) {
             this.context.drawImage(LoadedImage.Coffee.image,
                 p.x * this.blockWidth, p.y * this.blockWidth,
                 this.blockWidth, this.blockWidth
             );
-        } else if (this.mode === Gamemode.ObstacleCourse && entities.obstacles.hasPoint(p)) {
+        }
+        // draw obstacle
+        else if (this.mode === Gamemode.ObstacleCourse && entities.obstacles.hasPoint(p)) {
+            // loop through obstacle array so the random image isn't randomized between ticks
             if (obsIndex === numObstacles) {
                 obsIndex = 0;
             }
+            // go to next index (before next tick)
             obsIndex += 1;
             switch (obsRandom[obsIndex-1]) {
                 case 0:
@@ -146,8 +161,7 @@ const GridManager = {
 
             }
         } else {
-            // body block
-            // TODO: Add directional sprites
+            // draw relevant body pieces based on direction
             let snakeImg;
             switch (p.drawDirection) {
                 case Direction.NS:
@@ -179,6 +193,7 @@ const GridManager = {
         this.context.clearRect(0, 0, canvas.width, canvas.height);
     },
     draw: function() {
+        //draw all of the snake pieces
         this.clear();
         for (let i = 0; i < snake.length; i++) {
             this.drawBlock(snake.points[i]);
@@ -241,7 +256,7 @@ const GridManager = {
         this.drawBlock(oldHead);
         if (this.mode === Gamemode.DontStarve) {
             if (newHead.equals(entities.fruit)) {
-                // Snake head is on a fruit
+                // Snake head is on a rat (in dont starve)
                 this.growth += 2.5;
                 increment *= 0.85;
                 refreshTime += .8 * increment;
@@ -249,7 +264,7 @@ const GridManager = {
 
                 clearInterval(refresh);
                 refresh = setInterval(GridManager.drawGrid, refreshTime);
-                // get rid of fruit immediately
+                // get rid of rat immediately
                 this.removeBlock(snake.head.y, snake.head.x, true);
                 this.removeBlock(oldHead.y, oldHead.x, false);
                 entities.fruit = generateEntity(entities.slimFruit);
@@ -257,6 +272,8 @@ const GridManager = {
                 // Update timer
                 document.getElementById('progressBar').value += 10;
             } else {
+
+                // check if snake drank some coffee
                 if (this.mode === Gamemode.DontStarve && newHead.equals(entities.slimFruit)) {
                     this.growth = Math.max(this.growth - 2.5, 0);
                     refreshTime = Math.max(refreshTime - .5 * increment, initialRefreshTime);
@@ -275,7 +292,7 @@ const GridManager = {
             }
         } else {
             if (newHead.equals(entities.fruit)) {
-                // Snake head is on a fruit
+                // Snake head is on a rat
                 document.getElementById('currentScore').innerHTML = "" + (parseInt(document.getElementById('currentScore').innerHTML) + 1);
 
                 clearInterval(refresh);
@@ -338,6 +355,7 @@ entities.init = _ => {
 }
 
 function generateEntity(exclude = null) {
+    //spawn procedure for rats/coffee/obstacles
     const maxIndex = gridWidth - 2;
     let out = snake.points[0];
     while (snake.hasPoint(out) || entities.obstacles.hasPoint(out) || out.equals(exclude)) {
@@ -400,6 +418,7 @@ window.addEventListener("keydown", function (event) {
     inputProcessed = true;
     switch (event.key) {
         case " ":
+            // spacebar can pause the game, or restart if the game is over
             if (GridManager.gameOver) {
                 restartGame();
             } else {
@@ -595,6 +614,9 @@ function syncDB() {
 }
 
 function pauseSymbol() {
+
+    // print pause symbol in middle when paused
+
     let middle = new Point(7, 7, Direction.NA, Direction.NA);
     if (GridManager.isPaused) {
         GridManager.drawBlock(middle);
