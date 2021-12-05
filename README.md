@@ -15,6 +15,8 @@ Installation of the project requires [Node.js >= v16](https://nodejs.org/en/down
 3. Navigate to the project root directory (`a99-segfault`)
 4. Run `npm install` to install all dependencies.
 
+(Optional): Watch Demo for more information on how to signup/login, play games, and check statistics
+
 ### Execution
 
 Run `npm start` to start Browsersync and paste the link provided into your preferred web browser. The website should open and you're free to play Snake!
