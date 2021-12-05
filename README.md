@@ -17,7 +17,7 @@ Installation of the project requires [Node.js >= v16](https://nodejs.org/en/down
 
 ### Execution
 
-Run `npm start` and play Snake!
+Run `npm start` to start Browsersync and paste the link provided into your preferred web browser. The website should open and you're free to play Snake!
 
 ## License
 
