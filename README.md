@@ -24,7 +24,7 @@ Run `npm start` to start Browsersync and paste the link provided into your prefe
 This project is licensed under the [GNU General Public License v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
 ## Demo
+https://www.youtube.com/watch?v=IgNQPmjUzDg
 
-[![Watch the video](https://i.imgur.com/IISJHpp.png)](https://www.youtube.com/watch?v=IgNQPmjUzDg)
 
 
