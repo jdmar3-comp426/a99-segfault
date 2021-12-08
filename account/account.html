@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Page</title>
+    <script type="text/javascript" src="account.js"></script>
+    <link rel="stylesheet" href="./../node_modules/bulma/css/bulma.css">
+</head>
+<body>
+<section class="hero is-warning">
+    <div class="hero-head">
+        <nav class="navbar">
+            <div class="container">
+                <div id="navMenu" class="navbar-brand">
+                    <p class="navbar-item is-size-4 is-family-monospace">
+                        SEGFAULT
+                    </p>
+                </div>
+
+                <div class="navbar-menu">
+                    <div class="navbar-end">
+                        <a class="navbar-item" href="./../index.html">
+                            Home
+                        </a>
+                        <div class="navbar-item has-dropdown is-hoverable">
+                            <a class="navbar-link">
+                                Game Modes
+                            </a>
+                            <div class="navbar-dropdown">
+                                <a class="navbar-item" onclick="setDontStarve()">
+                                    Don't Starve
+                                </a>
+                                <a class="navbar-item" onclick="setObstacleCourse()">
+                                    Obstacle Course
+                                </a>
+                            </div>
+                        </div>
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                <a class="button is-warning is-inverted" onclick="logout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container has-text-centered">
+            <p class="title is-1" id="username">
+            </p>
+        </div>
+    </div>
+
+    <div class="hero-body">
+    </div>
+</section>
+<section class="section has-background-white">
+    <div class="container">
+        <div class="content">
+            <div class="columns">
+                <div class="column">
+                    <div class="box">
+                        <h1 class="title">Statistics</h1>
+                        <h2 class="title has-text-centered">Don't Starve</h2>
+                        <div class="columns">
+                            <div class="column">
+                                <div class="container has-text-centered has-background-info-light">
+                                    <div>
+                                        <p class="heading">Games Played</p>
+                                        <p class="title" id="starveGamesPlayed">3,456</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column">
+                                <div class="container has-text-centered has-background-info-light">
+                                    <div>
+                                        <p class="heading" >High Score</p>
+                                        <p class="title" id="starveHighScore">426</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="title has-text-centered">Obstacle Course</h2>
+                        <div class="columns">
+                            <div class="column">
+                                <div class="container has-text-centered has-background-info-light">
+                                    <div>
+                                        <p class="heading">Games Played</p>
+                                        <p class="title" id="obstacleGamesPlayed">3,456</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column">
+                                <div class="container has-text-centered has-background-info-light">
+                                    <div>
+                                        <p class="heading">High Score</p>
+                                        <p class="title" id="obstacleHighScore">426</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box">
+                        <h1 class="title">Settings</h1>
+                        <p>Update or reset account information</p>
+                        <form class="container">
+                            <div class="field">
+                                <label class="label">Update Email</label>
+                                <div class="control">
+                                    <input class="input" type="text" id="newEmail" placeholder="New email address">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <button class="button is-warning" id="updateEmail">Update Email</button>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Update Password</label>
+                                <div class="control">
+                                    <input class="input" type="text" id="newPassword" placeholder="New password">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <button class="button is-warning" id="updatePassword">Update Password</button>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Reset Statistics</label>
+                            </div>
+                            <div class="field">
+                                <button class="button is-danger" id="resetStatistics">Reset Statistics</button>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Delete Account</label>
+                            </div>
+                            <div class="field">
+                                <button class="button is-danger" id="deleteAccount">Delete account</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>

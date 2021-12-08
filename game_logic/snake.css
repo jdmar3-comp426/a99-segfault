@@ -1,0 +1,54 @@
+* {
+    caret-color: transparent;
+}
+
+#snakeGrid {
+    display: flex;
+    width: 50%;
+    margin: auto;
+    /*background-image: url("https://i.imgur.com/S4K5bGe.png");*/
+    background-image: url("https://i.imgur.com/wMnX7qD.png");
+    background-size: 100%;
+}
+
+#square:after {
+    content: "";
+    display: inline-block;
+    padding-bottom: 100%;
+}
+
+#progressBar {
+    display: none;
+    width: 44%;
+    outline: 3px solid  rgba(0, 0, 0, 0.7);
+}
+
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    background-image: url("https://i.imgur.com/lElqVCd.png");
+    background-size: contain;
+}
+
+canvas {
+
+}
+
+html {
+    overflow-y: scroll;
+    background-color: #FFFAEB;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+html::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+html {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}

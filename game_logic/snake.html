@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake | Segfault</title>
+    <script type="text/javascript" src="./../game_logic/classes.js"></script>
+    <script type="text/javascript" src="./../game_logic/snake.js"></script>
+    <link rel="stylesheet" href="./../node_modules/bulma/css/bulma.css">
+    <link href="./snake.css" rel="stylesheet">
+</head>
+
+<body >
+<section class="hero is-warning" style="outline: 3px solid rgba(0, 0, 0, 0.7)">
+    <div class="hero-head">
+        <nav class="navbar" >
+            <div class="container">
+                <div id="navMenu" class="navbar-brand" >
+                    <p class="navbar-item is-size-4 is-family-monospace">
+                        SEGFAULT
+                    </p>
+                </div>
+
+                <div class="navbar-menu">
+                    <div class="navbar-end">
+                        <a class="navbar-item" href="./../index.html">
+                            Home
+                        </a>
+                        <div class="navbar-item has-dropdown is-hoverable">
+                            <a class="navbar-link">
+                                Game Modes
+                            </a>
+                            <div class="navbar-dropdown">
+                                <a class="navbar-item" onclick="setDontStarve()">
+                                    Don't Starve
+                                </a>
+                                <a class="navbar-item" onclick="setObstacleCourse()">
+                                    Obstacle Course
+                                </a>
+                            </div>
+                        </div>
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                <a class="button is-warning is-inverted" onclick="logout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container has-text-centered">
+            <p class="title is-1">
+                Snake
+            </p>
+            <p class="subtitle is-size-4" id="gameType">
+            </p>
+        </div>
+    </div>
+
+    <div class="hero-body">
+    </div>
+</section>
+
+<section class="section">
+    <div class="hero-body" >
+        <div class="columns">
+            <div class="column is-one-fifth has-text-centered">
+                <div class="box has-background-dark">
+                    <h1 class="title has-text-warning">Username</h1>
+                    <h2 id="usernameLabel" class="title has-text-white"></h2>
+                    <br><br>
+                    <h1 class="title has-text-warning">Email</h1>
+                    <h2 id="emailLabel" class="title has-text-white"></h2>
+                </div>
+            </div>
+
+            <div class="column is-flex is-flex-direction-column is-align-items-center grid">
+                <progress class="progress is-success" value="100" max="100" id="progressBar"></progress>
+                <canvas id="snakeGrid" width="800px" height="800px">
+                </canvas>
+
+                <br>
+                <div class="buttons">
+                    <button class="button is-warning is-inverted" onclick="restartGame()">Play Again</button>
+                </div>
+            </div>
+
+            <div class="column is-one-fifth has-text-centered">
+                <div class="box has-background-dark">
+                    <h1 class="title has-text-warning">Current Score</h1>
+                    <h2 id="currentScore" class="title has-text-white">0</h2>
+                    <br><br>
+                    <h1 class="title has-text-warning">High Score</h1>
+                    <h2 id="userStandardScore" class="title has-text-white"></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

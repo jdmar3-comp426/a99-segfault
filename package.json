@@ -1,0 +1,30 @@
+{
+  "name": "a99-segfault",
+  "version": "1.0.0",
+  "description": "Implementation of Snake for the final project for COMP 426",
+  "main": "index.js",
+  "scripts": {
+    "client": "npx browser-sync start -sw",
+    "server": "node server.js",
+    "start": "concurrently --kill-others 'npm run client' 'npm run server'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdmar3-comp426/a99-segfault.git"
+  },
+  "author": "segfault",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jdmar3-comp426/a99-segfault/issues"
+  },
+  "homepage": "https://github.com/jdmar3-comp426/a99-segfault#readme",
+  "dependencies": {
+    "better-sqlite3": "^7.4.5",
+    "browser-sync": "^2.27.7",
+    "bulma": "^0.9.3",
+    "concurrently": "^6.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "md5": "^2.3.0"
+  }
+}

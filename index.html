@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake | Segfault</title>
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="./game_logic/snake.js"></script>
+    <link rel="stylesheet" href="./../node_modules/bulma/css/bulma.css">
+    <link rel="stylesheet" href="./../home.css">
+</head>
+
+<body>
+<section class="hero is-warning">
+    <div class="hero-head">
+        <nav class="navbar">
+            <div class="container">
+                <div id="navMenu" class="navbar-brand">
+                    <p class="navbar-item is-size-4 is-family-monospace">
+                        SEGFAULT
+                    </p>
+                </div>
+
+                <div class="navbar-menu">
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                <a class="button is-warning is-inverted" id="" href="account/account.html">Account</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+        </nav>
+        <div class="container has-text-centered">
+            <p class="title is-1">
+                Snake
+            </p>
+        </div>
+    </div>
+
+    <br>
+</section>
+
+<section class="has-background-warning-light">
+    <br>
+    <div class="columns">
+        <div class="column is-one-fourth">
+        </div>
+
+        <div class="column has-text-centered ">
+            <div class="card" id="launchDontStarve">
+                <a>
+                    <header class="card-header">
+                        <p class="card-header-title is-family-monospace">
+                            Don't Starve
+                        </p>
+                    </header>
+
+                    <div class="card-image">
+                        <figure class="image">
+                            <img src="https://i.imgur.com/cUDLyKv.png" id = "screenshot" alt="Screenshot of Don't Starve layout">
+                        </figure>
+                    </div>
+                </a>
+
+                <div class="card-content">
+                    <div class="content">
+                        Eat rats to get longer (and fatter) and increase your score! But beware, each rat will slow you down. <br>Drink coffee to go faster and thin yourself out again.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column has-text-centered">
+            <div class="card" id="launchObstacleCourse">
+                <a>
+                    <header class="card-header">
+                        <p class="card-header-title is-family-monospace">
+                            Obstacle Course
+                        </p>
+                    </header>
+
+                    <div class="card-image">
+                        <figure class="image ">
+                            <img src="https://i.imgur.com/0AlKDvV.png" id = "screenshot2" alt="Screenshot of Obstacle Course layout">
+                        </figure>
+                    </div>
+                </a>
+
+                <div class="card-content">
+                    <div class="content">
+                        Eat rats to get longer and increase your score! Watch out for the extra obstacles in your path!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column is-one-fourth">
+        </div>
+    </div>
+
+    <br>
+    <div class="buttons is-flex is-justify-content-center">
+        <button class="button is-warning is-inverted" id="loginButton">Login</button>
+        <button class="button is-warning is-inverted" id="createAccount">Signup</button>
+    </div>
+</section>
+
+<!-- Login form -->
+<section id="loginSection">
+    <form id="loginForm" class="container">
+        <div class="box" id="loginBox">
+            <section class="hero is-small is-link">
+                <div class="hero-body">
+                    <p class="title">
+                        Login
+                    </p>
+                </div>
+            </section>
+            <br>
+            <div class="field">
+                <label class="label">Username</label>
+                <div class="control">
+                    <input class="input" type="text" name="username" value="">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Password</label>
+                <div class="control">
+                    <input class="input" type="password" id="password" name="password" value="">
+                </div>
+            </div>
+
+            <input type="submit" value="Login">
+        </div>
+    </form>
+</section>
+
+<!-- Account creation form -->
+<section id="createAccountSection">
+    <form id="createAccountForm" class="container">
+        <div class="box" id="formBox">
+            <section class="hero is-small is-link">
+                <div class="hero-body">
+                    <p class="title">
+                        Register an Account
+                    </p>
+                </div>
+            </section>
+            <br>
+
+            <div class="field">
+                <label class="label">Username</label>
+                <div class="control">
+                    <input class="input" type="text" name="username" value="">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                    <input class="input" type="text" id="email" name="email" value="">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Password</label>
+                <div class="control">
+                    <input class="input" type="password" name="password" value="">
+                </div>
+            </div>
+
+            <input type="submit" value="Create Account">
+        </div>
+    </form>
+</section>
+
+<footer class="footer has-background-warning-light">
+    <div class="content has-text-centered">
+        <p>
+            <strong>Snake</strong> by <a href="https://github.com/jdmar3-comp426/a99-segfault">Segfault</a> | COMP 426 | Fall 2021
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>
